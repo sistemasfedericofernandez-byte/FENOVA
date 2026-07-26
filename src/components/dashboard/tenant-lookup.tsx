@@ -81,7 +81,7 @@ export function TenantLookup() {
             placeholder="Ej: 30123456"
             value={dni}
             onChange={(e) => setDni(e.target.value)}
-            className="flex-1 rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+            className="flex-1 rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
           />
           <Button disabled={!dni || loading} onClick={handleSearch}>
             {loading ? "Buscando..." : "Buscar"}
@@ -126,12 +126,12 @@ export function TenantLookup() {
             placeholder="Nombre del inquilino (opcional)"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
           />
           <select
             value={score}
             onChange={(e) => setScore(Number(e.target.value))}
-            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
           >
             {[5, 4, 3, 2, 1].map((s) => (
               <option key={s} value={s}>
@@ -145,7 +145,7 @@ export function TenantLookup() {
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             rows={3}
-            className="resize-none rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+            className="resize-none rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
           />
           {rateError ? <p className="text-sm text-red-600">{rateError}</p> : null}
           {rateSuccess ? (

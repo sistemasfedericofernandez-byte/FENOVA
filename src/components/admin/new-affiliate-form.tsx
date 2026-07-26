@@ -45,21 +45,21 @@ export function NewAffiliateForm() {
           placeholder="Nombre completo"
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
-          className="rounded-lg border border-zinc-700 bg-transparent px-3 py-2.5 text-sm"
+          className="rounded-lg border border-zinc-700 bg-transparent px-3 py-2.5 text-base sm:text-sm"
         />
         <input
           type="text"
           placeholder="Código de referido (ej: JUAN10)"
           value={referralCode}
           onChange={(e) => setReferralCode(e.target.value)}
-          className="rounded-lg border border-zinc-700 bg-transparent px-3 py-2.5 text-sm"
+          className="rounded-lg border border-zinc-700 bg-transparent px-3 py-2.5 text-base sm:text-sm"
         />
         <input
           type="number"
           placeholder="Comisión %"
           value={commissionPercent}
           onChange={(e) => setCommissionPercent(e.target.value)}
-          className="rounded-lg border border-zinc-700 bg-transparent px-3 py-2.5 text-sm"
+          className="rounded-lg border border-zinc-700 bg-transparent px-3 py-2.5 text-base sm:text-sm"
         />
       </div>
       {error ? <p className="text-sm text-red-400">{error}</p> : null}

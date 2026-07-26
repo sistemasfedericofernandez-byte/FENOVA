@@ -107,21 +107,21 @@ export function NewPropertyForm({
         placeholder="Título (ej: Casa 3 dormitorios en Cambá Cué)"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+        className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
       />
       <textarea
         placeholder="Descripción"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         rows={4}
-        className="resize-none rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+        className="resize-none rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
       />
 
       <div className="grid grid-cols-2 gap-3">
         <select
           value={operationType}
           onChange={(e) => setOperationType(e.target.value as OperationType)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
         >
           {OPERATION_OPTIONS.map((opt) => (
             <option key={opt.value} value={opt.value}>
@@ -132,7 +132,7 @@ export function NewPropertyForm({
         <select
           value={propertyType}
           onChange={(e) => setPropertyType(e.target.value as PropertyType)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
         >
           {PROPERTY_TYPE_OPTIONS.map((opt) => (
             <option key={opt.value} value={opt.value}>
@@ -145,7 +145,7 @@ export function NewPropertyForm({
       <select
         value={neighborhoodId}
         onChange={(e) => setNeighborhoodId(e.target.value)}
-        className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+        className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
       >
         <option value="">Barrio (opcional)</option>
         {neighborhoods.map((n) => (
@@ -163,26 +163,26 @@ export function NewPropertyForm({
           placeholder="Precio"
           value={priceAmount}
           onChange={(e) => setPriceAmount(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
         />
         <select
           value={priceCurrency}
           onChange={(e) => setPriceCurrency(e.target.value as PriceCurrency)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
         >
           <option value="USD">USD</option>
           <option value="ARS">ARS</option>
         </select>
       </div>
 
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         <input
           type="number"
           inputMode="decimal"
           placeholder="Superficie m²"
           value={surfaceTotalM2}
           onChange={(e) => setSurfaceTotalM2(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
         />
         <input
           type="number"
@@ -190,7 +190,7 @@ export function NewPropertyForm({
           placeholder="Dormitorios"
           value={bedrooms}
           onChange={(e) => setBedrooms(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
         />
         <input
           type="number"
@@ -198,7 +198,7 @@ export function NewPropertyForm({
           placeholder="Baños"
           value={bathrooms}
           onChange={(e) => setBathrooms(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
         />
       </div>
 
@@ -209,7 +209,7 @@ export function NewPropertyForm({
           accept="image/*"
           multiple
           onChange={handleFilesChange}
-          className="rounded-lg border border-dashed border-zinc-300 px-3 py-2.5 text-sm dark:border-zinc-700"
+          className="rounded-lg border border-dashed border-zinc-300 px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
         />
       </label>
       {files.length > 0 ? (

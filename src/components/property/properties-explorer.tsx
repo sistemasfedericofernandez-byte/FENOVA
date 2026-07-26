@@ -103,7 +103,7 @@ export function PropertiesExplorer({
               key={opt.value}
               onClick={() => updateFilter(setOperationType)(opt.value)}
               className={cn(
-                "shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition-colors",
+                "shrink-0 min-h-11 rounded-full border px-4 py-2 text-sm font-medium transition-colors",
                 operationType === opt.value
                   ? "border-zinc-900 bg-zinc-900 text-white dark:border-white dark:bg-white dark:text-zinc-900"
                   : "border-zinc-300 text-zinc-700 dark:border-zinc-700 dark:text-zinc-300",
@@ -120,7 +120,7 @@ export function PropertiesExplorer({
             onChange={(e) =>
               updateFilter(setPropertyType)(e.target.value as PropertyType | "todos")
             }
-            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
           >
             {PROPERTY_TYPE_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -132,7 +132,7 @@ export function PropertiesExplorer({
           <select
             value={neighborhood}
             onChange={(e) => updateFilter(setNeighborhood)(e.target.value)}
-            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
           >
             <option value="todos">Todos los barrios</option>
             {neighborhoods.map((n) => (
@@ -148,7 +148,7 @@ export function PropertiesExplorer({
             placeholder="Precio máximo"
             value={priceMax}
             onChange={(e) => updateFilter(setPriceMax)(e.target.value)}
-            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
           />
         </div>
       </div>
@@ -187,7 +187,7 @@ export function PropertiesExplorer({
               <button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
-                className="rounded-full border border-zinc-300 px-4 py-2 text-sm font-medium disabled:opacity-40 dark:border-zinc-700"
+                className="min-h-11 rounded-full border border-zinc-300 px-4 py-2 text-sm font-medium disabled:opacity-40 dark:border-zinc-700"
               >
                 Anterior
               </button>
@@ -197,7 +197,7 @@ export function PropertiesExplorer({
               <button
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
-                className="rounded-full border border-zinc-300 px-4 py-2 text-sm font-medium disabled:opacity-40 dark:border-zinc-700"
+                className="min-h-11 rounded-full border border-zinc-300 px-4 py-2 text-sm font-medium disabled:opacity-40 dark:border-zinc-700"
               >
                 Siguiente
               </button>

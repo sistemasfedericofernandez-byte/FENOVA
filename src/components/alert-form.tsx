@@ -65,14 +65,14 @@ export function AlertForm({
         placeholder="tu@email.com"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+        className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
       />
 
       <div className="grid grid-cols-2 gap-3">
         <select
           value={operationType}
           onChange={(e) => setOperationType(e.target.value as OperationType | "")}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
         >
           <option value="">Cualquier operación</option>
           <option value="venta">Venta</option>
@@ -82,7 +82,7 @@ export function AlertForm({
         <select
           value={propertyType}
           onChange={(e) => setPropertyType(e.target.value as PropertyType | "")}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
         >
           <option value="">Cualquier tipo</option>
           <option value="casa">Casa</option>
@@ -99,7 +99,7 @@ export function AlertForm({
       <select
         value={neighborhoodId}
         onChange={(e) => setNeighborhoodId(e.target.value)}
-        className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+        className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
       >
         <option value="">Cualquier barrio</option>
         {neighborhoods.map((n) => (
@@ -115,7 +115,7 @@ export function AlertForm({
         placeholder="Precio máximo en ARS (opcional)"
         value={priceMax}
         onChange={(e) => setPriceMax(e.target.value)}
-        className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+        className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
       />
 
       <textarea
@@ -123,7 +123,7 @@ export function AlertForm({
         value={rawQueryText}
         onChange={(e) => setRawQueryText(e.target.value)}
         rows={3}
-        className="resize-none rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+        className="resize-none rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
       />
 
       {error ? <p className="text-sm text-red-600">{error}</p> : null}

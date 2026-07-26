@@ -87,7 +87,7 @@ export default function RegistroPage() {
               key={opt.value}
               type="button"
               onClick={() => setRole(opt.value)}
-              className={`flex-1 rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+              className={`flex-1 min-h-11 rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
                 role === opt.value
                   ? "border-zinc-900 bg-zinc-900 text-white dark:border-white dark:bg-white dark:text-zinc-900"
                   : "border-zinc-300 text-zinc-700 dark:border-zinc-700 dark:text-zinc-300"
@@ -104,7 +104,7 @@ export default function RegistroPage() {
           placeholder="Tu nombre completo"
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
         />
         <input
           type="text"
@@ -115,7 +115,7 @@ export default function RegistroPage() {
           }
           value={businessName}
           onChange={(e) => setBusinessName(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
         />
         <input
           type="tel"
@@ -123,7 +123,7 @@ export default function RegistroPage() {
           placeholder="WhatsApp de contacto (ej: 5493794000001)"
           value={whatsappNumber}
           onChange={(e) => setWhatsappNumber(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
         />
         <input
           type="email"
@@ -131,7 +131,7 @@ export default function RegistroPage() {
           placeholder="tu@email.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
         />
         <input
           type="password"
@@ -140,7 +140,7 @@ export default function RegistroPage() {
           placeholder="Contraseña (mín. 6 caracteres)"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-sm dark:border-zinc-700"
+          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
         />
 
         {error ? <p className="text-sm text-red-600">{error}</p> : null}

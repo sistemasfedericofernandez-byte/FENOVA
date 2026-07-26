@@ -1,4 +1,7 @@
 import type { ReactNode } from "react";
+import Link from "next/link";
+import { DashboardNav } from "@/components/layout/dashboard-nav";
+import { SignOutButton } from "@/components/layout/sign-out-button";
 
 export default function DashboardLayout({
   children,
@@ -7,10 +10,14 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="border-b border-zinc-200 px-6 py-4 dark:border-zinc-800">
-        <span className="font-semibold">Panel de agencia</span>
+      <header className="flex items-center justify-between border-b border-zinc-200 px-4 py-4 dark:border-zinc-800">
+        <Link href="/dashboard/propiedades" className="font-semibold">
+          Panel de agencia
+        </Link>
+        <SignOutButton className="text-sm font-medium text-zinc-600 dark:text-zinc-400" />
       </header>
-      <div className="flex-1 px-6 py-8">{children}</div>
+      <DashboardNav />
+      <div className="flex-1 px-4 py-8 sm:px-6">{children}</div>
     </div>
   );
 }

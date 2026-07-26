@@ -137,7 +137,7 @@ export default async function PropiedadDetallePage({
       ) : null}
 
       {property.whatsappNumber ? (
-        <div className="sticky bottom-4 flex justify-center sm:static sm:justify-start">
+        <div className="sticky bottom-[calc(1rem+env(safe-area-inset-bottom))] flex justify-center sm:static sm:justify-start">
           <WhatsappButton
             phone={property.whatsappNumber}
             propertyId={property.id}
