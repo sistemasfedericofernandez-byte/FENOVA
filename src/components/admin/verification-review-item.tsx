@@ -25,14 +25,14 @@ export function VerificationReviewItem({
   }
 
   return (
-    <div className="flex items-center justify-between gap-4 p-4">
+    <div className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-center gap-4">
         {docUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={docUrl}
             alt={`Comprobante de ${businessName}`}
-            className="h-16 w-16 rounded-lg object-cover"
+            className="h-16 w-16 shrink-0 rounded-lg object-cover"
           />
         ) : null}
         <span className="font-medium">{businessName}</span>
@@ -42,10 +42,15 @@ export function VerificationReviewItem({
           variant="secondary"
           disabled={loading !== null}
           onClick={() => handleReview("rechazado")}
+          className="flex-1 sm:flex-none"
         >
           {loading === "rechazado" ? "..." : "Rechazar"}
         </Button>
-        <Button disabled={loading !== null} onClick={() => handleReview("aprobado")}>
+        <Button
+          disabled={loading !== null}
+          onClick={() => handleReview("aprobado")}
+          className="flex-1 sm:flex-none"
+        >
           {loading === "aprobado" ? "..." : "Aprobar"}
         </Button>
       </div>

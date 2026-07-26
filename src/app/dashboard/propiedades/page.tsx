@@ -49,7 +49,10 @@ export default async function DashboardPropiedadesPage() {
       ) : (
         <div className="flex flex-col divide-y divide-zinc-200 rounded-xl border border-zinc-200 dark:divide-zinc-800 dark:border-zinc-800">
           {properties.map((p) => (
-            <div key={p.id} className="flex items-center justify-between gap-4 p-4">
+            <div
+              key={p.id}
+              className="flex flex-col gap-2 p-4 sm:flex-row sm:items-center sm:justify-between"
+            >
               <div className="flex flex-col">
                 <span className="font-medium">{p.title}</span>
                 <span className="text-sm text-zinc-500">
@@ -57,12 +60,12 @@ export default async function DashboardPropiedadesPage() {
                   {STATUS_LABEL[p.status] ?? p.status}
                 </span>
               </div>
-              <div className="flex items-center gap-4 text-sm text-zinc-500">
+              <div className="flex items-center justify-between gap-4 text-sm text-zinc-500 sm:justify-end">
                 <span>{p.views_count} vistas</span>
                 <span>{p.whatsapp_clicks_count} clics WhatsApp</span>
                 <Link
                   href={`/dashboard/propiedades/${p.id}/editar`}
-                  className="underline underline-offset-4"
+                  className="flex min-h-11 items-center underline underline-offset-4"
                 >
                   Editar
                 </Link>
