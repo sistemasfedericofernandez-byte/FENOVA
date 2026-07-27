@@ -3,6 +3,17 @@ import type { createClient } from "@/lib/supabase/server";
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 
 /**
+ * Interruptor temporal para el lanzamiento comercial: mientras se sale a
+ * vender la plataforma a inmobiliarias, se les permite publicar sin haber
+ * pagado todavía. Poner REQUIRE_ACTIVE_SUBSCRIPTION=true en las variables
+ * de entorno (y redeploy) para volver a exigir suscripción activa.
+ */
+const REQUIRE_ACTIVE_SUBSCRIPTION =
+  process.env.REQUIRE_ACTIVE_SUBSCRIPTION !== "false";
+
+const FREE_PERIOD_LISTING_LIMIT = 999;
+
+/**
  * Determina si una agencia puede publicar una propiedad más, según el
  * límite de su plan activo. Centralizado acá porque se usa tanto al crear
  * como al despausar una propiedad.
@@ -11,6 +22,10 @@ export async function canPublishMoreListings(
   supabase: SupabaseServerClient,
   agencyId: string,
 ): Promise<{ allowed: boolean; reason?: string }> {
+  if (!REQUIRE_ACTIVE_SUBSCRIPTION) {
+    return { allowed: true };
+  }
+
   const { data: subscription } = await supabase
     .from("subscriptions")
     .select("status, subscription_plans(max_active_listings)")
@@ -60,6 +75,23 @@ export async function getAgencyPlanCapacity(
   allowsCsvBulkUpload: boolean;
   remainingActiveListings: number;
 }> {
+  const { count: publishedCount } = await supabase
+    .from("properties")
+    .select("id", { count: "exact", head: true })
+    .eq("agency_id", agencyId)
+    .eq("status", "publicada");
+
+  if (!REQUIRE_ACTIVE_SUBSCRIPTION) {
+    return {
+      hasActivePlan: true,
+      allowsCsvBulkUpload: true,
+      remainingActiveListings: Math.max(
+        0,
+        FREE_PERIOD_LISTING_LIMIT - (publishedCount ?? 0),
+      ),
+    };
+  }
+
   const { data: subscription } = await supabase
     .from("subscriptions")
     .select("status, subscription_plans(max_active_listings, allows_csv_bulk_upload)")
@@ -84,15 +116,12 @@ export async function getAgencyPlanCapacity(
     };
   }
 
-  const { count } = await supabase
-    .from("properties")
-    .select("id", { count: "exact", head: true })
-    .eq("agency_id", agencyId)
-    .eq("status", "publicada");
-
   return {
     hasActivePlan: true,
     allowsCsvBulkUpload: plan.allows_csv_bulk_upload,
-    remainingActiveListings: Math.max(0, plan.max_active_listings - (count ?? 0)),
+    remainingActiveListings: Math.max(
+      0,
+      plan.max_active_listings - (publishedCount ?? 0),
+    ),
   };
 }
