@@ -24,3 +24,11 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Los navegadores renderizan el popup de <option> con estilos nativos del
+   SO (casi siempre fondo blanco), ignorando nuestras clases dark:. Forzamos
+   texto oscuro fijo para que nunca quede blanco sobre blanco. */
+select option {
+  color: #171717;
+  background: #ffffff;
+}
