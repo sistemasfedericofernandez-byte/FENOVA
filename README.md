@@ -4,7 +4,7 @@ Marketplace inmobiliario para Corrientes (Argentina). Next.js 16 (App Router) +
 Tailwind, Supabase (DB/Auth/RLS), Cloudinary (imágenes), MercadoPago
 (suscripciones) y Resend (emails de alertas).
 
-Desplegado en Vercel: https://fenovaa.vercel.app
+Desplegado en Vercel: https://fenova-seven.vercel.app
 
 ## Stack
 
