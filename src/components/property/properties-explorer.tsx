@@ -20,6 +20,10 @@ export type DisplayProperty = {
   propertyType: PropertyType;
   isVerifiedOwner: boolean;
   coverImageUrl: string | null;
+  surfaceTotalM2: number | null;
+  bedrooms: number | null;
+  bathrooms: number | null;
+  imageCount: number;
 };
 
 const OPERATION_OPTIONS: { value: OperationType | "todas"; label: string }[] = [
@@ -46,17 +50,23 @@ const PAGE_SIZE = 12;
 export function PropertiesExplorer({
   properties,
   neighborhoods,
+  initialOperationType = "todas",
+  initialPropertyType = "todos",
+  initialNeighborhood = "todos",
 }: {
   properties: DisplayProperty[];
   neighborhoods: string[];
+  initialOperationType?: OperationType | "todas";
+  initialPropertyType?: PropertyType | "todos";
+  initialNeighborhood?: string;
 }) {
   const [operationType, setOperationType] = useState<OperationType | "todas">(
-    "todas",
+    initialOperationType,
   );
   const [propertyType, setPropertyType] = useState<PropertyType | "todos">(
-    "todos",
+    initialPropertyType,
   );
-  const [neighborhood, setNeighborhood] = useState<string>("todos");
+  const [neighborhood, setNeighborhood] = useState<string>(initialNeighborhood);
   const [priceMax, setPriceMax] = useState<string>("");
   const [page, setPage] = useState(1);
 
@@ -178,6 +188,10 @@ export function PropertiesExplorer({
                 priceCurrency={p.priceCurrency}
                 isVerifiedOwner={p.isVerifiedOwner}
                 coverImageUrl={p.coverImageUrl}
+                surfaceTotalM2={p.surfaceTotalM2}
+                bedrooms={p.bedrooms}
+                bathrooms={p.bathrooms}
+                imageCount={p.imageCount}
               />
             ))}
           </div>

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { SiteHeader } from "@/components/layout/site-header";
+import { BottomNav } from "@/components/layout/bottom-nav";
 
 export default async function PublicLayout({
   children,
@@ -27,7 +28,8 @@ export default async function PublicLayout({
   return (
     <>
       <SiteHeader isLoggedIn={Boolean(user)} dashboardHref={dashboardHref} />
-      {children}
+      <div className="pb-16 sm:pb-0">{children}</div>
+      <BottomNav isLoggedIn={Boolean(user)} dashboardHref={dashboardHref} />
     </>
   );
 }

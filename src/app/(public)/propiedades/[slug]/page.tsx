@@ -1,8 +1,11 @@
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import type { Metadata } from "next";
 import { WhatsappButton } from "@/components/property/whatsapp-button";
 import { ViewTracker } from "@/components/property/view-tracker";
+import { PropertyGallery } from "@/components/property/property-gallery";
+import { ShareButton } from "@/components/property/share-button";
+import { PropertyMap } from "@/components/property/property-map";
+import { BedIcon, BathIcon, RulerIcon } from "@/components/icons";
 import { getPublishedPropertyBySlug } from "@/server/services/public-properties";
 import { formatArs } from "@/lib/utils";
 import type { PriceCurrency } from "@/types/database.types";
@@ -12,6 +15,8 @@ const OPERATION_LABEL: Record<string, string> = {
   alquiler: "Alquiler",
   alquiler_temporal: "Alquiler temporal",
 };
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 export async function generateMetadata({
   params,
@@ -55,40 +60,25 @@ export default async function PropiedadDetallePage({
   return (
     <main className="mx-auto flex min-h-screen max-w-4xl flex-col gap-6 px-4 py-6 sm:py-8">
       <ViewTracker propertyId={property.id} />
-      {property.images.length > 0 ? (
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-          {property.images.map((url, index) => (
-            <div
-              key={url}
-              className={`relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-900 ${
-                index === 0 ? "sm:col-span-2" : ""
-              }`}
-            >
-              <Image
-                src={url}
-                alt={`${property.title} - foto ${index + 1}`}
-                fill
-                className="object-cover"
-                sizes="(max-width: 640px) 100vw, 800px"
-                priority={index === 0}
-              />
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="aspect-[4/3] w-full rounded-xl bg-zinc-100 dark:bg-zinc-900" />
-      )}
+
+      <PropertyGallery images={property.images} title={property.title} />
 
       <div className="flex flex-col gap-2">
-        <div className="flex items-center gap-2">
-          <span className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium dark:bg-zinc-800">
-            {OPERATION_LABEL[property.operationType] ?? property.operationType}
-          </span>
-          {property.isVerifiedOwner ? (
-            <span className="rounded-full bg-emerald-600 px-3 py-1 text-xs font-medium text-white">
-              Propietario Seguro
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <span className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium dark:bg-zinc-800">
+              {OPERATION_LABEL[property.operationType] ?? property.operationType}
             </span>
-          ) : null}
+            {property.isVerifiedOwner ? (
+              <span className="rounded-full bg-emerald-600 px-3 py-1 text-xs font-medium text-white">
+                Propietario Seguro
+              </span>
+            ) : null}
+          </div>
+          <ShareButton
+            title={property.title}
+            url={`${siteUrl}/propiedades/${slug}`}
+          />
         </div>
 
         <h1 className="text-2xl font-semibold">{property.title}</h1>
@@ -103,31 +93,34 @@ export default async function PropiedadDetallePage({
             property.priceCurrency as PriceCurrency,
           )}
         </p>
+
+        {property.surfaceTotalM2 || property.bedrooms || property.bathrooms ? (
+          <div className="flex items-center gap-4 text-sm text-zinc-600 dark:text-zinc-400">
+            {property.surfaceTotalM2 ? (
+              <span className="flex items-center gap-1.5">
+                <RulerIcon width={18} height={18} />
+                {property.surfaceTotalM2} m²
+              </span>
+            ) : null}
+            {property.bedrooms ? (
+              <span className="flex items-center gap-1.5">
+                <BedIcon width={18} height={18} />
+                {property.bedrooms} dorm.
+              </span>
+            ) : null}
+            {property.bathrooms ? (
+              <span className="flex items-center gap-1.5">
+                <BathIcon width={18} height={18} />
+                {property.bathrooms} baños
+              </span>
+            ) : null}
+          </div>
+        ) : null}
       </div>
 
-      <div className="grid grid-cols-3 gap-3 rounded-xl border border-zinc-200 p-4 text-center dark:border-zinc-800 sm:grid-cols-4">
-        {property.surfaceTotalM2 ? (
-          <div>
-            <div className="font-semibold">{property.surfaceTotalM2} m²</div>
-            <div className="text-xs text-zinc-500">Superficie</div>
-          </div>
-        ) : null}
-        {property.bedrooms ? (
-          <div>
-            <div className="font-semibold">{property.bedrooms}</div>
-            <div className="text-xs text-zinc-500">Dormitorios</div>
-          </div>
-        ) : null}
-        {property.bathrooms ? (
-          <div>
-            <div className="font-semibold">{property.bathrooms}</div>
-            <div className="text-xs text-zinc-500">Baños</div>
-          </div>
-        ) : null}
-        <div>
-          <div className="font-semibold">{property.agencyName}</div>
-          <div className="text-xs text-zinc-500">Publicado por</div>
-        </div>
+      <div className="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800">
+        <div className="text-sm text-zinc-500">Publicado por</div>
+        <div className="font-semibold">{property.agencyName}</div>
       </div>
 
       {property.description ? (
@@ -136,8 +129,12 @@ export default async function PropiedadDetallePage({
         </p>
       ) : null}
 
+      {property.lat != null && property.lng != null ? (
+        <PropertyMap lat={property.lat} lng={property.lng} />
+      ) : null}
+
       {property.whatsappNumber ? (
-        <div className="sticky bottom-[calc(1rem+env(safe-area-inset-bottom))] flex justify-center sm:static sm:justify-start">
+        <div className="sticky bottom-[calc(4.5rem+env(safe-area-inset-bottom))] flex justify-center sm:static sm:bottom-auto sm:justify-start">
           <WhatsappButton
             phone={property.whatsappNumber}
             propertyId={property.id}
@@ -148,4 +145,3 @@ export default async function PropiedadDetallePage({
     </main>
   );
 }
-

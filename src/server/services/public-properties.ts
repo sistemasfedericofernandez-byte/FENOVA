@@ -14,7 +14,7 @@ export async function getPublishedProperties(): Promise<DisplayProperty[]> {
   const { data: properties } = await supabase
     .from("properties")
     .select(
-      "id, slug, title, price_amount, price_currency, operation_type, property_type, neighborhood_id, agency_id, created_at",
+      "id, slug, title, price_amount, price_currency, operation_type, property_type, neighborhood_id, agency_id, created_at, surface_total_m2, bedrooms, bathrooms",
     )
     .eq("status", "publicada")
     .order("created_at", { ascending: false })
@@ -49,10 +49,12 @@ export async function getPublishedProperties(): Promise<DisplayProperty[]> {
     (agencies ?? []).map((a) => [a.id, a.is_verified_owner]),
   );
   const coverImageMap = new Map<string, string>();
+  const imageCountMap = new Map<string, number>();
   for (const image of images ?? []) {
     if (!coverImageMap.has(image.property_id)) {
       coverImageMap.set(image.property_id, image.url);
     }
+    imageCountMap.set(image.property_id, (imageCountMap.get(image.property_id) ?? 0) + 1);
   }
 
   return properties.map((p) => ({
@@ -68,6 +70,10 @@ export async function getPublishedProperties(): Promise<DisplayProperty[]> {
     propertyType: p.property_type,
     isVerifiedOwner: agencyMap.get(p.agency_id) ?? false,
     coverImageUrl: coverImageMap.get(p.id) ?? null,
+    surfaceTotalM2: p.surface_total_m2,
+    bedrooms: p.bedrooms,
+    bathrooms: p.bathrooms,
+    imageCount: imageCountMap.get(p.id) ?? 0,
   }));
 }
 
@@ -97,6 +103,8 @@ export type PublishedPropertyDetail = {
   isVerifiedOwner: boolean;
   whatsappNumber: string | null;
   images: string[];
+  lat: number | null;
+  lng: number | null;
 };
 
 export const getPublishedPropertyBySlug = cache(async function getPublishedPropertyBySlug(
@@ -149,5 +157,7 @@ export const getPublishedPropertyBySlug = cache(async function getPublishedPrope
     isVerifiedOwner: agency?.is_verified_owner ?? false,
     whatsappNumber: agency?.whatsapp_number ?? null,
     images: (images ?? []).map((i) => i.url),
+    lat: property.lat,
+    lng: property.lng,
   };
 });

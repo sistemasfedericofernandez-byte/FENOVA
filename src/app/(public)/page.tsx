@@ -1,14 +1,21 @@
-import Link from "next/link";
 import { PropertyCard } from "@/components/property/property-card";
-import { getPublishedProperties } from "@/server/services/public-properties";
+import { HomeSearch } from "@/components/home-search";
+import {
+  getActiveNeighborhoodNames,
+  getPublishedProperties,
+} from "@/server/services/public-properties";
 
 export default async function HomePage() {
-  const properties = await getPublishedProperties();
+  const [properties, neighborhoodNames] = await Promise.all([
+    getPublishedProperties(),
+    getActiveNeighborhoodNames(),
+  ]);
   const featured = properties.slice(0, 3);
+  const neighborhoods = neighborhoodNames.map((name) => ({ id: name, name }));
 
   return (
     <main className="flex min-h-screen flex-col">
-      <section className="flex flex-col items-center gap-4 px-6 py-16 text-center sm:py-24">
+      <section className="flex flex-col items-center gap-4 px-6 py-12 text-center sm:py-20">
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
           Argentina Inmuebles
         </h1>
@@ -16,12 +23,8 @@ export default async function HomePage() {
           Marketplace inmobiliario de Corrientes. Buscá propiedades en venta,
           alquiler o alquiler temporal sin necesidad de registrarte.
         </p>
-        <Link
-          href="/propiedades"
-          className="inline-flex items-center justify-center rounded-full bg-zinc-900 px-6 py-3 font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-white dark:text-zinc-900"
-        >
-          Buscar propiedades
-        </Link>
+
+        <HomeSearch neighborhoods={neighborhoods} />
       </section>
 
       {featured.length > 0 ? (
@@ -38,6 +41,10 @@ export default async function HomePage() {
                 priceCurrency={p.priceCurrency}
                 isVerifiedOwner={p.isVerifiedOwner}
                 coverImageUrl={p.coverImageUrl}
+                surfaceTotalM2={p.surfaceTotalM2}
+                bedrooms={p.bedrooms}
+                bathrooms={p.bathrooms}
+                imageCount={p.imageCount}
               />
             ))}
           </div>
