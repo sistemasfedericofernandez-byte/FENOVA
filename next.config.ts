@@ -8,9 +8,10 @@ const nextConfig: NextConfig = {
         hostname: "res.cloudinary.com",
       },
       {
-        // Solo para las fotos placeholder de las propiedades demo.
+        // Solo para las fotos placeholder (con etiqueta de texto) de las
+        // propiedades demo — no son fotos reales, dicen qué representan.
         protocol: "https",
-        hostname: "picsum.photos",
+        hostname: "placehold.co",
       },
     ],
   },
