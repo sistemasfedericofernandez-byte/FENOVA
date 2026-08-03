@@ -64,6 +64,34 @@ export async function canPublishMoreListings(
 }
 
 /**
+ * Determina si una agencia puede publicar su hotel. A diferencia de
+ * canPublishMoreListings, no hay límite de cantidad (una agencia tiene un
+ * solo hotel por el unique de `hotels.agency_id`) — solo importa si tiene
+ * una suscripción activa.
+ */
+export async function canPublishHotel(
+  supabase: SupabaseServerClient,
+  agencyId: string,
+): Promise<{ allowed: boolean; reason?: string }> {
+  if (!REQUIRE_ACTIVE_SUBSCRIPTION) {
+    return { allowed: true };
+  }
+
+  const { data: subscription } = await supabase
+    .from("subscriptions")
+    .select("status")
+    .eq("agency_id", agencyId)
+    .eq("status", "activa")
+    .maybeSingle();
+
+  if (!subscription) {
+    return { allowed: false, reason: "No hay una suscripción activa." };
+  }
+
+  return { allowed: true };
+}
+
+/**
  * Info de plan/capacidad usada por la carga masiva: cuántas publicaciones
  * más puede activar la agencia ahora mismo, y si su plan habilita CSV/Excel.
  */

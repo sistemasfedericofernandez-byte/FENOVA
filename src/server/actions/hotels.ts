@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { requireAgencyId, slugify } from "@/server/services/agency";
+import { canPublishHotel } from "@/server/services/subscriptions";
 
 const AMENITY_VALUES = [
   "wifi",
@@ -45,6 +46,13 @@ export async function upsertHotel(input: z.infer<typeof hotelSchema>) {
 
   const supabase = await createClient();
   const agencyId = await requireAgencyId(supabase);
+
+  if (parsed.data.status === "publicada") {
+    const check = await canPublishHotel(supabase, agencyId);
+    if (!check.allowed) {
+      return { ok: false as const, error: check.reason };
+    }
+  }
 
   const { data: existing } = await supabase
     .from("hotels")
@@ -116,6 +124,13 @@ export async function upsertHotel(input: z.infer<typeof hotelSchema>) {
 export async function setHotelStatus(status: "borrador" | "publicada" | "oculta") {
   const supabase = await createClient();
   const agencyId = await requireAgencyId(supabase);
+
+  if (status === "publicada") {
+    const check = await canPublishHotel(supabase, agencyId);
+    if (!check.allowed) {
+      return { ok: false as const, error: check.reason };
+    }
+  }
 
   const { error } = await supabase
     .from("hotels")

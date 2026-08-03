@@ -41,7 +41,7 @@ export default async function SuscripcionPage() {
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-semibold">Mi suscripción</h1>
         <p className="text-zinc-600 dark:text-zinc-400">
-          Elegí un plan para poder publicar propiedades.
+          Elegí un plan para poder publicar propiedades o tu hotel.
         </p>
       </div>
 
