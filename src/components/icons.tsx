@@ -109,3 +109,91 @@ export function CameraIcon(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+export function StarIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)} fill="currentColor" stroke="none">
+      <path d="M12 2.5l2.9 6.3 6.8.7-5.1 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.1-4.7 6.8-.7Z" />
+    </svg>
+  );
+}
+
+export function WifiIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <path d="M2 8.5a16 16 0 0 1 20 0" />
+      <path d="M5.5 12.5a11 11 0 0 1 13 0" />
+      <path d="M9 16.5a6 6 0 0 1 6 0" />
+      <circle cx="12" cy="20" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+export function PoolIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <path d="M2 17c1.5 1.5 3 1.5 4.5 0s3-1.5 4.5 0 3 1.5 4.5 0 3-1.5 4.5 0" />
+      <path d="M2 21c1.5 1.5 3 1.5 4.5 0s3-1.5 4.5 0 3 1.5 4.5 0 3-1.5 4.5 0" />
+      <path d="M7 13V5a2 2 0 0 1 2-2h1" />
+      <path d="M17 13V9" />
+    </svg>
+  );
+}
+
+export function CoffeeIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Z" />
+      <path d="M17 9h1.5a2.5 2.5 0 0 1 0 5H17" />
+      <path d="M8 2c-.5.8-.5 1.2 0 2M12 2c-.5.8-.5 1.2 0 2" />
+    </svg>
+  );
+}
+
+export function ParkingIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <rect x="3" y="3" width="18" height="18" rx="2" />
+      <path d="M9 16V7h4a3 3 0 0 1 0 6H9" />
+    </svg>
+  );
+}
+
+export function AcIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <path d="M12 2v6M12 16v6M4.9 4.9l4.2 4.2M14.9 14.9l4.2 4.2M2 12h6M16 12h6M4.9 19.1l4.2-4.2M14.9 9.1l4.2-4.2" />
+    </svg>
+  );
+}
+
+export function PawIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)} fill="currentColor" stroke="none">
+      <circle cx="6" cy="9" r="2" />
+      <circle cx="18" cy="9" r="2" />
+      <circle cx="9.5" cy="5" r="2" />
+      <circle cx="14.5" cy="5" r="2" />
+      <path d="M12 12c-3.3 0-6 2-6 4.5S8 21 12 21s6-1.5 6-4.5-2.7-4.5-6-4.5Z" />
+    </svg>
+  );
+}
+
+export function DumbbellIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <path d="M6 7v10M18 7v10" />
+      <path d="M2 10v4M22 10v4" />
+      <path d="M6 12h12" />
+    </svg>
+  );
+}
+
+export function UtensilsIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <path d="M6 2v8M4 2v5a2 2 0 0 0 4 0V2M6 10v12" />
+      <path d="M18 2c-1.7 0-3 2-3 5s1.3 5 3 5v10" />
+    </svg>
+  );
+}

@@ -52,6 +52,16 @@ export type BulkUploadStatus =
 
 export type PropertyEventType = "view" | "whatsapp_click";
 
+export type HotelAmenity =
+  | "wifi"
+  | "pileta"
+  | "desayuno"
+  | "estacionamiento"
+  | "aire_acondicionado"
+  | "pet_friendly"
+  | "gimnasio"
+  | "restaurante";
+
 export interface Database {
   public: {
     Tables: {
@@ -352,6 +362,69 @@ export interface Database {
         Update: Partial<Database["public"]["Tables"]["tenant_lookup_audit"]["Row"]>;
         Relationships: [];
       };
+      hotels: {
+        Row: {
+          id: string;
+          agency_id: string;
+          name: string;
+          slug: string;
+          description: string | null;
+          neighborhood_id: string | null;
+          address_text: string | null;
+          lat: number | null;
+          lng: number | null;
+          star_rating: number | null;
+          price_per_night: number;
+          price_currency: PriceCurrency;
+          total_rooms: number | null;
+          amenities: HotelAmenity[];
+          status: PropertyStatus;
+          views_count: number;
+          whatsapp_clicks_count: number;
+          created_at: string;
+          updated_at: string;
+          published_at: string | null;
+        };
+        Insert: Partial<Database["public"]["Tables"]["hotels"]["Row"]> & {
+          agency_id: string;
+          name: string;
+          slug: string;
+          price_per_night: number;
+        };
+        Update: Partial<Database["public"]["Tables"]["hotels"]["Row"]>;
+        Relationships: [];
+      };
+      hotel_images: {
+        Row: {
+          id: string;
+          hotel_id: string;
+          cloudinary_public_id: string;
+          url: string;
+          sort_order: number;
+          created_at: string;
+        };
+        Insert: Partial<Database["public"]["Tables"]["hotel_images"]["Row"]> & {
+          hotel_id: string;
+          cloudinary_public_id: string;
+          url: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["hotel_images"]["Row"]>;
+        Relationships: [];
+      };
+      hotel_events: {
+        Row: {
+          id: string;
+          hotel_id: string;
+          event_type: PropertyEventType;
+          created_at: string;
+        };
+        Insert: Partial<Database["public"]["Tables"]["hotel_events"]["Row"]> & {
+          hotel_id: string;
+          event_type: PropertyEventType;
+        };
+        Update: Partial<Database["public"]["Tables"]["hotel_events"]["Row"]>;
+        Relationships: [];
+      };
       neighborhood_roi_snapshot: {
         Row: {
           id: string;
@@ -398,6 +471,10 @@ export interface Database {
       };
       increment_property_counter: {
         Args: { p_property_id: string; p_column: string };
+        Returns: undefined;
+      };
+      increment_hotel_counter: {
+        Args: { p_hotel_id: string; p_column: string };
         Returns: undefined;
       };
     };

@@ -15,6 +15,7 @@ export function SiteHeader({
 
   const navLinks = [
     { href: "/propiedades", label: "Propiedades" },
+    { href: "/hoteles", label: "Hoteles" },
     { href: "/alertas", label: "Alertas" },
   ];
 

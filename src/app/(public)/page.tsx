@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { PropertyCard } from "@/components/property/property-card";
 import { HomeSearch } from "@/components/home-search";
 import {
@@ -25,6 +26,13 @@ export default async function HomePage() {
         </p>
 
         <HomeSearch neighborhoods={neighborhoods} />
+
+        <Link
+          href="/hoteles"
+          className="text-sm font-medium text-zinc-600 underline underline-offset-4 dark:text-zinc-400"
+        >
+          ¿Buscás un hotel en Corrientes? Ver hoteles →
+        </Link>
       </section>
 
       {featured.length > 0 ? (

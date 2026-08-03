@@ -6,12 +6,17 @@ export function WhatsappButton({
   phone,
   propertyId,
   propertyTitle,
+  kind = "property",
 }: {
   phone: string;
   propertyId: string;
   propertyTitle: string;
+  kind?: "property" | "hotel";
 }) {
   const href = buildWhatsappLink({ phone, propertyId, propertyTitle });
+  const endpoint =
+    kind === "hotel" ? "/api/hotels/track-event" : "/api/properties/track-event";
+  const idField = kind === "hotel" ? "hotelId" : "propertyId";
 
   return (
     <a
@@ -19,10 +24,10 @@ export function WhatsappButton({
       target="_blank"
       rel="noopener noreferrer"
       onClick={() => {
-        fetch("/api/properties/track-event", {
+        fetch(endpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ propertyId, eventType: "whatsapp_click" }),
+          body: JSON.stringify({ [idField]: propertyId, eventType: "whatsapp_click" }),
           keepalive: true,
         }).catch(() => {});
       }}

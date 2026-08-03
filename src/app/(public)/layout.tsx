@@ -22,6 +22,8 @@ export default async function PublicLayout({
       .maybeSingle();
     if (profile?.role === "super_admin") {
       dashboardHref = "/admin/metricas";
+    } else if (profile?.role === "hotel") {
+      dashboardHref = "/dashboard/hotel";
     }
   }
 

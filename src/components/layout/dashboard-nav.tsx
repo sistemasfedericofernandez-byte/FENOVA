@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import type { UserRole } from "@/types/database.types";
 
-const LINKS = [
+const PROPERTY_LINKS = [
   { href: "/dashboard/propiedades", label: "Mis propiedades" },
   { href: "/dashboard/propiedades/nueva", label: "Nueva propiedad" },
   { href: "/dashboard/propiedades/carga-masiva", label: "Carga masiva" },
@@ -14,12 +15,20 @@ const LINKS = [
   { href: "/dashboard/inquilinos", label: "Inquilinos" },
 ];
 
-export function DashboardNav() {
+const HOTEL_LINKS = [
+  { href: "/dashboard/hotel", label: "Mi hotel" },
+  { href: "/dashboard/estadisticas", label: "Estadísticas" },
+  { href: "/dashboard/suscripcion", label: "Suscripción" },
+  { href: "/dashboard/verificacion", label: "Propietario Seguro" },
+];
+
+export function DashboardNav({ role }: { role?: UserRole }) {
   const pathname = usePathname();
+  const links = role === "hotel" ? HOTEL_LINKS : PROPERTY_LINKS;
 
   return (
     <nav className="flex gap-1 overflow-x-auto border-b border-zinc-200 px-4 dark:border-zinc-800">
-      {LINKS.map((link) => {
+      {links.map((link) => {
         const active = pathname === link.href;
         return (
           <Link
