@@ -8,10 +8,10 @@ const nextConfig: NextConfig = {
         hostname: "res.cloudinary.com",
       },
       {
-        // Solo para las fotos placeholder (con etiqueta de texto) de las
-        // propiedades demo — no son fotos reales, dicen qué representan.
+        // Fotos reales de referencia (Unsplash) para las propiedades y
+        // hoteles demo, mientras se suben fotos reales de cada agencia.
         protocol: "https",
-        hostname: "placehold.co",
+        hostname: "images.unsplash.com",
       },
     ],
   },
