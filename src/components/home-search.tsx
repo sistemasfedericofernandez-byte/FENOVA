@@ -5,6 +5,7 @@ import { useState } from "react";
 import { motion } from "motion/react";
 import { SearchIcon } from "@/components/icons";
 import { springSoft, springSnappy } from "@/lib/motion";
+import { useSetBackgroundTone } from "@/components/background-tone-provider";
 import type { OperationType, PropertyType } from "@/types/database.types";
 
 const OPERATION_OPTIONS: { value: OperationType; label: string }[] = [
@@ -19,9 +20,15 @@ export function HomeSearch({
   neighborhoods: { id: string; name: string }[];
 }) {
   const router = useRouter();
+  const setTone = useSetBackgroundTone();
   const [operationType, setOperationType] = useState<OperationType>("venta");
   const [propertyType, setPropertyType] = useState<PropertyType | "">("");
   const [neighborhood, setNeighborhood] = useState("");
+
+  function selectOperation(value: OperationType) {
+    setOperationType(value);
+    setTone(value);
+  }
 
   function handleSearch() {
     const params = new URLSearchParams();
@@ -38,7 +45,7 @@ export function HomeSearch({
           <button
             key={opt.value}
             type="button"
-            onClick={() => setOperationType(opt.value)}
+            onClick={() => selectOperation(opt.value)}
             className={`relative shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
               operationType === opt.value ? "text-accent-foreground" : "text-foreground/60"
             }`}

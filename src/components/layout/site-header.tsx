@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion, useScroll, useTransform } from "motion/react";
 import { SignOutButton } from "@/components/layout/sign-out-button";
+import { Logo } from "@/components/logo";
 import { springSnappy } from "@/lib/motion";
 
 export function SiteHeader({
@@ -50,7 +51,7 @@ export function SiteHeader({
           className="text-[19px] font-extrabold tracking-tight text-accent-strong"
           onClick={() => setOpen(false)}
         >
-          FENOVA
+          <Logo />
         </Link>
 
         <nav className="hidden items-center gap-2 sm:flex">

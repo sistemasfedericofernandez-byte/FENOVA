@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { PropertyCard } from "@/components/property/property-card";
 import { cn } from "@/lib/utils";
 import { staggerContainer, springSoft } from "@/lib/motion";
+import { useSetBackgroundTone } from "@/components/background-tone-provider";
 import type {
   OperationType,
   PriceCurrency,
@@ -62,6 +63,7 @@ export function PropertiesExplorer({
   initialPropertyType?: PropertyType | "todos";
   initialNeighborhood?: string;
 }) {
+  const setTone = useSetBackgroundTone();
   const [operationType, setOperationType] = useState<OperationType | "todas">(
     initialOperationType,
   );
@@ -113,7 +115,10 @@ export function PropertiesExplorer({
           {OPERATION_OPTIONS.map((opt) => (
             <button
               key={opt.value}
-              onClick={() => updateFilter(setOperationType)(opt.value)}
+              onClick={() => {
+                updateFilter(setOperationType)(opt.value);
+                setTone(opt.value === "todas" ? "default" : opt.value);
+              }}
               className={cn(
                 "relative shrink-0 min-h-11 rounded-full px-4 py-2 text-sm font-semibold transition-colors",
                 operationType === opt.value ? "text-accent-foreground" : "text-foreground/60",

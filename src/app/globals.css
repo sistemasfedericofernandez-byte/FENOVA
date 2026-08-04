@@ -42,13 +42,14 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Base neutra del fondo: los focos de color que le dan vida (y que
+   cambian de tono según la sección/filtro activo) son elementos reales
+   animados por BackgroundToneProvider con motion, no CSS — escribir la
+   transición a mano con @property se perdía en el pipeline de build de
+   Turbopack, igual que pasó antes con backdrop-filter. */
 html {
   scroll-behavior: smooth;
-  background:
-    radial-gradient(ellipse 75% 55% at 12% -5%, #cfdbe6 0%, transparent 58%),
-    radial-gradient(ellipse 60% 50% at 100% 8%, #f0e2bd 0%, transparent 52%),
-    radial-gradient(ellipse 80% 55% at 50% 105%, #e7ddc8 0%, transparent 58%),
-    linear-gradient(160deg, #eef1ec 0%, #f2eee0 40%, #f5f2ea 70%, #efe9d9 100%);
+  background: linear-gradient(160deg, #eef1ec 0%, #f2eee0 40%, #f5f2ea 70%, #efe9d9 100%);
   background-attachment: fixed;
   background-size: 100% 100%;
   min-height: 100%;
