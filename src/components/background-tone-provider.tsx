@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useRef, useState } from "react";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 export type BackgroundTone =
   | "default"
@@ -10,19 +10,28 @@ export type BackgroundTone =
   | "alquiler_temporal"
   | "hoteles";
 
-/* Rota entre blanco, dorado y azul petróleo — un color bien marcado por
-   sección en vez de un matiz apenas perceptible. */
+/* Rota entre blanco, dorado y azul petróleo por sección, con un tinte
+   moderado (ni imperceptible ni un golpe de color). */
 const TONE_PRESETS: Record<BackgroundTone, [string, string, string]> = {
   default: ["#f8f6f1", "#faf8f3", "#f6f4ee"],
-  venta: ["#f0d99b", "#ecd07f", "#eedcaa"],
-  alquiler: ["#a7c2d6", "#9ab7cf", "#aec6d8"],
+  venta: ["#f2ddab", "#eed6a2", "#f0e0b3"],
+  alquiler: ["#b7cddc", "#aec6d8", "#bbd0dc"],
   alquiler_temporal: ["#f8f6f1", "#faf8f3", "#f6f4ee"],
-  hoteles: ["#8fb0c9", "#83a6c2", "#96b7cc"],
+  hoteles: ["#a1bcd0", "#98b4cb", "#a8c1d3"],
 };
 
 const BackgroundToneContext = createContext<((tone: BackgroundTone) => void) | null>(
   null,
 );
+
+// Máscara radial (en vez de filter: blur): desvanece el borde del foco de
+// color de forma nativa, sin depender de blur — que en mobile Safari,
+// combinado con position: fixed + overflow: hidden, terminaba recortando
+// el desenfoque y dejando bordes duros tipo "mosaico".
+const softMask: CSSProperties = {
+  WebkitMaskImage: "radial-gradient(circle, black 0%, black 35%, transparent 72%)",
+  maskImage: "radial-gradient(circle, black 0%, black 35%, transparent 72%)",
+};
 
 export function BackgroundToneProvider({ children }: { children: ReactNode }) {
   const [colors, setColors] = useState<[string, string, string]>(TONE_PRESETS.default);
@@ -42,16 +51,16 @@ export function BackgroundToneProvider({ children }: { children: ReactNode }) {
     <BackgroundToneContext.Provider value={setTone}>
       <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
         <div
-          style={{ backgroundColor: colors[0] }}
-          className="absolute -left-32 -top-32 h-[65vw] max-h-[620px] w-[65vw] max-w-[620px] rounded-full opacity-75 blur-3xl transition-colors duration-[1100ms] ease-in-out"
+          style={{ backgroundColor: colors[0], ...softMask }}
+          className="absolute -left-32 -top-32 h-[75vw] max-h-[680px] w-[75vw] max-w-[680px] opacity-60 transition-colors duration-[1400ms] ease-in-out"
         />
         <div
-          style={{ backgroundColor: colors[1] }}
-          className="absolute -right-24 -top-16 h-[55vw] max-h-[540px] w-[55vw] max-w-[540px] rounded-full opacity-75 blur-3xl transition-colors duration-[1100ms] ease-in-out"
+          style={{ backgroundColor: colors[1], ...softMask }}
+          className="absolute -right-24 -top-16 h-[65vw] max-h-[600px] w-[65vw] max-w-[600px] opacity-60 transition-colors duration-[1400ms] ease-in-out"
         />
         <div
-          style={{ backgroundColor: colors[2] }}
-          className="absolute -bottom-32 left-1/4 h-[60vw] max-h-[580px] w-[60vw] max-w-[580px] rounded-full opacity-75 blur-3xl transition-colors duration-[1100ms] ease-in-out"
+          style={{ backgroundColor: colors[2], ...softMask }}
+          className="absolute -bottom-32 left-1/4 h-[70vw] max-h-[640px] w-[70vw] max-w-[640px] opacity-60 transition-colors duration-[1400ms] ease-in-out"
         />
       </div>
       {children}
