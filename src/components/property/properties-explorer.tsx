@@ -1,8 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { motion } from "motion/react";
 import { PropertyCard } from "@/components/property/property-card";
 import { cn } from "@/lib/utils";
+import { staggerContainer, springSoft } from "@/lib/motion";
 import type {
   OperationType,
   PriceCurrency,
@@ -113,13 +115,22 @@ export function PropertiesExplorer({
               key={opt.value}
               onClick={() => updateFilter(setOperationType)(opt.value)}
               className={cn(
-                "shrink-0 min-h-11 rounded-full border px-4 py-2 text-sm font-medium transition-colors",
+                "relative shrink-0 min-h-11 rounded-full px-4 py-2 text-sm font-medium transition-colors",
                 operationType === opt.value
-                  ? "border-zinc-900 bg-zinc-900 text-white dark:border-white dark:bg-white dark:text-zinc-900"
-                  : "border-zinc-300 text-zinc-700 dark:border-zinc-700 dark:text-zinc-300",
+                  ? "text-white dark:text-zinc-900"
+                  : "text-zinc-700 dark:text-zinc-300",
               )}
             >
-              {opt.label}
+              {operationType === opt.value ? (
+                <motion.span
+                  layoutId="properties-operation-pill"
+                  transition={springSoft}
+                  className="absolute inset-0 rounded-full bg-zinc-900 dark:bg-white"
+                />
+              ) : (
+                <span className="absolute inset-0 rounded-full border border-zinc-300 dark:border-zinc-700" />
+              )}
+              <span className="relative">{opt.label}</span>
             </button>
           ))}
         </div>
@@ -177,7 +188,13 @@ export function PropertiesExplorer({
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <motion.div
+            key={currentPage}
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
+            className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+          >
             {paginated.map((p) => (
               <PropertyCard
                 key={p.id}
@@ -194,7 +211,7 @@ export function PropertiesExplorer({
                 imageCount={p.imageCount}
               />
             ))}
-          </div>
+          </motion.div>
 
           {totalPages > 1 ? (
             <div className="flex items-center justify-center gap-3">

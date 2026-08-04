@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { PropertyCard } from "@/components/property/property-card";
 import { HomeSearch } from "@/components/home-search";
+import { HomeHero } from "@/components/home-hero";
 import {
   getActiveNeighborhoodNames,
   getPublishedProperties,
@@ -16,28 +17,20 @@ export default async function HomePage() {
 
   return (
     <main className="flex min-h-screen flex-col">
-      <section className="flex flex-col items-center gap-4 px-6 py-12 text-center sm:py-20">
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-          Argentina Inmuebles
-        </h1>
-        <p className="max-w-md text-base text-zinc-600 dark:text-zinc-400">
-          Marketplace inmobiliario de Corrientes. Buscá propiedades en venta,
-          alquiler o alquiler temporal sin necesidad de registrarte.
-        </p>
-
+      <HomeHero>
         <HomeSearch neighborhoods={neighborhoods} />
 
         <Link
           href="/hoteles"
-          className="text-sm font-medium text-zinc-600 underline underline-offset-4 dark:text-zinc-400"
+          className="text-sm font-medium text-zinc-600 underline underline-offset-4 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
         >
           ¿Buscás un hotel en Corrientes? Ver hoteles →
         </Link>
-      </section>
+      </HomeHero>
 
       {featured.length > 0 ? (
         <section className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 pb-16">
-          <h2 className="text-xl font-semibold">Destacadas</h2>
+          <h2 className="text-xl font-semibold tracking-tight">Destacadas</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {featured.map((p) => (
               <PropertyCard

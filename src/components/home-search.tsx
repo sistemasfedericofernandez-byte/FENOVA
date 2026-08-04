@@ -2,7 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { motion } from "motion/react";
 import { SearchIcon } from "@/components/icons";
+import { springSoft, springSnappy } from "@/lib/motion";
 import type { OperationType, PropertyType } from "@/types/database.types";
 
 const OPERATION_OPTIONS: { value: OperationType; label: string }[] = [
@@ -30,20 +32,29 @@ export function HomeSearch({
   }
 
   return (
-    <div className="w-full max-w-xl rounded-2xl border border-zinc-200 bg-white p-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="w-full max-w-xl rounded-2xl border border-zinc-200/80 bg-white/90 p-3 shadow-lg shadow-zinc-900/5 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-900/90">
       <div className="flex gap-2 overflow-x-auto pb-1">
         {OPERATION_OPTIONS.map((opt) => (
           <button
             key={opt.value}
             type="button"
             onClick={() => setOperationType(opt.value)}
-            className={`shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+            className={`relative shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
               operationType === opt.value
-                ? "border-zinc-900 bg-zinc-900 text-white dark:border-white dark:bg-white dark:text-zinc-900"
-                : "border-zinc-300 text-zinc-700 dark:border-zinc-700 dark:text-zinc-300"
+                ? "text-white dark:text-zinc-900"
+                : "text-zinc-700 dark:text-zinc-300"
             }`}
           >
-            {opt.label}
+            {operationType === opt.value ? (
+              <motion.span
+                layoutId="home-operation-pill"
+                transition={springSoft}
+                className="absolute inset-0 rounded-full bg-zinc-900 dark:bg-white"
+              />
+            ) : (
+              <span className="absolute inset-0 rounded-full border border-zinc-300 dark:border-zinc-700" />
+            )}
+            <span className="relative">{opt.label}</span>
           </button>
         ))}
       </div>
@@ -78,14 +89,16 @@ export function HomeSearch({
           ))}
         </select>
 
-        <button
+        <motion.button
           type="button"
+          whileTap={{ scale: 0.96 }}
+          transition={springSnappy}
           onClick={handleSearch}
-          className="flex min-h-11 items-center justify-center gap-2 rounded-lg bg-zinc-900 px-5 text-sm font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-white dark:text-zinc-900"
+          className="flex min-h-11 items-center justify-center gap-2 rounded-lg bg-zinc-900 px-5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-zinc-700 dark:bg-white dark:text-zinc-900"
         >
           <SearchIcon width={16} height={16} />
           Buscar
-        </button>
+        </motion.button>
       </div>
     </div>
   );

@@ -49,7 +49,7 @@ export async function notifyMatchingAlerts(property: NewPublishedProperty) {
       to: alert.email,
       subject: `Nueva propiedad que puede interesarte: ${property.title}`,
       html: `
-        <p>Encontramos una propiedad publicada en Argentina Inmuebles que coincide con tu búsqueda:</p>
+        <p>Encontramos una propiedad publicada en FENOVA que coincide con tu búsqueda:</p>
         <p><strong>${property.title}</strong></p>
         <p><a href="${process.env.NEXT_PUBLIC_SITE_URL}/propiedades/${property.slug}">Ver propiedad</a></p>
       `,

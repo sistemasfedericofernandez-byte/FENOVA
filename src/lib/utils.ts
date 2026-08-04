@@ -17,7 +17,7 @@ export function buildWhatsappLink(params: {
   propertyTitle: string;
 }) {
   const { phone, propertyId, propertyTitle } = params;
-  const message = `Hola! Te escribo por la propiedad "${propertyTitle}" (ID: ${propertyId}) que vi en Argentina Inmuebles.`;
+  const message = `Hola! Te escribo por la propiedad "${propertyTitle}" (ID: ${propertyId}) que vi en FENOVA.`;
   const digitsOnly = phone.replace(/\D/g, "");
   return `https://wa.me/${digitsOnly}?text=${encodeURIComponent(message)}`;
 }

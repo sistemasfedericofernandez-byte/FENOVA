@@ -1,7 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { motion } from "motion/react";
 import { HotelCard } from "@/components/hotel/hotel-card";
+import { staggerContainer } from "@/lib/motion";
 import type { DisplayHotel } from "@/server/services/public-hotels";
 
 const PAGE_SIZE = 12;
@@ -81,7 +83,13 @@ export function HotelsExplorer({
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <motion.div
+            key={currentPage}
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
+            className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+          >
             {paginated.map((h) => (
               <HotelCard
                 key={h.id}
@@ -97,7 +105,7 @@ export function HotelsExplorer({
                 imageCount={h.imageCount}
               />
             ))}
-          </div>
+          </motion.div>
 
           {totalPages > 1 ? (
             <div className="flex items-center justify-center gap-3">

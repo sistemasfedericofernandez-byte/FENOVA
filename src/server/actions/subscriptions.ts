@@ -49,7 +49,7 @@ export async function startSubscriptionCheckout(planSlug: string) {
   // pero la API sí lo acepta y lo devuelve (confirmado contra /preapproval_plan).
   const preapprovalPlan = await preApprovalPlanClient.create({
     body: {
-      reason: `Argentina Inmuebles — Plan ${plan.name}`,
+      reason: `FENOVA — Plan ${plan.name}`,
       back_url: getBackUrl("/dashboard/suscripcion"),
       auto_recurring: {
         frequency: 1,

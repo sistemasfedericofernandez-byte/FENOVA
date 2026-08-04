@@ -2,6 +2,8 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
+import { AnimatePresence, motion } from "motion/react";
+import { springSnappy } from "@/lib/motion";
 
 export function PropertyGallery({
   images,
@@ -16,7 +18,7 @@ export function PropertyGallery({
 
   if (images.length === 0) {
     return (
-      <div className="aspect-[4/3] w-full rounded-xl bg-zinc-100 dark:bg-zinc-900" />
+      <div className="aspect-[4/3] w-full rounded-2xl bg-zinc-100 dark:bg-zinc-900" />
     );
   }
 
@@ -36,7 +38,7 @@ export function PropertyGallery({
         <div
           ref={scrollRef}
           onScroll={handleScroll}
-          className="flex snap-x snap-mandatory overflow-x-auto rounded-xl [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="flex snap-x snap-mandatory overflow-x-auto rounded-2xl [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {images.map((url, i) => (
             <div
@@ -55,7 +57,7 @@ export function PropertyGallery({
           ))}
         </div>
         {images.length > 1 ? (
-          <span className="absolute bottom-2 right-2 rounded-full bg-black/70 px-2 py-1 text-xs font-medium text-white">
+          <span className="absolute bottom-2 right-2 rounded-full bg-black/70 px-2 py-1 text-xs font-medium text-white backdrop-blur-sm">
             {mobileIndex + 1} / {images.length}
           </span>
         ) : null}
@@ -63,22 +65,36 @@ export function PropertyGallery({
 
       {/* Desktop: foto grande + miniaturas */}
       <div className="hidden h-[420px] gap-2 sm:flex">
-        <div className="relative flex-[3] overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-900">
-          <Image
-            src={images[heroIndex]}
-            alt={title}
-            fill
-            className="object-cover"
-            sizes="800px"
-            priority
-          />
+        <div className="relative flex-[3] overflow-hidden rounded-2xl bg-zinc-100 dark:bg-zinc-900">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={heroIndex}
+              initial={{ opacity: 0, scale: 1.02 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              className="absolute inset-0"
+            >
+              <Image
+                src={images[heroIndex]}
+                alt={title}
+                fill
+                className="object-cover"
+                sizes="800px"
+                priority
+              />
+            </motion.div>
+          </AnimatePresence>
         </div>
         {thumbnails.length > 0 ? (
           <div className="flex flex-1 flex-col gap-2">
             {thumbnails.map((url, i) => (
-              <button
+              <motion.button
                 key={url}
                 type="button"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                transition={springSnappy}
                 onClick={() => setHeroIndex(i)}
                 className="relative flex-1 overflow-hidden rounded-lg bg-zinc-100 ring-inset dark:bg-zinc-900"
               >
@@ -86,7 +102,7 @@ export function PropertyGallery({
                   src={url}
                   alt=""
                   fill
-                  className={`object-cover ${heroIndex === i ? "ring-2 ring-zinc-900 dark:ring-white" : ""}`}
+                  className={`object-cover transition-[box-shadow] ${heroIndex === i ? "ring-2 ring-zinc-900 dark:ring-white" : ""}`}
                   sizes="150px"
                 />
                 {i === 3 && extraCount > 0 ? (
@@ -94,7 +110,7 @@ export function PropertyGallery({
                     +{extraCount} fotos
                   </span>
                 ) : null}
-              </button>
+              </motion.button>
             ))}
           </div>
         ) : null}
