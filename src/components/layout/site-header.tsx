@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
+import { AnimatePresence, motion, useScroll, useTransform } from "motion/react";
 import { SignOutButton } from "@/components/layout/sign-out-button";
 import { springSnappy } from "@/lib/motion";
 
@@ -14,12 +14,19 @@ export function SiteHeader({
   dashboardHref: string;
 }) {
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const { scrollY } = useScroll();
 
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    setScrolled(latest > 8);
-  });
+  // Blur, opacidad y sombra del header interpolan de forma continua con el
+  // scroll (no un salto binario) para que la transición se sienta líquida.
+  const backdropOpacity = useTransform(scrollY, [0, 90], [0, 0.7]);
+  const blurPx = useTransform(scrollY, [0, 90], [0, 20]);
+  const shadowOpacity = useTransform(scrollY, [0, 90], [0, 0.16]);
+  const backgroundColor = useTransform(backdropOpacity, (v) => `rgba(255,255,255,${v})`);
+  const boxShadow = useTransform(
+    shadowOpacity,
+    (v) => `0 8px 28px -16px rgba(27,31,25,${v})`,
+  );
+  const backdropFilter = useTransform(blurPx, (v) => `blur(${v}px) saturate(160%)`);
 
   const navLinks = [
     { href: "/propiedades", label: "Propiedades" },
@@ -29,14 +36,13 @@ export function SiteHeader({
 
   return (
     <motion.header
-      animate={{
-        backgroundColor: scrolled ? "rgba(255,255,255,0.75)" : "rgba(255,255,255,0)",
-        boxShadow: scrolled
-          ? "0 8px 24px -14px rgba(27,31,25,0.18)"
-          : "0 0 0 0 rgba(0,0,0,0)",
+      style={{
+        backgroundColor,
+        boxShadow,
+        backdropFilter,
+        WebkitBackdropFilter: backdropFilter,
       }}
-      transition={{ duration: 0.25, ease: "easeOut" }}
-      className="sticky top-0 z-40 backdrop-blur-xl"
+      className="sticky top-0 z-40"
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link
@@ -85,7 +91,7 @@ export function SiteHeader({
           transition={springSnappy}
           onClick={() => setOpen((v) => !v)}
           aria-label="Abrir menú"
-          className="flex h-11 w-11 items-center justify-center rounded-full bg-surface shadow-sm shadow-black/5 sm:hidden"
+          className="glass flex h-11 w-11 items-center justify-center rounded-full backdrop-blur-xl backdrop-saturate-150 sm:hidden"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -112,7 +118,7 @@ export function SiteHeader({
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.22, ease: "easeOut" }}
-            className="mx-4 overflow-hidden rounded-2xl bg-surface shadow-lg shadow-black/5 sm:hidden"
+            className="glass-strong mx-4 overflow-hidden rounded-2xl backdrop-blur-2xl backdrop-saturate-150 sm:hidden"
           >
             <div className="flex flex-col p-2">
               {navLinks.map((link) => (

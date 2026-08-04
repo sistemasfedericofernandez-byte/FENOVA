@@ -32,7 +32,7 @@ export function HomeSearch({
   }
 
   return (
-    <div className="w-full max-w-xl rounded-[28px] bg-surface/90 p-4 shadow-xl shadow-black/5 backdrop-blur-sm">
+    <div className="glass-strong w-full max-w-xl rounded-[28px] p-4 backdrop-blur-xl backdrop-saturate-150">
       <div className="flex gap-2 overflow-x-auto pb-1">
         {OPERATION_OPTIONS.map((opt) => (
           <button

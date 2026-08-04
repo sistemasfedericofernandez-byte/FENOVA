@@ -35,14 +35,17 @@
 
 html {
   scroll-behavior: smooth;
+  background:
+    radial-gradient(ellipse 90% 60% at 15% 0%, #cfe4c9 0%, transparent 60%),
+    radial-gradient(ellipse 70% 55% at 100% 10%, #d7e8d0 0%, transparent 55%),
+    radial-gradient(ellipse 80% 60% at 50% 100%, #e4e0d6 0%, transparent 60%),
+    linear-gradient(160deg, #dbe9d6 0%, #e7ecdf 38%, #eef0e9 68%, #ece7dd 100%);
+  background-attachment: fixed;
+  background-size: 100% 100%;
+  min-height: 100%;
 }
 
 body {
-  background:
-    radial-gradient(circle at 18% -8%, color-mix(in srgb, var(--accent) 22%, transparent) 0%, transparent 52%),
-    radial-gradient(circle at 88% 6%, color-mix(in srgb, var(--accent) 14%, transparent) 0%, transparent 46%),
-    var(--background);
-  background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
   text-rendering: optimizeLegibility;
@@ -103,4 +106,28 @@ select option {
   );
   background-size: 800px 100%;
   animation: shimmer 1.6s ease-in-out infinite;
+}
+
+/* Vidrio esmerilado: transparencia + filo de brillo superior, como el
+   borde de luz de un panel de vidrio real. El blur y el saturate se
+   aplican aparte con las utilidades backdrop-blur y backdrop-saturate
+   de Tailwind en cada uso (backdrop-filter escrito a mano en una sola
+   propiedad CSS se estaba perdiendo en el pipeline de build). */
+.glass {
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.7),
+    0 1px 2px 0 rgba(27, 31, 25, 0.04);
+}
+.glass-strong {
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.8),
+    0 20px 40px -20px rgba(27, 31, 25, 0.18);
+}
+.glass-tint {
+  background: rgba(111, 145, 96, 0.16);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.5),
+    0 20px 40px -22px rgba(27, 31, 25, 0.14);
 }

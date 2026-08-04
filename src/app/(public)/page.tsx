@@ -1,10 +1,10 @@
-import Link from "next/link";
 import { PropertyCard } from "@/components/property/property-card";
 import { HotelCard } from "@/components/hotel/hotel-card";
 import { HomeSearch } from "@/components/home-search";
 import { HomeHero } from "@/components/home-hero";
 import { CategorySection } from "@/components/home/category-section";
 import { RevealGrid } from "@/components/home/reveal-grid";
+import { ClosingCta } from "@/components/home/closing-cta";
 import {
   getActiveNeighborhoodNames,
   getPublishedProperties,
@@ -153,22 +153,7 @@ export default async function HomePage() {
         </CategorySection>
       ) : null}
 
-      <section className="flex w-full flex-col items-center gap-4 px-6 py-16 text-center sm:py-24">
-        <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">
-          ¿Tenés una <span className="text-accent-strong">inmobiliaria</span>,
-          hotel o propiedad para publicar?
-        </h2>
-        <p className="max-w-md text-sm text-foreground/60">
-          Sumate a FENOVA y llegá a quienes buscan propiedades y hoteles en
-          Corrientes todos los días.
-        </p>
-        <Link
-          href="/registro"
-          className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground shadow-sm shadow-accent/25 transition-colors hover:bg-accent-strong"
-        >
-          Crear cuenta gratis
-        </Link>
-      </section>
+      <ClosingCta />
     </main>
   );
 }

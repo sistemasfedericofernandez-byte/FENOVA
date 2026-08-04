@@ -15,14 +15,14 @@ export const springSoft: Transition = {
 };
 
 export const fadeInUp: Variants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0, transition: springSoft },
+  hidden: { opacity: 0, y: 22, scale: 0.97 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: springSoft },
 };
 
 export const staggerContainer: Variants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.06, delayChildren: 0.04 },
+    transition: { staggerChildren: 0.08, delayChildren: 0.05 },
   },
 };
 

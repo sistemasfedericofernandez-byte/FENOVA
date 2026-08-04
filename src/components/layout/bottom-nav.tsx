@@ -29,7 +29,7 @@ export function BottomNav({
 
   return (
     <nav
-      className="fixed inset-x-3 bottom-3 z-40 flex h-16 items-center justify-around rounded-[28px] bg-surface/95 px-2 shadow-xl shadow-black/10 backdrop-blur-xl sm:hidden"
+      className="glass-strong fixed inset-x-3 bottom-3 z-40 flex h-16 items-center justify-around rounded-[28px] px-2 backdrop-blur-2xl backdrop-saturate-150 sm:hidden"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       aria-label="Navegación principal"
     >

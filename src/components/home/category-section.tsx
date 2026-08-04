@@ -9,8 +9,8 @@ import { fadeInUp, staggerContainer } from "@/lib/motion";
 type Tone = "plain" | "tint";
 
 const TONE_PANEL: Record<Tone, string> = {
-  plain: "bg-surface/80",
-  tint: "bg-accent-soft/70",
+  plain: "glass-strong",
+  tint: "glass-tint",
 };
 
 export function CategorySection({
@@ -38,7 +38,7 @@ export function CategorySection({
         viewport={{ once: true, amount: 0.15 }}
         variants={staggerContainer}
         className={cn(
-          "mx-auto flex max-w-6xl flex-col gap-7 rounded-[32px] px-5 py-10 backdrop-blur-sm sm:px-10 sm:py-14",
+          "mx-auto flex max-w-6xl flex-col gap-7 rounded-[32px] px-5 py-10 backdrop-blur-2xl backdrop-saturate-150 sm:px-10 sm:py-14",
           TONE_PANEL[tone],
         )}
       >
