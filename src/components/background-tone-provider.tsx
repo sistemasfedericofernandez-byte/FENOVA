@@ -10,15 +10,14 @@ export type BackgroundTone =
   | "alquiler_temporal"
   | "hoteles";
 
-/* Paleta sutil: alterna entre dorado (venta/temporal) y azul petróleo
-   (alquiler/hoteles), siempre cerca del marfil de base para que el
-   cambio se sienta como un matiz, no un golpe de color. */
+/* Rota entre blanco, dorado y azul petróleo — un color bien marcado por
+   sección en vez de un matiz apenas perceptible. */
 const TONE_PRESETS: Record<BackgroundTone, [string, string, string]> = {
-  default: ["#e7e2d6", "#ece6d8", "#e3ddd0"],
-  venta: ["#eee0c0", "#ecd9ab", "#ecdfc4"],
-  alquiler: ["#d7e0e8", "#cfdbe5", "#d9e2e9"],
-  alquiler_temporal: ["#f0e6c9", "#eee0c0", "#ecdfc4"],
-  hoteles: ["#c9d7e2", "#d3dfe8", "#cddae4"],
+  default: ["#f8f6f1", "#faf8f3", "#f6f4ee"],
+  venta: ["#f0d99b", "#ecd07f", "#eedcaa"],
+  alquiler: ["#a7c2d6", "#9ab7cf", "#aec6d8"],
+  alquiler_temporal: ["#f8f6f1", "#faf8f3", "#f6f4ee"],
+  hoteles: ["#8fb0c9", "#83a6c2", "#96b7cc"],
 };
 
 const BackgroundToneContext = createContext<((tone: BackgroundTone) => void) | null>(
@@ -44,15 +43,15 @@ export function BackgroundToneProvider({ children }: { children: ReactNode }) {
       <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
         <div
           style={{ backgroundColor: colors[0] }}
-          className="absolute -left-32 -top-32 h-[65vw] max-h-[620px] w-[65vw] max-w-[620px] rounded-full opacity-50 blur-3xl transition-colors duration-[1800ms] ease-in-out"
+          className="absolute -left-32 -top-32 h-[65vw] max-h-[620px] w-[65vw] max-w-[620px] rounded-full opacity-75 blur-3xl transition-colors duration-[1100ms] ease-in-out"
         />
         <div
           style={{ backgroundColor: colors[1] }}
-          className="absolute -right-24 -top-16 h-[55vw] max-h-[540px] w-[55vw] max-w-[540px] rounded-full opacity-50 blur-3xl transition-colors duration-[1800ms] ease-in-out"
+          className="absolute -right-24 -top-16 h-[55vw] max-h-[540px] w-[55vw] max-w-[540px] rounded-full opacity-75 blur-3xl transition-colors duration-[1100ms] ease-in-out"
         />
         <div
           style={{ backgroundColor: colors[2] }}
-          className="absolute -bottom-32 left-1/4 h-[60vw] max-h-[580px] w-[60vw] max-w-[580px] rounded-full opacity-50 blur-3xl transition-colors duration-[1800ms] ease-in-out"
+          className="absolute -bottom-32 left-1/4 h-[60vw] max-h-[580px] w-[60vw] max-w-[580px] rounded-full opacity-75 blur-3xl transition-colors duration-[1100ms] ease-in-out"
         />
       </div>
       {children}
