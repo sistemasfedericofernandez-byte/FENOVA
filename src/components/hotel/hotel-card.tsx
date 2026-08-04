@@ -44,7 +44,7 @@ export function HotelCard({
     >
       <Link
         href={`/hoteles/${slug}`}
-        className="flex flex-col overflow-hidden rounded-2xl border border-zinc-200/80 bg-surface shadow-sm transition-shadow duration-300 group-hover:shadow-xl group-hover:shadow-zinc-900/10 dark:border-zinc-800 dark:group-hover:shadow-black/40"
+        className="flex flex-col overflow-hidden rounded-[26px] bg-surface shadow-sm shadow-black/5 transition-shadow duration-300 group-hover:shadow-xl group-hover:shadow-black/10"
       >
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-zinc-100 dark:bg-zinc-900">
           {coverImageUrl ? (

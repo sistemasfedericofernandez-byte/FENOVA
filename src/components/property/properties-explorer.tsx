@@ -115,20 +115,18 @@ export function PropertiesExplorer({
               key={opt.value}
               onClick={() => updateFilter(setOperationType)(opt.value)}
               className={cn(
-                "relative shrink-0 min-h-11 rounded-full px-4 py-2 text-sm font-medium transition-colors",
-                operationType === opt.value
-                  ? "text-white dark:text-zinc-900"
-                  : "text-zinc-700 dark:text-zinc-300",
+                "relative shrink-0 min-h-11 rounded-full px-4 py-2 text-sm font-semibold transition-colors",
+                operationType === opt.value ? "text-accent-foreground" : "text-foreground/60",
               )}
             >
               {operationType === opt.value ? (
                 <motion.span
                   layoutId="properties-operation-pill"
                   transition={springSoft}
-                  className="absolute inset-0 rounded-full bg-zinc-900 dark:bg-white"
+                  className="absolute inset-0 rounded-full bg-accent"
                 />
               ) : (
-                <span className="absolute inset-0 rounded-full border border-zinc-300 dark:border-zinc-700" />
+                <span className="absolute inset-0 rounded-full bg-accent-soft/60" />
               )}
               <span className="relative">{opt.label}</span>
             </button>

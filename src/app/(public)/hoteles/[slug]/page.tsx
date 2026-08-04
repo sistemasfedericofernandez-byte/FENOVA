@@ -138,7 +138,7 @@ export default async function HotelDetallePage({
       ) : null}
 
       {hotel.whatsappNumber ? (
-        <div className="sticky bottom-[calc(4.5rem+env(safe-area-inset-bottom))] flex justify-center sm:static sm:bottom-auto sm:justify-start">
+        <div className="sticky bottom-[calc(5.5rem+env(safe-area-inset-bottom))] flex justify-center sm:static sm:bottom-auto sm:justify-start">
           <WhatsappButton
             phone={hotel.whatsappNumber}
             propertyId={hotel.id}

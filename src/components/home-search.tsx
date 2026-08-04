@@ -32,27 +32,25 @@ export function HomeSearch({
   }
 
   return (
-    <div className="w-full max-w-xl rounded-2xl border border-zinc-200/80 bg-white/90 p-3 shadow-lg shadow-zinc-900/5 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-900/90">
+    <div className="w-full max-w-xl rounded-[28px] bg-surface/90 p-4 shadow-xl shadow-black/5 backdrop-blur-sm">
       <div className="flex gap-2 overflow-x-auto pb-1">
         {OPERATION_OPTIONS.map((opt) => (
           <button
             key={opt.value}
             type="button"
             onClick={() => setOperationType(opt.value)}
-            className={`relative shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-              operationType === opt.value
-                ? "text-white dark:text-zinc-900"
-                : "text-zinc-700 dark:text-zinc-300"
+            className={`relative shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+              operationType === opt.value ? "text-accent-foreground" : "text-foreground/60"
             }`}
           >
             {operationType === opt.value ? (
               <motion.span
                 layoutId="home-operation-pill"
                 transition={springSoft}
-                className="absolute inset-0 rounded-full bg-zinc-900 dark:bg-white"
+                className="absolute inset-0 rounded-full bg-accent"
               />
             ) : (
-              <span className="absolute inset-0 rounded-full border border-zinc-300 dark:border-zinc-700" />
+              <span className="absolute inset-0 rounded-full bg-accent-soft/60" />
             )}
             <span className="relative">{opt.label}</span>
           </button>
@@ -63,7 +61,7 @@ export function HomeSearch({
         <select
           value={propertyType}
           onChange={(e) => setPropertyType(e.target.value as PropertyType | "")}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          className="rounded-xl border-0 bg-accent-soft/60 px-3 py-2.5 text-base sm:text-sm"
         >
           <option value="">Cualquier tipo</option>
           <option value="casa">Casa</option>
@@ -79,7 +77,7 @@ export function HomeSearch({
         <select
           value={neighborhood}
           onChange={(e) => setNeighborhood(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          className="rounded-xl border-0 bg-accent-soft/60 px-3 py-2.5 text-base sm:text-sm"
         >
           <option value="">Cualquier barrio</option>
           {neighborhoods.map((n) => (
@@ -94,7 +92,7 @@ export function HomeSearch({
           whileTap={{ scale: 0.96 }}
           transition={springSnappy}
           onClick={handleSearch}
-          className="flex min-h-11 items-center justify-center gap-2 rounded-lg bg-zinc-900 px-5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-zinc-700 dark:bg-white dark:text-zinc-900"
+          className="flex min-h-11 items-center justify-center gap-2 rounded-xl bg-accent px-5 text-sm font-semibold text-accent-foreground shadow-sm shadow-accent/25 transition-colors hover:bg-accent-strong"
         >
           <SearchIcon width={16} height={16} />
           Buscar

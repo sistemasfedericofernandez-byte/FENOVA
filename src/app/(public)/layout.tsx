@@ -30,7 +30,7 @@ export default async function PublicLayout({
   return (
     <>
       <SiteHeader isLoggedIn={Boolean(user)} dashboardHref={dashboardHref} />
-      <div className="pb-16 sm:pb-0">{children}</div>
+      <div className="pb-28 sm:pb-0">{children}</div>
       <BottomNav isLoggedIn={Boolean(user)} dashboardHref={dashboardHref} />
     </>
   );

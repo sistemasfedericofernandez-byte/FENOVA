@@ -8,11 +8,9 @@ import { springSnappy } from "@/lib/motion";
 type ButtonVariant = "primary" | "secondary" | "ghost";
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary:
-    "bg-zinc-900 text-white shadow-sm hover:bg-zinc-700 dark:bg-white dark:text-zinc-900",
-  secondary:
-    "bg-zinc-100 text-zinc-900 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-50",
-  ghost: "bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800",
+  primary: "bg-accent text-accent-foreground shadow-sm shadow-accent/20 hover:bg-accent-strong",
+  secondary: "bg-accent-soft text-accent-strong hover:brightness-95 dark:text-accent-strong",
+  ghost: "bg-transparent hover:bg-accent-soft",
 };
 
 export function Button({
