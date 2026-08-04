@@ -118,15 +118,17 @@ export default async function PropiedadDetallePage({
         ) : null}
       </div>
 
-      <div className="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800">
-        <div className="text-sm text-zinc-500">Publicado por</div>
+      <div className="glass-strong rounded-2xl p-4 backdrop-blur-xl backdrop-saturate-150">
+        <div className="text-sm text-foreground/60">Publicado por</div>
         <div className="font-semibold">{property.agencyName}</div>
       </div>
 
       {property.description ? (
-        <p className="whitespace-pre-line text-zinc-700 dark:text-zinc-300">
-          {property.description}
-        </p>
+        <div className="glass rounded-2xl p-4 backdrop-blur-xl backdrop-saturate-150">
+          <p className="whitespace-pre-line text-foreground/85">
+            {property.description}
+          </p>
+        </div>
       ) : null}
 
       {property.lat != null && property.lng != null ? (
