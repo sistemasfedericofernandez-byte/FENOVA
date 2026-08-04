@@ -101,7 +101,7 @@ export default async function HomePage() {
           description="Establecimientos completos con precio por noche, categoría y servicios."
           href="/hoteles"
           hrefLabel="Ver todos los hoteles"
-          tone="tint"
+          tone="gold"
         >
           <RevealGrid>
             {destacadosHoteles.map((h) => (

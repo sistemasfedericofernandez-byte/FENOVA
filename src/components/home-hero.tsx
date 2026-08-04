@@ -17,7 +17,7 @@ export function HomeHero({ children }: { children: ReactNode }) {
           variants={fadeInUp}
           className="text-4xl font-extrabold tracking-tight text-foreground sm:text-6xl"
         >
-          Encontrá tu <span className="text-accent-strong">próximo lugar</span>
+          Encontrá tu <span className="text-gold-strong">próximo lugar</span>
           <br className="hidden sm:block" /> en Corrientes
         </motion.h1>
         <motion.p

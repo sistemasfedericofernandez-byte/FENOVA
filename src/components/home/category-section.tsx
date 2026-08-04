@@ -6,11 +6,24 @@ import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { fadeInUp, staggerContainer } from "@/lib/motion";
 
-type Tone = "plain" | "tint";
+type Tone = "plain" | "tint" | "gold";
 
 const TONE_PANEL: Record<Tone, string> = {
   plain: "glass-strong",
   tint: "glass-tint",
+  gold: "glass-gold",
+};
+
+const TONE_EYEBROW: Record<Tone, string> = {
+  plain: "text-gold-strong",
+  tint: "text-gold-strong",
+  gold: "text-accent",
+};
+
+const TONE_LINK: Record<Tone, string> = {
+  plain: "text-accent-strong",
+  tint: "text-accent-strong",
+  gold: "text-accent-strong",
 };
 
 export function CategorySection({
@@ -43,14 +56,22 @@ export function CategorySection({
         )}
       >
         <motion.div variants={fadeInUp} className="flex flex-col gap-2">
-          <span className="text-xs font-bold uppercase tracking-[0.14em] text-accent-strong">
+          <span
+            className={cn(
+              "text-xs font-bold uppercase tracking-[0.14em]",
+              TONE_EYEBROW[tone],
+            )}
+          >
             {eyebrow}
           </span>
           <div className="flex flex-wrap items-end justify-between gap-4">
             <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">{title}</h2>
             <Link
               href={href}
-              className="text-sm font-semibold text-accent-strong underline underline-offset-4 transition-opacity hover:opacity-70"
+              className={cn(
+                "text-sm font-semibold underline underline-offset-4 transition-opacity hover:opacity-70",
+                TONE_LINK[tone],
+              )}
             >
               {hrefLabel} →
             </Link>
