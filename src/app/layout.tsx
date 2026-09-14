@@ -17,16 +17,16 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "FENOVA — Marketplace inmobiliario de Corrientes",
-    template: "%s | FENOVA",
+    default: "PropiMarket — Marketplace inmobiliario de Corrientes",
+    template: "%s | PropiMarket",
   },
   description:
     "Buscá propiedades y hoteles en venta, alquiler o alquiler temporal en Corrientes sin necesidad de registrarte. Contactá directo por WhatsApp.",
   openGraph: {
     type: "website",
     locale: "es_AR",
-    siteName: "FENOVA",
-    title: "FENOVA — Marketplace inmobiliario de Corrientes",
+    siteName: "PropiMarket",
+    title: "PropiMarket — Marketplace inmobiliario de Corrientes",
     description:
       "Buscá propiedades y hoteles en venta, alquiler o alquiler temporal en Corrientes sin necesidad de registrarte.",
   },

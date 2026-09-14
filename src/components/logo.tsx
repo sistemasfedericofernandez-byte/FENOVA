@@ -2,13 +2,13 @@
 
 import { motion } from "motion/react";
 
-/** Wordmark FENOVA con un trazo dorado natural debajo, como si alguien
+/** Wordmark PropiMarket con un trazo dorado natural debajo, como si alguien
  * la subrayara a mano de un solo gesto — una curva simple con un
  * pequeño repunte al final, no un garabato ondulado. */
 export function Logo({ className }: { className?: string }) {
   return (
     <span className={`relative inline-block leading-none ${className ?? ""}`}>
-      FENOVA
+      PropiMarket
       <svg
         viewBox="0 0 120 16"
         preserveAspectRatio="none"

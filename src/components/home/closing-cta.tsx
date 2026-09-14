@@ -22,7 +22,7 @@ export function ClosingCta() {
           hotel o propiedad para publicar?
         </motion.h2>
         <motion.p variants={fadeInUp} className="max-w-md text-sm text-foreground/60">
-          Sumate a FENOVA y llegá a quienes buscan propiedades y hoteles en
+          Sumate a PropiMarket y llegá a quienes buscan propiedades y hoteles en
           Corrientes todos los días.
         </motion.p>
         <motion.div variants={fadeInUp}>

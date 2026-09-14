@@ -23,7 +23,7 @@ export async function sendEmail(params: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: process.env.RESEND_FROM_EMAIL || "FENOVA <onboarding@resend.dev>",
+      from: process.env.RESEND_FROM_EMAIL || "PropiMarket <onboarding@resend.dev>",
       to: params.to,
       subject: params.subject,
       html: params.html,
