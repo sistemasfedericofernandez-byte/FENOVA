@@ -5,7 +5,10 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { createProperty } from "@/server/actions/properties";
-import { importFromFacebookMarketplace } from "@/server/actions/facebook-import";
+import {
+  importFromFacebookMarketplace,
+  importFromFacebookHtml,
+} from "@/server/actions/facebook-import";
 import { uploadImageToCloudinary } from "@/lib/cloudinary-upload";
 import type {
   OperationType,
@@ -65,6 +68,22 @@ export function NewPropertyForm({
     setImportedImages((prev) => prev.filter((img) => img.publicId !== publicId));
   }
 
+  function applyImportResult(data: {
+    title: string;
+    description: string;
+    priceAmount: number | null;
+    priceCurrency: PriceCurrency;
+    images: ImportedImage[];
+  }) {
+    setTitle(data.title);
+    setDescription(data.description);
+    if (data.priceAmount != null) {
+      setPriceAmount(String(data.priceAmount));
+      setPriceCurrency(data.priceCurrency);
+    }
+    setImportedImages(data.images);
+  }
+
   async function handleImportFromFacebook() {
     setImportError(null);
     setImporting(true);
@@ -74,15 +93,31 @@ export function NewPropertyForm({
         setImportError(result.error);
         return;
       }
-      setTitle(result.data.title);
-      setDescription(result.data.description);
-      if (result.data.priceAmount != null) {
-        setPriceAmount(String(result.data.priceAmount));
-        setPriceCurrency(result.data.priceCurrency);
-      }
-      setImportedImages(result.data.images);
+      applyImportResult(result.data);
     } catch {
       setImportError("No se pudo importar la publicación. Revisá el link e intentá de nuevo.");
+    } finally {
+      setImporting(false);
+    }
+  }
+
+  async function handleImportFromHtmlFile(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+
+    setImportError(null);
+    setImporting(true);
+    try {
+      const html = await file.text();
+      const result = await importFromFacebookHtml(html);
+      if (!result.ok) {
+        setImportError(result.error);
+        return;
+      }
+      applyImportResult(result.data);
+    } catch {
+      setImportError("No se pudo leer ese archivo. Asegurate de subir el HTML guardado desde el navegador.");
     } finally {
       setImporting(false);
     }
@@ -138,32 +173,71 @@ export function NewPropertyForm({
 
   return (
     <div className="flex max-w-xl flex-col gap-4">
-      <div className="flex flex-col gap-2 rounded-lg border border-dashed border-zinc-300 p-3 dark:border-zinc-700">
-        <label className="text-sm font-medium">
-          Importar desde Facebook Marketplace
-        </label>
-        <p className="text-xs text-zinc-500">
-          Pegá el link de tu publicación y completamos título, descripción,
-          precio y fotos automáticamente — después podés editar todo antes de
-          guardar.
-        </p>
-        <div className="flex flex-col gap-2 sm:flex-row">
-          <input
-            type="url"
-            placeholder="https://www.facebook.com/marketplace/item/..."
-            value={facebookUrl}
-            onChange={(e) => setFacebookUrl(e.target.value)}
-            className="flex-1 rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-          />
-          <Button
-            type="button"
-            variant="secondary"
-            disabled={importing || !facebookUrl}
-            onClick={handleImportFromFacebook}
-          >
-            {importing ? "Importando..." : "Importar"}
-          </Button>
+      <div className="flex flex-col gap-3 rounded-lg border border-dashed border-zinc-300 p-3 dark:border-zinc-700">
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium">
+            Importar desde Facebook Marketplace
+          </label>
+          <p className="text-xs text-zinc-500">
+            Completamos título, descripción, precio y fotos automáticamente
+            — después podés editar todo antes de guardar.
+          </p>
         </div>
+
+        <div className="flex flex-col gap-1.5">
+          <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
+            Opción recomendada — 100% confiable
+          </span>
+          <ol className="list-decimal pl-4 text-xs text-zinc-500">
+            <li>Abrí tu publicación en Facebook, en tu propio navegador.</li>
+            <li>
+              Ctrl+S (o menú → &quot;Guardar página como&quot;) y elegí{" "}
+              <strong>&quot;Página web, solo HTML&quot;</strong>.
+            </li>
+            <li>Subí acá ese archivo .html.</li>
+          </ol>
+          <label className="flex flex-col gap-1 text-sm">
+            <input
+              type="file"
+              accept=".html,.htm,text/html"
+              disabled={importing}
+              onChange={handleImportFromHtmlFile}
+              className="rounded-lg border border-dashed border-zinc-300 px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+            />
+          </label>
+        </div>
+
+        <details className="text-xs text-zinc-500">
+          <summary className="cursor-pointer font-medium">
+            O probá pegando el link directo
+          </summary>
+          <p className="mt-1">
+            Más rápido, pero Facebook a veces bloquea este método (bloquea
+            más seguido a los servidores que a una visita normal) — si
+            falla, usá la opción de arriba.
+          </p>
+          <div className="mt-2 flex flex-col gap-2 sm:flex-row">
+            <input
+              type="url"
+              placeholder="https://www.facebook.com/marketplace/item/..."
+              value={facebookUrl}
+              onChange={(e) => setFacebookUrl(e.target.value)}
+              className="flex-1 rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+            />
+            <Button
+              type="button"
+              variant="secondary"
+              disabled={importing || !facebookUrl}
+              onClick={handleImportFromFacebook}
+            >
+              {importing ? "Importando..." : "Importar"}
+            </Button>
+          </div>
+        </details>
+
+        {importing ? (
+          <p className="text-sm text-zinc-500">Importando, un momento…</p>
+        ) : null}
         {importError ? <p className="text-sm text-red-600">{importError}</p> : null}
       </div>
 

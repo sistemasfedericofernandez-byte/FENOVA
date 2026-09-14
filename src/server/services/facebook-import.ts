@@ -25,18 +25,14 @@ const BROWSER_HEADERS = {
 };
 
 /**
- * Facebook Marketplace no tiene API pública. Esto lee el mismo HTML que le
- * serviría a un visitante sin sesión iniciada: alcanza con headers de
- * navegador (no hace falta un browser headless). Los datos completos
- * (título, precio, descripción, fotos) vienen embebidos en bloques
- * `<script type="application/json">` que React usa para hidratar la
- * página — se buscan por forma de los datos, no por índice fijo, porque
- * la posición de esos bloques varía entre publicaciones.
- *
- * Es inherentemente frágil: si Facebook cambia la estructura interna de
- * la página, esto puede dejar de encontrar los bloques y hay que ajustar
- * los heurísticos. Por eso siempre se devuelve al menos lo que sacan las
- * meta tags og:* (más estables) como piso mínimo.
+ * Facebook Marketplace no tiene API pública. Esto intenta leer el mismo
+ * HTML que le serviría a un visitante sin sesión iniciada (headers de
+ * navegador, sin browser headless). El problema: Meta bloquea el acceso
+ * automático mucho más seguido desde IPs de servidores en la nube (como
+ * las de Vercel) que desde una visita normal — por eso esta vía falla de
+ * forma intermitente. Para importar de forma confiable, ver
+ * `parseFacebookMarketplaceHtml`: la agencia guarda la página desde su
+ * propio navegador (ya logueado y sin bloqueo) y sube ese archivo.
  */
 export async function fetchFacebookMarketplaceListing(
   url: string,
@@ -54,7 +50,22 @@ export async function fetchFacebookMarketplaceListing(
     throw new Error(`Facebook devolvió un error (${response.status}). Probá de nuevo en un rato.`);
   }
   const html = await response.text();
+  return parseFacebookMarketplaceHtml(html);
+}
 
+/**
+ * Parsea el HTML de una publicación de Facebook Marketplace (venga de un
+ * fetch en vivo o de un archivo guardado por el usuario) y saca título,
+ * precio, descripción y fotos. Los datos completos vienen embebidos en
+ * bloques `<script type="application/json">` que React usa para hidratar
+ * la página — se buscan por forma/clave de los datos, no por índice fijo,
+ * porque la posición de esos bloques varía entre publicaciones.
+ *
+ * Es inherentemente frágil ante cambios internos de Facebook. Por eso
+ * siempre se cae de vuelta a las meta tags og:* (más estables) cuando el
+ * bloque JSON no aparece.
+ */
+export function parseFacebookMarketplaceHtml(html: string): FacebookListingData {
   const ogTitle = extractMeta(html, "og:title");
   const ogDescription = extractMeta(html, "og:description");
   const ogImage = extractMeta(html, "og:image");
@@ -67,14 +78,12 @@ export async function fetchFacebookMarketplaceListing(
   const title = detail?.title ?? ogTitle;
   const imageUrls = images.length > 0 ? images : ogImage ? [decodeHtmlEntities(ogImage)] : [];
 
-  // Si no se pudo sacar ni el título ni ninguna foto, probablemente Facebook
-  // bloqueó este pedido (les pasa seguido a los servidores en la nube, son
-  // más estrictos con esas IPs que con una visita normal) en vez de servir
-  // la publicación. Mejor avisar con un error claro que devolver un
-  // formulario vacío como si hubiese funcionado.
+  // Si no se pudo sacar ni el título ni ninguna foto, o esto no era HTML
+  // de una publicación de Marketplace, mejor avisar con un error claro
+  // que devolver un formulario vacío como si hubiese funcionado.
   if (!title && imageUrls.length === 0) {
     throw new Error(
-      "Facebook no devolvió los datos de la publicación esta vez (a veces bloquea el acceso automático). Probá de nuevo en un rato, o cargá los datos a mano.",
+      "No se pudieron sacar los datos de esa publicación. Si pegaste un link, probá guardando la página y subiendo el archivo en su lugar.",
     );
   }
 
