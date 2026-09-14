@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, type ChangeEvent, type SyntheticEvent } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { createProperty } from "@/server/actions/properties";
+import { importFromFacebookMarketplace } from "@/server/actions/facebook-import";
 import { uploadImageToCloudinary } from "@/lib/cloudinary-upload";
 import type {
   OperationType,
@@ -28,6 +30,8 @@ const PROPERTY_TYPE_OPTIONS: { value: PropertyType; label: string }[] = [
   { value: "otro", label: "Otro" },
 ];
 
+type ImportedImage = { url: string; publicId: string };
+
 export function NewPropertyForm({
   neighborhoods,
 }: {
@@ -45,11 +49,43 @@ export function NewPropertyForm({
   const [bedrooms, setBedrooms] = useState("");
   const [bathrooms, setBathrooms] = useState("");
   const [files, setFiles] = useState<File[]>([]);
+  const [importedImages, setImportedImages] = useState<ImportedImage[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [facebookUrl, setFacebookUrl] = useState("");
+  const [importing, setImporting] = useState(false);
+  const [importError, setImportError] = useState<string | null>(null);
+
   function handleFilesChange(e: ChangeEvent<HTMLInputElement>) {
-    setFiles(Array.from(e.target.files ?? []).slice(0, 12));
+    setFiles(Array.from(e.target.files ?? []).slice(0, 12 - importedImages.length));
+  }
+
+  function handleRemoveImported(publicId: string) {
+    setImportedImages((prev) => prev.filter((img) => img.publicId !== publicId));
+  }
+
+  async function handleImportFromFacebook() {
+    setImportError(null);
+    setImporting(true);
+    try {
+      const result = await importFromFacebookMarketplace(facebookUrl);
+      if (!result.ok) {
+        setImportError(result.error);
+        return;
+      }
+      setTitle(result.data.title);
+      setDescription(result.data.description);
+      if (result.data.priceAmount != null) {
+        setPriceAmount(String(result.data.priceAmount));
+        setPriceCurrency(result.data.priceCurrency);
+      }
+      setImportedImages(result.data.images);
+    } catch {
+      setImportError("No se pudo importar la publicación. Revisá el link e intentá de nuevo.");
+    } finally {
+      setImporting(false);
+    }
   }
 
   async function handleSubmit(
@@ -61,10 +97,11 @@ export function NewPropertyForm({
     setLoading(true);
 
     try {
-      const images = [];
+      const uploadedFromFiles = [];
       for (const file of files) {
-        images.push(await uploadImageToCloudinary(file));
+        uploadedFromFiles.push(await uploadImageToCloudinary(file));
       }
+      const images = [...importedImages, ...uploadedFromFiles];
 
       const result = await createProperty({
         title,
@@ -100,144 +137,198 @@ export function NewPropertyForm({
   }
 
   return (
-    <form className="flex max-w-xl flex-col gap-3">
-      <input
-        type="text"
-        required
-        placeholder="Título (ej: Casa 3 dormitorios en Cambá Cué)"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-      />
-      <textarea
-        placeholder="Descripción"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        rows={4}
-        className="resize-none rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-      />
-
-      <div className="grid grid-cols-2 gap-3">
-        <select
-          value={operationType}
-          onChange={(e) => setOperationType(e.target.value as OperationType)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        >
-          {OPERATION_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-        <select
-          value={propertyType}
-          onChange={(e) => setPropertyType(e.target.value as PropertyType)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        >
-          {PROPERTY_TYPE_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <select
-        value={neighborhoodId}
-        onChange={(e) => setNeighborhoodId(e.target.value)}
-        className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-      >
-        <option value="">Barrio (opcional)</option>
-        {neighborhoods.map((n) => (
-          <option key={n.id} value={n.id}>
-            {n.name}
-          </option>
-        ))}
-      </select>
-
-      <div className="grid grid-cols-2 gap-3">
-        <input
-          type="number"
-          required
-          inputMode="decimal"
-          placeholder="Precio"
-          value={priceAmount}
-          onChange={(e) => setPriceAmount(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        />
-        <select
-          value={priceCurrency}
-          onChange={(e) => setPriceCurrency(e.target.value as PriceCurrency)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        >
-          <option value="USD">USD</option>
-          <option value="ARS">ARS</option>
-        </select>
-      </div>
-
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        <input
-          type="number"
-          inputMode="decimal"
-          placeholder="Superficie m²"
-          value={surfaceTotalM2}
-          onChange={(e) => setSurfaceTotalM2(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        />
-        <input
-          type="number"
-          inputMode="numeric"
-          placeholder="Dormitorios"
-          value={bedrooms}
-          onChange={(e) => setBedrooms(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        />
-        <input
-          type="number"
-          inputMode="numeric"
-          placeholder="Baños"
-          value={bathrooms}
-          onChange={(e) => setBathrooms(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        />
-      </div>
-
-      <label className="flex flex-col gap-1 text-sm">
-        Fotos (hasta 12)
-        <input
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={handleFilesChange}
-          className="rounded-lg border border-dashed border-zinc-300 px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        />
-      </label>
-      {files.length > 0 ? (
+    <div className="flex max-w-xl flex-col gap-4">
+      <div className="flex flex-col gap-2 rounded-lg border border-dashed border-zinc-300 p-3 dark:border-zinc-700">
+        <label className="text-sm font-medium">
+          Importar desde Facebook Marketplace
+        </label>
         <p className="text-xs text-zinc-500">
-          {files.length} foto{files.length === 1 ? "" : "s"} seleccionada
-          {files.length === 1 ? "" : "s"}
+          Pegá el link de tu publicación y completamos título, descripción,
+          precio y fotos automáticamente — después podés editar todo antes de
+          guardar.
         </p>
-      ) : null}
-
-      {error ? <p className="text-sm text-red-600">{error}</p> : null}
-
-      <div className="flex gap-3">
-        <Button
-          type="button"
-          variant="secondary"
-          disabled={loading}
-          onClick={(e) => handleSubmit(e, "borrador")}
-        >
-          Guardar borrador
-        </Button>
-        <Button
-          type="button"
-          disabled={loading}
-          onClick={(e) => handleSubmit(e, "publicada")}
-        >
-          {loading ? "Guardando..." : "Publicar"}
-        </Button>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <input
+            type="url"
+            placeholder="https://www.facebook.com/marketplace/item/..."
+            value={facebookUrl}
+            onChange={(e) => setFacebookUrl(e.target.value)}
+            className="flex-1 rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          />
+          <Button
+            type="button"
+            variant="secondary"
+            disabled={importing || !facebookUrl}
+            onClick={handleImportFromFacebook}
+          >
+            {importing ? "Importando..." : "Importar"}
+          </Button>
+        </div>
+        {importError ? <p className="text-sm text-red-600">{importError}</p> : null}
       </div>
-    </form>
+
+      <form className="flex flex-col gap-3">
+        <input
+          type="text"
+          required
+          placeholder="Título (ej: Casa 3 dormitorios en Cambá Cué)"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+        />
+        <textarea
+          placeholder="Descripción"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          rows={4}
+          className="resize-none rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+        />
+
+        <div className="grid grid-cols-2 gap-3">
+          <select
+            value={operationType}
+            onChange={(e) => setOperationType(e.target.value as OperationType)}
+            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          >
+            {OPERATION_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+          <select
+            value={propertyType}
+            onChange={(e) => setPropertyType(e.target.value as PropertyType)}
+            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          >
+            {PROPERTY_TYPE_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <select
+          value={neighborhoodId}
+          onChange={(e) => setNeighborhoodId(e.target.value)}
+          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+        >
+          <option value="">Barrio (opcional)</option>
+          {neighborhoods.map((n) => (
+            <option key={n.id} value={n.id}>
+              {n.name}
+            </option>
+          ))}
+        </select>
+
+        <div className="grid grid-cols-2 gap-3">
+          <input
+            type="number"
+            required
+            inputMode="decimal"
+            placeholder="Precio"
+            value={priceAmount}
+            onChange={(e) => setPriceAmount(e.target.value)}
+            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          />
+          <select
+            value={priceCurrency}
+            onChange={(e) => setPriceCurrency(e.target.value as PriceCurrency)}
+            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          >
+            <option value="USD">USD</option>
+            <option value="ARS">ARS</option>
+          </select>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <input
+            type="number"
+            inputMode="decimal"
+            placeholder="Superficie m²"
+            value={surfaceTotalM2}
+            onChange={(e) => setSurfaceTotalM2(e.target.value)}
+            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          />
+          <input
+            type="number"
+            inputMode="numeric"
+            placeholder="Dormitorios"
+            value={bedrooms}
+            onChange={(e) => setBedrooms(e.target.value)}
+            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          />
+          <input
+            type="number"
+            inputMode="numeric"
+            placeholder="Baños"
+            value={bathrooms}
+            onChange={(e) => setBathrooms(e.target.value)}
+            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          />
+        </div>
+
+        {importedImages.length > 0 ? (
+          <div className="flex flex-col gap-1">
+            <span className="text-sm font-medium">Fotos importadas de Facebook</span>
+            <div className="grid grid-cols-4 gap-2">
+              {importedImages.map((img) => (
+                <div
+                  key={img.publicId}
+                  className="group relative aspect-square overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-900"
+                >
+                  <Image src={img.url} alt="" fill className="object-cover" sizes="100px" />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImported(img.publicId)}
+                    className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/70 text-xs text-white"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        <label className="flex flex-col gap-1 text-sm">
+          {importedImages.length > 0 ? "Agregar más fotos" : "Fotos (hasta 12)"}
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleFilesChange}
+            className="rounded-lg border border-dashed border-zinc-300 px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          />
+        </label>
+        {files.length > 0 ? (
+          <p className="text-xs text-zinc-500">
+            {files.length} foto{files.length === 1 ? "" : "s"} seleccionada
+            {files.length === 1 ? "" : "s"}
+          </p>
+        ) : null}
+
+        {error ? <p className="text-sm text-red-600">{error}</p> : null}
+
+        <div className="flex gap-3">
+          <Button
+            type="button"
+            variant="secondary"
+            disabled={loading}
+            onClick={(e) => handleSubmit(e, "borrador")}
+          >
+            Guardar borrador
+          </Button>
+          <Button
+            type="button"
+            disabled={loading}
+            onClick={(e) => handleSubmit(e, "publicada")}
+          >
+            {loading ? "Guardando..." : "Publicar"}
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 }
