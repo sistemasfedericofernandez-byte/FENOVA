@@ -16,7 +16,12 @@ const BROWSER_HEADERS = {
   "Sec-Fetch-Mode": "navigate",
   "Sec-Fetch-Site": "none",
   "Sec-Fetch-Dest": "document",
+  "Sec-Fetch-User": "?1",
   "Upgrade-Insecure-Requests": "1",
+  "Sec-Ch-Ua": '"Not_A Brand";v="8", "Chromium";v="128", "Google Chrome";v="128"',
+  "Sec-Ch-Ua-Mobile": "?0",
+  "Sec-Ch-Ua-Platform": '"Windows"',
+  Priority: "u=0, i",
 };
 
 /**
@@ -59,12 +64,26 @@ export async function fetchFacebookMarketplaceListing(
   const detail = findDetailBlock(jsonBlocks);
   const images = findImageArray(jsonBlocks);
 
+  const title = detail?.title ?? ogTitle;
+  const imageUrls = images.length > 0 ? images : ogImage ? [decodeHtmlEntities(ogImage)] : [];
+
+  // Si no se pudo sacar ni el título ni ninguna foto, probablemente Facebook
+  // bloqueó este pedido (les pasa seguido a los servidores en la nube, son
+  // más estrictos con esas IPs que con una visita normal) en vez de servir
+  // la publicación. Mejor avisar con un error claro que devolver un
+  // formulario vacío como si hubiese funcionado.
+  if (!title && imageUrls.length === 0) {
+    throw new Error(
+      "Facebook no devolvió los datos de la publicación esta vez (a veces bloquea el acceso automático). Probá de nuevo en un rato, o cargá los datos a mano.",
+    );
+  }
+
   return {
-    title: detail?.title ?? ogTitle ?? "Propiedad importada de Facebook",
+    title: title ?? "Propiedad importada de Facebook",
     description: detail?.description ?? ogDescription ?? null,
     priceAmount: detail?.priceAmount ?? null,
     priceCurrency: detail?.priceCurrency ?? "ARS",
-    imageUrls: images.length > 0 ? images : ogImage ? [decodeHtmlEntities(ogImage)] : [],
+    imageUrls,
   };
 }
 
