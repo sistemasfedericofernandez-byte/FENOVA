@@ -23,7 +23,7 @@ export default async function EditarPropiedadPage({
   const { data: property } = await supabase
     .from("properties")
     .select(
-      "id, title, description, operation_type, property_type, neighborhood_id, price_amount, price_currency, surface_total_m2, bedrooms, bathrooms, status, agency_id",
+      "id, title, description, operation_type, property_type, neighborhood_id, owner_id, price_amount, price_currency, surface_total_m2, bedrooms, bathrooms, status, agency_id",
     )
     .eq("id", id)
     .maybeSingle();
@@ -32,13 +32,14 @@ export default async function EditarPropiedadPage({
     notFound();
   }
 
-  const [{ data: neighborhoods }, { data: images }] = await Promise.all([
+  const [{ data: neighborhoods }, { data: images }, { data: owners }] = await Promise.all([
     supabase.from("neighborhoods").select("id, name").eq("active", true).order("name"),
     supabase
       .from("property_images")
       .select("id, url")
       .eq("property_id", id)
       .order("sort_order", { ascending: true }),
+    supabase.from("owners").select("id, full_name").eq("agency_id", agency.id).order("full_name"),
   ]);
 
   return (
@@ -52,6 +53,7 @@ export default async function EditarPropiedadPage({
           operationType: property.operation_type,
           propertyType: property.property_type,
           neighborhoodId: property.neighborhood_id,
+          ownerId: property.owner_id,
           priceAmount: property.price_amount,
           priceCurrency: property.price_currency,
           surfaceTotalM2: property.surface_total_m2,
@@ -60,6 +62,7 @@ export default async function EditarPropiedadPage({
           status: property.status,
         }}
         neighborhoods={neighborhoods ?? []}
+        owners={owners ?? []}
         initialImages={images ?? []}
       />
     </div>

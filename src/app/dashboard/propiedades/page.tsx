@@ -8,6 +8,7 @@ const STATUS_LABEL: Record<string, string> = {
   publicada: "Publicada",
   oculta: "Oculta",
   pausada_por_impago: "Pausada por impago",
+  alquilada: "Alquilada",
 };
 
 export default async function DashboardPropiedadesPage() {
@@ -63,6 +64,12 @@ export default async function DashboardPropiedadesPage() {
               <div className="flex items-center justify-between gap-4 text-sm text-zinc-500 sm:justify-end">
                 <span>{p.views_count} vistas</span>
                 <span>{p.whatsapp_clicks_count} clics WhatsApp</span>
+                <Link
+                  href={`/dashboard/propiedades/${p.id}/alquilar`}
+                  className="flex min-h-11 items-center underline underline-offset-4"
+                >
+                  {p.status === "alquilada" ? "Ver contrato" : "Marcar como alquilada"}
+                </Link>
                 <Link
                   href={`/dashboard/propiedades/${p.id}/editar`}
                   className="flex min-h-11 items-center underline underline-offset-4"

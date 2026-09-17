@@ -41,6 +41,7 @@ export function EditPropertyForm({
   propertyId,
   initial,
   neighborhoods,
+  owners,
   initialImages,
 }: {
   propertyId: string;
@@ -50,6 +51,7 @@ export function EditPropertyForm({
     operationType: OperationType;
     propertyType: PropertyType;
     neighborhoodId: string | null;
+    ownerId: string | null;
     priceAmount: number;
     priceCurrency: PriceCurrency;
     surfaceTotalM2: number | null;
@@ -58,6 +60,7 @@ export function EditPropertyForm({
     status: string;
   };
   neighborhoods: { id: string; name: string }[];
+  owners: { id: string; full_name: string }[];
   initialImages: ExistingImage[];
 }) {
   const router = useRouter();
@@ -66,6 +69,7 @@ export function EditPropertyForm({
   const [operationType, setOperationType] = useState(initial.operationType);
   const [propertyType, setPropertyType] = useState(initial.propertyType);
   const [neighborhoodId, setNeighborhoodId] = useState(initial.neighborhoodId ?? "");
+  const [ownerId, setOwnerId] = useState(initial.ownerId ?? "");
   const [priceAmount, setPriceAmount] = useState(String(initial.priceAmount));
   const [priceCurrency, setPriceCurrency] = useState(initial.priceCurrency);
   const [surfaceTotalM2, setSurfaceTotalM2] = useState(
@@ -104,6 +108,7 @@ export function EditPropertyForm({
       operationType,
       propertyType,
       neighborhoodId: neighborhoodId || undefined,
+      ownerId: ownerId || undefined,
       priceAmount: Number(priceAmount),
       priceCurrency,
       surfaceTotalM2: surfaceTotalM2 ? Number(surfaceTotalM2) : undefined,
@@ -268,6 +273,29 @@ export function EditPropertyForm({
           </option>
         ))}
       </select>
+
+      <div className="flex flex-col gap-1">
+        <select
+          value={ownerId}
+          onChange={(e) => setOwnerId(e.target.value)}
+          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+        >
+          <option value="">Sin propietario asignado</option>
+          {owners.map((o) => (
+            <option key={o.id} value={o.id}>
+              {o.full_name}
+            </option>
+          ))}
+        </select>
+        <a
+          href="/dashboard/propietarios"
+          target="_blank"
+          rel="noreferrer"
+          className="text-xs text-zinc-500 underline underline-offset-4"
+        >
+          + nuevo propietario
+        </a>
+      </div>
 
       <div className="grid grid-cols-2 gap-3">
         <input

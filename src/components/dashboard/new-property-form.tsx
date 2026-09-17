@@ -37,8 +37,10 @@ type ImportedImage = { url: string; publicId: string };
 
 export function NewPropertyForm({
   neighborhoods,
+  owners,
 }: {
   neighborhoods: { id: string; name: string }[];
+  owners: { id: string; full_name: string }[];
 }) {
   const router = useRouter();
   const [title, setTitle] = useState("");
@@ -46,6 +48,7 @@ export function NewPropertyForm({
   const [operationType, setOperationType] = useState<OperationType>("venta");
   const [propertyType, setPropertyType] = useState<PropertyType>("casa");
   const [neighborhoodId, setNeighborhoodId] = useState("");
+  const [ownerId, setOwnerId] = useState("");
   const [priceAmount, setPriceAmount] = useState("");
   const [priceCurrency, setPriceCurrency] = useState<PriceCurrency>("USD");
   const [surfaceTotalM2, setSurfaceTotalM2] = useState("");
@@ -144,6 +147,7 @@ export function NewPropertyForm({
         operationType,
         propertyType,
         neighborhoodId: neighborhoodId || undefined,
+        ownerId: ownerId || undefined,
         priceAmount: Number(priceAmount),
         priceCurrency,
         surfaceTotalM2: surfaceTotalM2 ? Number(surfaceTotalM2) : undefined,
@@ -295,6 +299,29 @@ export function NewPropertyForm({
             </option>
           ))}
         </select>
+
+        <div className="flex flex-col gap-1">
+          <select
+            value={ownerId}
+            onChange={(e) => setOwnerId(e.target.value)}
+            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          >
+            <option value="">Sin propietario asignado</option>
+            {owners.map((o) => (
+              <option key={o.id} value={o.id}>
+                {o.full_name}
+              </option>
+            ))}
+          </select>
+          <a
+            href="/dashboard/propietarios"
+            target="_blank"
+            rel="noreferrer"
+            className="text-xs text-zinc-500 underline underline-offset-4"
+          >
+            + nuevo propietario
+          </a>
+        </div>
 
         <div className="grid grid-cols-2 gap-3">
           <input

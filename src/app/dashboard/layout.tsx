@@ -23,7 +23,7 @@ export default async function DashboardLayout({
     <div className="flex min-h-screen flex-col">
       <header className="flex items-center justify-between border-b border-zinc-200 px-4 py-4 dark:border-zinc-800">
         <Link
-          href={profile?.role === "hotel" ? "/dashboard/hotel" : "/dashboard/propiedades"}
+          href={profile?.role === "hotel" ? "/dashboard/hotel" : "/dashboard"}
           className="font-semibold"
         >
           Panel de agencia

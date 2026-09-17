@@ -6,9 +6,12 @@ import { cn } from "@/lib/utils";
 import type { UserRole } from "@/types/database.types";
 
 const PROPERTY_LINKS = [
+  { href: "/dashboard", label: "Panel" },
+  { href: "/dashboard/perfil", label: "Perfil" },
   { href: "/dashboard/propiedades", label: "Mis propiedades" },
   { href: "/dashboard/propiedades/nueva", label: "Nueva propiedad" },
   { href: "/dashboard/propiedades/carga-masiva", label: "Carga masiva" },
+  { href: "/dashboard/propietarios", label: "Propietarios" },
   { href: "/dashboard/estadisticas", label: "Estadísticas" },
   { href: "/dashboard/suscripcion", label: "Suscripción" },
   { href: "/dashboard/verificacion", label: "Propietario Seguro" },

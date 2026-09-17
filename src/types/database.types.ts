@@ -42,7 +42,12 @@ export type PropertyStatus =
   | "borrador"
   | "publicada"
   | "oculta"
-  | "pausada_por_impago";
+  | "pausada_por_impago"
+  | "alquilada";
+
+export type TenancyStatus = "activo" | "finalizado";
+
+export type RentPaymentStatus = "pendiente" | "pagado";
 
 export type BulkUploadStatus =
   | "procesando"
@@ -75,6 +80,8 @@ export interface Database {
           avatar_url: string | null;
           status: ProfileStatus;
           referred_by_affiliate_id: string | null;
+          terms_accepted_at: string | null;
+          terms_version: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -217,6 +224,7 @@ export interface Database {
           operation_type: OperationType;
           property_type: PropertyType;
           neighborhood_id: string | null;
+          owner_id: string | null;
           address_text: string | null;
           lat: number | null;
           lng: number | null;
@@ -423,6 +431,75 @@ export interface Database {
           event_type: PropertyEventType;
         };
         Update: Partial<Database["public"]["Tables"]["hotel_events"]["Row"]>;
+        Relationships: [];
+      };
+      property_tenancies: {
+        Row: {
+          id: string;
+          property_id: string;
+          agency_id: string;
+          status: TenancyStatus;
+          tenant_full_name: string;
+          tenant_dni: string | null;
+          guarantor_full_name: string | null;
+          guarantor_dni: string | null;
+          monthly_rent_amount: number | null;
+          price_currency: PriceCurrency | null;
+          start_date: string | null;
+          end_date: string | null;
+          notes: string | null;
+          data_consent_confirmed_at: string | null;
+          personal_data_erased_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: Partial<Database["public"]["Tables"]["property_tenancies"]["Row"]> & {
+          property_id: string;
+          agency_id: string;
+          tenant_full_name: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["property_tenancies"]["Row"]>;
+        Relationships: [];
+      };
+      owners: {
+        Row: {
+          id: string;
+          agency_id: string;
+          full_name: string;
+          dni_cuit: string | null;
+          phone: string | null;
+          email: string | null;
+          notes: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: Partial<Database["public"]["Tables"]["owners"]["Row"]> & {
+          agency_id: string;
+          full_name: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["owners"]["Row"]>;
+        Relationships: [];
+      };
+      rent_payments: {
+        Row: {
+          id: string;
+          tenancy_id: string;
+          agency_id: string;
+          period_month: string;
+          amount: number | null;
+          price_currency: PriceCurrency | null;
+          status: RentPaymentStatus;
+          paid_at: string | null;
+          notes: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: Partial<Database["public"]["Tables"]["rent_payments"]["Row"]> & {
+          tenancy_id: string;
+          agency_id: string;
+          period_month: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["rent_payments"]["Row"]>;
         Relationships: [];
       };
       neighborhood_roi_snapshot: {

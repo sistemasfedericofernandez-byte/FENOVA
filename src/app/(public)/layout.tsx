@@ -15,7 +15,7 @@ export default async function PublicLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
-  let dashboardHref = "/dashboard/propiedades";
+  let dashboardHref = "/dashboard";
   if (user) {
     const { data: profile } = await supabase
       .from("profiles")

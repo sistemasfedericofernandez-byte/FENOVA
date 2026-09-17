@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
+import { TERMS_VERSION } from "@/lib/terms";
 import type { UserRole } from "@/types/database.types";
 
 const ROLE_OPTIONS: { value: UserRole; label: string }[] = [
@@ -20,6 +21,7 @@ export default function RegistroPage() {
   const [whatsappNumber, setWhatsappNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [confirmationSent, setConfirmationSent] = useState(false);
@@ -27,6 +29,12 @@ export default function RegistroPage() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError(null);
+
+    if (!termsAccepted) {
+      setError("Tenés que aceptar los Términos y Condiciones para crear tu cuenta.");
+      return;
+    }
+
     setLoading(true);
 
     const supabase = createClient();
@@ -40,6 +48,8 @@ export default function RegistroPage() {
           full_name: fullName,
           business_name: businessName,
           whatsapp_number: whatsappNumber,
+          terms_accepted_at: new Date().toISOString(),
+          terms_version: TERMS_VERSION,
         },
       },
     });
@@ -144,9 +154,30 @@ export default function RegistroPage() {
           className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
         />
 
+        <label className="flex items-start gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+          <input
+            type="checkbox"
+            checked={termsAccepted}
+            onChange={(e) => setTermsAccepted(e.target.checked)}
+            className="mt-1 h-4 w-4 shrink-0"
+          />
+          <span>
+            Acepto los{" "}
+            <a
+              href="/terminos"
+              target="_blank"
+              rel="noreferrer"
+              className="underline underline-offset-4"
+            >
+              Términos y Condiciones
+            </a>{" "}
+            de PropiMarket.
+          </span>
+        </label>
+
         {error ? <p className="text-sm text-red-600">{error}</p> : null}
 
-        <Button type="submit" disabled={loading}>
+        <Button type="submit" disabled={loading || !termsAccepted}>
           {loading ? "Creando cuenta..." : "Crear cuenta"}
         </Button>
       </form>
