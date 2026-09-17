@@ -163,6 +163,7 @@ export interface Database {
           status: SubscriptionStatus;
           mercadopago_subscription_id: string | null;
           current_period_end: string | null;
+          renewal_reminder_period_end: string | null;
           created_at: string;
           updated_at: string;
         };

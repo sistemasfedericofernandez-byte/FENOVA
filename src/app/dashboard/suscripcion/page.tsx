@@ -31,7 +31,7 @@ export default async function SuscripcionPage() {
   const { data: subscription } = agency
     ? await supabase
         .from("subscriptions")
-        .select("plan_id, status")
+        .select("plan_id, status, current_period_end")
         .eq("agency_id", agency.id)
         .maybeSingle()
     : { data: null };
@@ -48,6 +48,9 @@ export default async function SuscripcionPage() {
       {subscription ? (
         <p className="text-sm text-zinc-600 dark:text-zinc-400">
           Estado actual: <strong>{STATUS_LABEL[subscription.status] ?? subscription.status}</strong>
+          {subscription.status === "activa" && subscription.current_period_end
+            ? ` · Próximo cobro: ${new Date(subscription.current_period_end).toLocaleDateString("es-AR", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })}`
+            : ""}
         </p>
       ) : null}
 

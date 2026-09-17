@@ -100,9 +100,21 @@ export async function POST(request: Request) {
   );
 
   if (paymentStatus === "aprobado") {
+    // Los planes son todos mensuales (auto_recurring.frequency_type: "months",
+    // ver server/actions/subscriptions.ts), así que el próximo cobro es un mes
+    // después de este pago aprobado. Reseteamos el flag de recordatorio para
+    // que el cron pueda volver a avisar en el próximo ciclo.
+    const paidAt = payment.date_approved ? new Date(payment.date_approved) : new Date();
+    const nextPeriodEnd = new Date(paidAt);
+    nextPeriodEnd.setUTCMonth(nextPeriodEnd.getUTCMonth() + 1);
+
     await supabase
       .from("subscriptions")
-      .update({ status: "activa" })
+      .update({
+        status: "activa",
+        current_period_end: nextPeriodEnd.toISOString(),
+        renewal_reminder_period_end: null,
+      })
       .eq("id", subscription.id);
   } else if (paymentStatus === "rechazado") {
     // Regla de negocio: pago rechazado => las propiedades de la agencia pasan a "oculta".
