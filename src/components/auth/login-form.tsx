@@ -3,6 +3,8 @@
 import { useState, type FormEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { translateAuthError } from "@/lib/auth-errors";
+import { safeInternalPath } from "@/lib/safe-redirect";
 import { Button } from "@/components/ui/button";
 
 export function LoginForm() {
@@ -11,7 +13,7 @@ export function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(searchParams.get("error"));
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -20,11 +22,11 @@ export function LoginForm() {
 
     const supabase = createClient();
     const { data, error: signInError } =
-      await supabase.auth.signInWithPassword({ email, password });
+      await supabase.auth.signInWithPassword({ email: email.trim(), password });
 
     if (signInError || !data.user) {
       setLoading(false);
-      setError(signInError?.message ?? "No se pudo iniciar sesión");
+      setError(translateAuthError(signInError?.message));
       return;
     }
 
@@ -36,14 +38,14 @@ export function LoginForm() {
 
     setLoading(false);
 
-    const redirectParam = searchParams.get("redirect");
-    const destination =
-      redirectParam ??
-      (profile?.role === "super_admin"
+    const defaultDestination =
+      profile?.role === "super_admin"
         ? "/admin/metricas"
-        : "/dashboard/propiedades");
+        : profile?.role === "hotel"
+          ? "/dashboard/hotel"
+          : "/dashboard";
 
-    router.push(destination);
+    router.push(safeInternalPath(searchParams.get("redirect"), defaultDestination));
     router.refresh();
   }
 
@@ -53,6 +55,7 @@ export function LoginForm() {
         <input
           type="email"
           required
+          autoComplete="email"
           placeholder="tu@email.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -61,6 +64,7 @@ export function LoginForm() {
         <input
           type="password"
           required
+          autoComplete="current-password"
           placeholder="Contraseña"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -74,12 +78,14 @@ export function LoginForm() {
         </Button>
       </form>
 
-      <a
-        href="/registro"
-        className="text-center text-sm underline underline-offset-4"
-      >
-        No tengo cuenta, crear una
-      </a>
+      <div className="flex flex-col gap-2 text-center text-sm">
+        <a href="/olvide-mi-contrasena" className="underline underline-offset-4">
+          Olvidé mi contraseña
+        </a>
+        <a href="/registro" className="underline underline-offset-4">
+          No tengo cuenta, crear una
+        </a>
+      </div>
     </>
   );
 }

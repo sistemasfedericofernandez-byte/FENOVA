@@ -1,9 +1,22 @@
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { VerificationReviewItem } from "@/components/admin/verification-review-item";
 
 export default async function VerificacionesAdminPage() {
+  // El comprobante (verification_doc_url) no es legible con la API pública;
+  // se lee con el cliente de servicio, previa confirmación explícita del rol.
   const supabase = await createClient();
-  const { data: pending } = await supabase
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user?.id ?? "")
+    .maybeSingle();
+  if (profile?.role !== "super_admin") return null;
+
+  const { data: pending } = await createAdminClient()
     .from("agencies")
     .select("id, business_name, verification_doc_url")
     .eq("verification_status", "pendiente")

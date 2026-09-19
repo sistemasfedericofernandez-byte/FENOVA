@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { translateAuthError } from "@/lib/auth-errors";
 import { Button } from "@/components/ui/button";
 import { TERMS_VERSION } from "@/lib/terms";
 import type { UserRole } from "@/types/database.types";
@@ -13,6 +14,9 @@ const ROLE_OPTIONS: { value: UserRole; label: string }[] = [
   { value: "dueno_directo", label: "Dueño directo" },
 ];
 
+const INPUT_CLASS =
+  "rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700";
+
 export default function RegistroPage() {
   const router = useRouter();
   const [role, setRole] = useState<UserRole>("inmobiliaria");
@@ -21,10 +25,12 @@ export default function RegistroPage() {
   const [whatsappNumber, setWhatsappNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [confirmationSent, setConfirmationSent] = useState(false);
+  const [resendMessage, setResendMessage] = useState<string | null>(null);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -35,19 +41,24 @@ export default function RegistroPage() {
       return;
     }
 
+    if (password.length < 8) {
+      setError("La contraseña tiene que tener al menos 8 caracteres.");
+      return;
+    }
+
     setLoading(true);
 
     const supabase = createClient();
     const { data, error: signUpError } = await supabase.auth.signUp({
-      email,
+      email: email.trim(),
       password,
       options: {
         emailRedirectTo: `${window.location.origin}/auth/callback`,
         data: {
           role,
-          full_name: fullName,
-          business_name: businessName,
-          whatsapp_number: whatsappNumber,
+          full_name: fullName.trim(),
+          business_name: businessName.trim(),
+          whatsapp_number: whatsappNumber.trim(),
           terms_accepted_at: new Date().toISOString(),
           terms_version: TERMS_VERSION,
         },
@@ -57,12 +68,12 @@ export default function RegistroPage() {
     setLoading(false);
 
     if (signUpError) {
-      setError(signUpError.message);
+      setError(translateAuthError(signUpError.message));
       return;
     }
 
     if (data.session) {
-      router.push("/dashboard/propiedades");
+      router.push(role === "hotel" ? "/dashboard/hotel" : "/dashboard");
       router.refresh();
       return;
     }
@@ -70,14 +81,39 @@ export default function RegistroPage() {
     setConfirmationSent(true);
   }
 
+  async function handleResend() {
+    setResendMessage(null);
+    const supabase = createClient();
+    const { error: resendError } = await supabase.auth.resend({
+      type: "signup",
+      email: email.trim(),
+      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+    });
+    setResendMessage(
+      resendError ? translateAuthError(resendError.message) : "Listo, te lo mandamos de nuevo.",
+    );
+  }
+
   if (confirmationSent) {
     return (
       <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center gap-4 px-4 text-center">
         <h1 className="text-2xl font-semibold">Revisá tu email</h1>
         <p className="text-zinc-600 dark:text-zinc-400">
-          Te enviamos un link de confirmación a {email}. Una vez confirmado ya
-          podés ingresar.
+          Te enviamos un link de confirmación a <strong>{email}</strong>. Al
+          tocarlo tu cuenta queda lista para usar. Si no lo ves, revisá la
+          carpeta de spam.
         </p>
+        <button
+          type="button"
+          onClick={handleResend}
+          className="text-sm underline underline-offset-4"
+        >
+          Reenviar el email
+        </button>
+        {resendMessage ? <p className="text-sm text-zinc-500">{resendMessage}</p> : null}
+        <a href="/login" className="text-sm underline underline-offset-4">
+          Ya confirmé, ingresar
+        </a>
       </main>
     );
   }
@@ -112,13 +148,16 @@ export default function RegistroPage() {
         <input
           type="text"
           required
+          autoComplete="name"
           placeholder="Tu nombre completo"
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          className={INPUT_CLASS}
         />
         <input
           type="text"
+          required={role !== "dueno_directo"}
+          autoComplete="organization"
           placeholder={
             role === "dueno_directo"
               ? "Nombre (opcional si sos particular)"
@@ -126,33 +165,46 @@ export default function RegistroPage() {
           }
           value={businessName}
           onChange={(e) => setBusinessName(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          className={INPUT_CLASS}
         />
         <input
           type="tel"
           required
+          autoComplete="tel"
+          inputMode="tel"
           placeholder="WhatsApp de contacto (ej: 5493794000001)"
           value={whatsappNumber}
           onChange={(e) => setWhatsappNumber(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          className={INPUT_CLASS}
         />
         <input
           type="email"
           required
+          autoComplete="email"
           placeholder="tu@email.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          className={INPUT_CLASS}
         />
-        <input
-          type="password"
-          required
-          minLength={6}
-          placeholder="Contraseña (mín. 6 caracteres)"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        />
+        <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            required
+            minLength={8}
+            autoComplete="new-password"
+            placeholder="Contraseña (mínimo 8 caracteres)"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={`${INPUT_CLASS} w-full pr-16`}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((v) => !v)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-zinc-500 underline underline-offset-2"
+          >
+            {showPassword ? "Ocultar" : "Ver"}
+          </button>
+        </div>
 
         <label className="flex items-start gap-2 text-sm text-zinc-600 dark:text-zinc-400">
           <input
