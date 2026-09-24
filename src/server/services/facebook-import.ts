@@ -1,4 +1,5 @@
 import type { PriceCurrency } from "@/types/database.types";
+import { decodeMhtmlIfNeeded } from "@/server/services/mhtml";
 
 export type FacebookListingData = {
   title: string;
@@ -65,7 +66,8 @@ export async function fetchFacebookMarketplaceListing(
  * siempre se cae de vuelta a las meta tags og:* (más estables) cuando el
  * bloque JSON no aparece.
  */
-export function parseFacebookMarketplaceHtml(html: string): FacebookListingData {
+export function parseFacebookMarketplaceHtml(rawHtml: string): FacebookListingData {
+  const html = decodeMhtmlIfNeeded(rawHtml);
   const ogTitle = extractMeta(html, "og:title");
   const ogDescription = extractMeta(html, "og:description");
   const ogImage = extractMeta(html, "og:image");

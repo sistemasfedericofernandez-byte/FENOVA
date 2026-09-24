@@ -12,6 +12,7 @@ import {
   CloseIcon,
   ExternalIcon,
   HomeIcon,
+  ImportIcon,
   KeyIcon,
   LogoutIcon,
   MenuIcon,
@@ -39,6 +40,7 @@ const AGENCY_NAV: NavGroup[] = [
     items: [
       { href: "/dashboard/propiedades", label: "Mis propiedades", icon: BuildingIcon },
       { href: "/dashboard/propiedades/nueva", label: "Publicar propiedad", icon: PlusIcon },
+      { href: "/dashboard/propiedades/importar", label: "Importar de Facebook", icon: ImportIcon },
       { href: "/dashboard/propiedades/carga-masiva", label: "Carga masiva", icon: UploadIcon },
     ],
   },

@@ -2,6 +2,7 @@
 
 import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { goTo } from "@/lib/navigate";
 import { Button } from "@/components/ui/button";
@@ -200,6 +201,12 @@ export function NewPropertyForm({
           Importala y completamos título, descripción, precio y fotos por vos. Después podés corregir
           lo que quieras antes de guardar.
         </p>
+        <Link
+          href="/dashboard/propiedades/importar"
+          className="w-fit text-sm font-semibold text-[#163a5c] underline underline-offset-4"
+        >
+          ¿Tenés varias? Importalas todas juntas, paso a paso →
+        </Link>
 
         <ol className="list-decimal space-y-1 pl-5 text-sm text-zinc-800">
           <li>Abrí tu publicación en Facebook, en tu propio navegador.</li>

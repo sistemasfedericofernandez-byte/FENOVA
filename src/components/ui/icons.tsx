@@ -36,6 +36,11 @@ export const PlusIcon = (p: IconProps) => (
     <path d="M12 5v14M5 12h14" />
   </Icon>
 );
+export const ImportIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M12 4v11m0 0-4-4m4 4 4-4M4 20h16" />
+  </Icon>
+);
 export const UploadIcon = (p: IconProps) => (
   <Icon {...p}>
     <path d="M12 16V4m0 0L8 8m4-4 4 4M4 20h16" />
