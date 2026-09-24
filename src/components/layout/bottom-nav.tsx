@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "motion/react";
-import { HomeIcon, SearchIcon, BellIcon, UserIcon } from "@/components/icons";
+import { HomeIcon, SearchIcon, MapPinIcon, BellIcon, UserIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import { springSoft } from "@/lib/motion";
 
@@ -19,6 +19,7 @@ export function BottomNav({
   const items = [
     { href: "/", label: "Inicio", icon: HomeIcon },
     { href: "/propiedades", label: "Buscar", icon: SearchIcon },
+    { href: "/mapa", label: "Mapa", icon: MapPinIcon },
     { href: "/alertas", label: "Alertas", icon: BellIcon },
     {
       href: isLoggedIn ? dashboardHref : "/login",

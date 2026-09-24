@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
+import { LocationPicker } from "@/components/dashboard/location-picker";
+import { neighborhoodCenter } from "@/lib/corrientes";
 import { createProperty } from "@/server/actions/properties";
 import {
   importFromFacebookMarketplace,
@@ -50,6 +52,8 @@ export function NewPropertyForm({
   const [propertyType, setPropertyType] = useState<PropertyType>("casa");
   const [neighborhoodId, setNeighborhoodId] = useState("");
   const [ownerId, setOwnerId] = useState("");
+  const [addressText, setAddressText] = useState("");
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [priceAmount, setPriceAmount] = useState("");
   const [priceCurrency, setPriceCurrency] = useState<PriceCurrency>("USD");
   const [surfaceTotalM2, setSurfaceTotalM2] = useState("");
@@ -149,6 +153,9 @@ export function NewPropertyForm({
         propertyType,
         neighborhoodId: neighborhoodId || undefined,
         ownerId: ownerId || undefined,
+        addressText: addressText.trim() || null,
+        lat: location ? location.lat : null,
+        lng: location ? location.lng : null,
         priceAmount: Number(priceAmount),
         priceCurrency,
         surfaceTotalM2: surfaceTotalM2 ? Number(surfaceTotalM2) : undefined,
@@ -311,6 +318,32 @@ export function NewPropertyForm({
               ))}
             </select>
           </Field>
+        </div>
+
+        <Field
+          label="Dirección"
+          hint="Es opcional y se muestra en el aviso. Si no querés mostrar el número exacto, poné solo la calle o la zona."
+        >
+          <input
+            type="text"
+            value={addressText}
+            onChange={(e) => setAddressText(e.target.value)}
+            placeholder="Ej: San Martín 1200"
+            className="field"
+          />
+        </Field>
+
+        <div className="flex flex-col gap-2">
+          <span className="text-sm font-semibold text-zinc-800">Ubicación en el mapa</span>
+          <p className="text-xs leading-snug text-zinc-600">
+            Marcá el punto exacto. Quien mire el aviso va a ver en el mapa la zona donde queda, sin
+            necesidad de que le pases la dirección.
+          </p>
+          <LocationPicker
+            value={location}
+            onChange={setLocation}
+            fallbackCenter={neighborhoodCenter(neighborhoods.find((n) => n.id === neighborhoodId)?.name)}
+          />
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">

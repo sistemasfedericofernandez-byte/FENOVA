@@ -4,7 +4,7 @@ import { WhatsappButton } from "@/components/property/whatsapp-button";
 import { ViewTracker } from "@/components/property/view-tracker";
 import { PropertyGallery } from "@/components/property/property-gallery";
 import { ShareButton } from "@/components/property/share-button";
-import { PropertyMap } from "@/components/property/property-map";
+import { LocationSection } from "@/components/property/location-section";
 import { StarIcon } from "@/components/icons";
 import { AMENITY_MAP } from "@/components/hotel/amenities";
 import { getPublishedHotelBySlug } from "@/server/services/public-hotels";
@@ -133,9 +133,12 @@ export default async function HotelDetallePage({
         </div>
       ) : null}
 
-      {hotel.lat != null && hotel.lng != null ? (
-        <PropertyMap lat={hotel.lat} lng={hotel.lng} />
-      ) : null}
+      <LocationSection
+        lat={hotel.lat}
+        lng={hotel.lng}
+        neighborhoodName={hotel.neighborhoodName}
+        addressText={hotel.addressText}
+      />
 
       {hotel.whatsappNumber ? (
         <div className="sticky bottom-[calc(5.5rem+env(safe-area-inset-bottom))] flex justify-center sm:static sm:bottom-auto sm:justify-start">

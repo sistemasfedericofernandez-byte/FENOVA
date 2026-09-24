@@ -4,7 +4,7 @@ import { WhatsappButton } from "@/components/property/whatsapp-button";
 import { ViewTracker } from "@/components/property/view-tracker";
 import { PropertyGallery } from "@/components/property/property-gallery";
 import { ShareButton } from "@/components/property/share-button";
-import { PropertyMap } from "@/components/property/property-map";
+import { LocationSection } from "@/components/property/location-section";
 import { BedIcon, BathIcon, RulerIcon } from "@/components/icons";
 import { getPublishedPropertyBySlug } from "@/server/services/public-properties";
 import { formatArs } from "@/lib/utils";
@@ -131,9 +131,12 @@ export default async function PropiedadDetallePage({
         </div>
       ) : null}
 
-      {property.lat != null && property.lng != null ? (
-        <PropertyMap lat={property.lat} lng={property.lng} />
-      ) : null}
+      <LocationSection
+        lat={property.lat}
+        lng={property.lng}
+        neighborhoodName={property.neighborhoodName}
+        addressText={property.addressText}
+      />
 
       {property.whatsappNumber ? (
         <div className="sticky bottom-[calc(5.5rem+env(safe-area-inset-bottom))] flex justify-center sm:static sm:bottom-auto sm:justify-start">

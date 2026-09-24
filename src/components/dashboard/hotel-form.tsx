@@ -7,6 +7,9 @@ import { Button } from "@/components/ui/button";
 import { upsertHotel, removeHotelImage, setHotelStatus } from "@/server/actions/hotels";
 import { uploadImageToCloudinary } from "@/lib/cloudinary-upload";
 import { AMENITY_OPTIONS } from "@/components/hotel/amenities";
+import { Field } from "@/components/ui/field";
+import { LocationPicker } from "@/components/dashboard/location-picker";
+import { neighborhoodCenter } from "@/lib/corrientes";
 import type { HotelAmenity, PriceCurrency } from "@/types/database.types";
 
 export function HotelForm({
@@ -19,6 +22,9 @@ export function HotelForm({
     name: string;
     description: string | null;
     neighborhood_id: string | null;
+    address_text: string | null;
+    lat: number | null;
+    lng: number | null;
     star_rating: number | null;
     price_per_night: number;
     price_currency: PriceCurrency;
@@ -34,6 +40,12 @@ export function HotelForm({
   const [description, setDescription] = useState(initialHotel?.description ?? "");
   const [neighborhoodId, setNeighborhoodId] = useState(
     initialHotel?.neighborhood_id ?? "",
+  );
+  const [addressText, setAddressText] = useState(initialHotel?.address_text ?? "");
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(
+    initialHotel?.lat != null && initialHotel?.lng != null
+      ? { lat: initialHotel.lat, lng: initialHotel.lng }
+      : null,
   );
   const [starRating, setStarRating] = useState(
     initialHotel?.star_rating ? String(initialHotel.star_rating) : "",
@@ -95,6 +107,9 @@ export function HotelForm({
         name,
         description: description || undefined,
         neighborhoodId: neighborhoodId || undefined,
+        addressText: addressText.trim() || null,
+        lat: location ? location.lat : null,
+        lng: location ? location.lng : null,
         starRating: starRating ? Number(starRating) : undefined,
         pricePerNight: Number(pricePerNight),
         priceCurrency,
@@ -165,6 +180,32 @@ export function HotelForm({
             </option>
           ))}
         </select>
+      </div>
+
+      <Field
+        label="Dirección"
+        hint="Es opcional y se muestra en el aviso. Si no querés mostrar el número exacto, poné solo la calle o la zona."
+      >
+        <input
+          type="text"
+          value={addressText}
+          onChange={(e) => setAddressText(e.target.value)}
+          placeholder="Ej: San Martín 1200"
+          className="field"
+        />
+      </Field>
+
+      <div className="flex flex-col gap-2">
+        <span className="text-sm font-semibold text-zinc-800">Ubicación en el mapa</span>
+        <p className="text-xs leading-snug text-zinc-600">
+          Marcá el punto exacto. Quien mire el aviso va a ver en el mapa la zona donde queda, sin
+          necesidad de que le pases la dirección.
+        </p>
+        <LocationPicker
+          value={location}
+          onChange={setLocation}
+          fallbackCenter={neighborhoodCenter(neighborhoods.find((n) => n.id === neighborhoodId)?.name)}
+        />
       </div>
 
       <div className="grid grid-cols-3 gap-3">

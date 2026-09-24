@@ -103,6 +103,7 @@ export type PublishedPropertyDetail = {
   isVerifiedOwner: boolean;
   whatsappNumber: string | null;
   images: string[];
+  addressText: string | null;
   lat: number | null;
   lng: number | null;
 };
@@ -157,6 +158,7 @@ export const getPublishedPropertyBySlug = cache(async function getPublishedPrope
     isVerifiedOwner: agency?.is_verified_owner ?? false,
     whatsappNumber: agency?.whatsapp_number ?? null,
     images: (images ?? []).map((i) => i.url),
+    addressText: property.address_text,
     lat: property.lat,
     lng: property.lng,
   };

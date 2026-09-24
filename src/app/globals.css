@@ -200,3 +200,72 @@ select option {
       0 10px 28px -18px rgba(19, 27, 38, 0.18);
   }
 }
+
+/* Mapas (Leaflet): pin de ubicación y globitos de precio estilo Booking. */
+.pm-pin-wrap,
+.pm-price-wrap {
+  background: none;
+  border: none;
+}
+.pm-pin {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 50% 50% 50% 0;
+  background: #163a5c;
+  border: 3px solid #ffffff;
+  transform: rotate(-45deg);
+  box-shadow: 0 3px 10px rgba(13, 39, 64, 0.45);
+}
+.pm-pin::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+.pm-price {
+  display: inline-block;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #0d2740;
+  border: 1.5px solid #0d2740;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+  box-shadow: 0 2px 8px rgba(13, 39, 64, 0.3);
+  cursor: pointer;
+}
+.pm-price:hover,
+.pm-price-active {
+  background: #0d2740;
+  color: #ffffff;
+  z-index: 1000;
+}
+.pm-price-hotel {
+  border-color: #8f6a22;
+  color: #5b430f;
+}
+.pm-price-hotel:hover,
+.pm-price-hotel.pm-price-active {
+  background: #8f6a22;
+  color: #ffffff;
+}
+.pm-price-approx {
+  border-style: dashed;
+}
+.leaflet-container {
+  font-family: inherit;
+}
+.pm-popup .leaflet-popup-content {
+  margin: 0;
+  width: 240px !important;
+}
+.pm-popup .leaflet-popup-content-wrapper {
+  padding: 0;
+  overflow: hidden;
+  border-radius: 14px;
+}

@@ -24,7 +24,7 @@ export default async function EditarPropiedadPage({
   const { data: property } = await supabase
     .from("properties")
     .select(
-      "id, title, description, operation_type, property_type, neighborhood_id, owner_id, price_amount, price_currency, surface_total_m2, bedrooms, bathrooms, status, agency_id",
+      "id, title, description, operation_type, property_type, neighborhood_id, owner_id, address_text, lat, lng, price_amount, price_currency, surface_total_m2, bedrooms, bathrooms, status, agency_id",
     )
     .eq("id", id)
     .maybeSingle();
@@ -55,6 +55,9 @@ export default async function EditarPropiedadPage({
           propertyType: property.property_type,
           neighborhoodId: property.neighborhood_id,
           ownerId: property.owner_id,
+          addressText: property.address_text,
+          lat: property.lat,
+          lng: property.lng,
           priceAmount: property.price_amount,
           priceCurrency: property.price_currency,
           surfaceTotalM2: property.surface_total_m2,
