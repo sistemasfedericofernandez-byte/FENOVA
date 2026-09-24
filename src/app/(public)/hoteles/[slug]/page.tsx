@@ -5,6 +5,7 @@ import { ViewTracker } from "@/components/property/view-tracker";
 import { PropertyGallery } from "@/components/property/property-gallery";
 import { ShareButton } from "@/components/property/share-button";
 import { LocationSection } from "@/components/property/location-section";
+import { zoneLabel } from "@/lib/corrientes";
 import { StarIcon } from "@/components/icons";
 import { AMENITY_MAP } from "@/components/hotel/amenities";
 import { getPublishedHotelBySlug } from "@/server/services/public-hotels";
@@ -86,7 +87,7 @@ export default async function HotelDetallePage({
         </div>
         {hotel.neighborhoodName ? (
           <p className="text-zinc-700">
-            {hotel.neighborhoodName}, Corrientes
+            {zoneLabel(hotel.neighborhoodName)}
           </p>
         ) : null}
         <p className="text-2xl font-bold">
@@ -148,7 +149,7 @@ export default async function HotelDetallePage({
             propertyTitle={hotel.name}
             url={`${siteUrl}/hoteles/${slug}`}
             summary={`Hotel · ${formatArs(hotel.pricePerNight, hotel.priceCurrency as PriceCurrency)} por noche`}
-            location={hotel.neighborhoodName ? `${hotel.neighborhoodName}, Corrientes` : "Corrientes"}
+            location={zoneLabel(hotel.neighborhoodName)}
             kind="hotel"
           />
         </div>

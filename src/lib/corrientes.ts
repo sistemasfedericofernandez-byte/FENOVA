@@ -1,3 +1,12 @@
+/**
+ * Texto de la zona de un aviso. Se aclara "Barrio" y "Corrientes Capital" para
+ * que no se confunda con localidades de la provincia que tienen el mismo nombre
+ * (p. ej. la ciudad de Yapeyú, en el departamento San Martín).
+ */
+export function zoneLabel(neighborhoodName: string | null | undefined) {
+  return neighborhoodName ? `Barrio ${neighborhoodName}, Corrientes Capital` : "Corrientes Capital";
+}
+
 /** Centro de Corrientes Capital: punto de arranque de todos los mapas. */
 export const CORRIENTES_CENTER = { lat: -27.4692, lng: -58.8306 };
 

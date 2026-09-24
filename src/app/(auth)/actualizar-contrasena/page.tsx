@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import { goTo } from "@/lib/navigate";
 import { createClient } from "@/lib/supabase/client";
 import { translateAuthError } from "@/lib/auth-errors";
 import { Button } from "@/components/ui/button";
@@ -46,8 +47,7 @@ export default function ActualizarContrasenaPage() {
       return;
     }
 
-    router.push("/dashboard");
-    router.refresh();
+    goTo(router, "/dashboard");
   }
 
   return (

@@ -3,6 +3,7 @@
 import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { goTo } from "@/lib/navigate";
 import { Button } from "@/components/ui/button";
 import { upsertHotel, removeHotelImage, setHotelStatus } from "@/server/actions/hotels";
 import { uploadImageToCloudinary } from "@/lib/cloudinary-upload";
@@ -129,8 +130,7 @@ export function HotelForm({
         return;
       }
 
-      router.push("/dashboard/hotel");
-      router.refresh();
+      goTo(router, "/dashboard/hotel");
     } catch {
       setError("No se pudo guardar el hotel. Intentá de nuevo.");
       setLoading(false);
@@ -205,6 +205,7 @@ export function HotelForm({
           value={location}
           onChange={setLocation}
           fallbackCenter={neighborhoodCenter(neighborhoods.find((n) => n.id === neighborhoodId)?.name)}
+            neighborhoodName={neighborhoods.find((n) => n.id === neighborhoodId)?.name ?? null}
         />
       </div>
 

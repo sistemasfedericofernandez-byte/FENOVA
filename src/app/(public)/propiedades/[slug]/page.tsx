@@ -5,6 +5,7 @@ import { ViewTracker } from "@/components/property/view-tracker";
 import { PropertyGallery } from "@/components/property/property-gallery";
 import { ShareButton } from "@/components/property/share-button";
 import { LocationSection } from "@/components/property/location-section";
+import { zoneLabel } from "@/lib/corrientes";
 import { BedIcon, BathIcon, RulerIcon } from "@/components/icons";
 import { getPublishedPropertyBySlug } from "@/server/services/public-properties";
 import { formatArs } from "@/lib/utils";
@@ -84,7 +85,7 @@ export default async function PropiedadDetallePage({
         <h1 className="text-2xl font-semibold">{property.title}</h1>
         {property.neighborhoodName ? (
           <p className="text-zinc-700">
-            {property.neighborhoodName}, Corrientes
+            {zoneLabel(property.neighborhoodName)}
           </p>
         ) : null}
         <p className="text-2xl font-bold">
@@ -146,7 +147,7 @@ export default async function PropiedadDetallePage({
             propertyTitle={property.title}
             url={`${siteUrl}/propiedades/${slug}`}
             summary={`${OPERATION_LABEL[property.operationType] ?? property.operationType} · ${formatArs(property.priceAmount, property.priceCurrency as PriceCurrency)}`}
-            location={property.neighborhoodName ? `${property.neighborhoodName}, Corrientes` : "Corrientes"}
+            location={zoneLabel(property.neighborhoodName)}
           />
         </div>
       ) : null}

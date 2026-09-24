@@ -3,6 +3,7 @@
 import { useState, type SyntheticEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { goTo } from "@/lib/navigate";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { buttonClass } from "@/lib/button-styles";
@@ -89,8 +90,7 @@ export function TenancyForm({
       return;
     }
 
-    router.push("/dashboard/alquileres");
-    router.refresh();
+    goTo(router, "/dashboard/alquileres");
   }
 
   async function handleEndTenancy() {
@@ -115,8 +115,7 @@ export function TenancyForm({
     }
 
     setLoading(false);
-    router.push("/dashboard/alquileres");
-    router.refresh();
+    goTo(router, "/dashboard/alquileres");
   }
 
   if (activeTenancy) {

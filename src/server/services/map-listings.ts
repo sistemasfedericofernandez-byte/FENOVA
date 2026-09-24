@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { resolveLocation } from "@/lib/corrientes";
+import { resolveLocation, zoneLabel } from "@/lib/corrientes";
 import { formatArs } from "@/lib/utils";
 
 export type MapListing = {
@@ -96,7 +96,7 @@ export async function getMapListings(): Promise<MapListing[]> {
       href: `/propiedades/${p.slug}`,
       title: p.title,
       priceLabel: formatArs(p.price_amount, p.price_currency),
-      zone: `${OPERATION_LABEL[p.operation_type] ?? p.operation_type} · ${neighborhood ? `${neighborhood}, ` : ""}Corrientes`,
+      zone: `${OPERATION_LABEL[p.operation_type] ?? p.operation_type} · ${zoneLabel(neighborhood)}`,
       lat: point.lat,
       lng: point.lng,
       approximate: location.approximate,
@@ -116,7 +116,7 @@ export async function getMapListings(): Promise<MapListing[]> {
       href: `/hoteles/${h.slug}`,
       title: h.name,
       priceLabel: formatArs(h.price_per_night, h.price_currency),
-      zone: `Hotel · ${neighborhood ? `${neighborhood}, ` : ""}Corrientes · por noche`,
+      zone: `Hotel · ${zoneLabel(neighborhood)} · por noche`,
       lat: point.lat,
       lng: point.lng,
       approximate: location.approximate,

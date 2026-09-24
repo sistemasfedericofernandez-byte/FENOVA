@@ -13,11 +13,14 @@ export function LocationPicker({
   value,
   onChange,
   fallbackCenter,
+  neighborhoodName,
 }: {
   value: Point | null;
   onChange: (point: Point | null) => void;
   /** Dónde centrar el mapa mientras no hay un punto marcado (p. ej. el barrio elegido). */
   fallbackCenter?: Point | null;
+  /** Barrio elegido en el formulario: afina la búsqueda de la dirección. */
+  neighborhoodName?: string | null;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<LeafletMap | null>(null);
@@ -31,6 +34,7 @@ export function LocationPicker({
   const [searching, setSearching] = useState(false);
   const [results, setResults] = useState<GeocodeResult[]>([]);
   const [message, setMessage] = useState<string | null>(null);
+  const [chosenLabel, setChosenLabel] = useState<string | null>(null);
 
   useEffect(() => {
     onChangeRef.current = onChange;
@@ -104,7 +108,7 @@ export function LocationPicker({
     setMessage(null);
     setResults([]);
     setSearching(true);
-    const response = await geocodeAddress(query);
+    const response = await geocodeAddress(query, neighborhoodName);
     setSearching(false);
 
     if (!response.ok) {
@@ -127,6 +131,7 @@ export function LocationPicker({
     placeRef.current?.(point);
     mapRef.current?.setView([point.lat, point.lng], 17);
     onChange(point);
+    setChosenLabel(result.label);
     setResults([]);
     setMessage(null);
   }
@@ -134,6 +139,7 @@ export function LocationPicker({
   function clear() {
     markerRef.current?.remove();
     markerRef.current = null;
+    setChosenLabel(null);
     onChange(null);
   }
 
@@ -183,7 +189,9 @@ export function LocationPicker({
       <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
         <p className={value ? "font-semibold text-emerald-800" : "text-zinc-700"}>
           {value
-            ? "Ubicación marcada. Podés arrastrar el pin para ajustarla."
+            ? chosenLabel
+              ? `Ubicación marcada: ${chosenLabel}. Podés arrastrar el pin para ajustarla.`
+              : "Ubicación marcada. Podés arrastrar el pin para ajustarla."
             : "Buscá la dirección o tocá el mapa para marcar el punto exacto."}
         </p>
         {value ? (

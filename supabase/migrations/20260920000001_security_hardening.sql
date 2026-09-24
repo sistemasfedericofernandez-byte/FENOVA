@@ -65,6 +65,7 @@ begin
 end;
 $$;
 
+drop trigger if exists profiles_protect_columns on profiles;
 create trigger profiles_protect_columns before update on profiles
   for each row execute function protect_profile_columns();
 
@@ -90,6 +91,7 @@ begin
 end;
 $$;
 
+drop trigger if exists agencies_protect_columns on agencies;
 create trigger agencies_protect_columns before update on agencies
   for each row execute function protect_agency_columns();
 
@@ -106,8 +108,10 @@ begin
 end;
 $$;
 
+drop trigger if exists properties_protect_agency_id on properties;
 create trigger properties_protect_agency_id before update on properties
   for each row execute function protect_agency_id_column();
+drop trigger if exists hotels_protect_agency_id on hotels;
 create trigger hotels_protect_agency_id before update on hotels
   for each row execute function protect_agency_id_column();
 

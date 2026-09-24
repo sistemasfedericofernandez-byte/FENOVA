@@ -2,6 +2,7 @@
 
 import { useState, type ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
+import { goTo } from "@/lib/navigate";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
@@ -180,7 +181,7 @@ export function EditPropertyForm({
       return;
     }
 
-    router.push("/dashboard/propiedades");
+    goTo(router, "/dashboard/propiedades");
   }
 
   return (
@@ -333,6 +334,7 @@ export function EditPropertyForm({
             value={location}
             onChange={setLocation}
             fallbackCenter={neighborhoodCenter(neighborhoods.find((n) => n.id === neighborhoodId)?.name)}
+            neighborhoodName={neighborhoods.find((n) => n.id === neighborhoodId)?.name ?? null}
           />
         </div>
 

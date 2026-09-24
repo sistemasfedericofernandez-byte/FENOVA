@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { goTo } from "@/lib/navigate";
 import { createClient } from "@/lib/supabase/client";
 import { translateAuthError } from "@/lib/auth-errors";
 import { safeInternalPath } from "@/lib/safe-redirect";
@@ -45,8 +46,7 @@ export function LoginForm() {
           ? "/dashboard/hotel"
           : "/dashboard";
 
-    router.push(safeInternalPath(searchParams.get("redirect"), defaultDestination));
-    router.refresh();
+    goTo(router, safeInternalPath(searchParams.get("redirect"), defaultDestination));
   }
 
   return (

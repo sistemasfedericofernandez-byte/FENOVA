@@ -83,7 +83,7 @@ export function HotelCard({
             ) : null}
           </div>
           {neighborhoodName ? (
-            <span className="text-sm text-zinc-600">{neighborhoodName}</span>
+            <span className="text-sm text-zinc-600">Barrio {neighborhoodName}</span>
           ) : null}
           {topAmenities.length > 0 ? (
             <div className="mt-1 flex items-center gap-3 text-xs text-zinc-600">

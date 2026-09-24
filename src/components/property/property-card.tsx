@@ -78,7 +78,7 @@ export function PropertyCard({
             {title}
           </span>
           {neighborhoodName ? (
-            <span className="text-sm text-zinc-600">{neighborhoodName}</span>
+            <span className="text-sm text-zinc-600">Barrio {neighborhoodName}</span>
           ) : null}
           {hasSpecs ? (
             <div className="mt-1 flex items-center gap-3 text-xs text-zinc-600">

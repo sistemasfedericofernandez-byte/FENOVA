@@ -1,5 +1,5 @@
 import { AreaMap } from "@/components/property/area-map";
-import { resolveLocation } from "@/lib/corrientes";
+import { resolveLocation, zoneLabel } from "@/lib/corrientes";
 
 /** Bloque "¿Dónde queda?" del detalle de un aviso: texto de la zona + mapa. */
 export function LocationSection({
@@ -14,7 +14,7 @@ export function LocationSection({
   addressText: string | null;
 }) {
   const location = resolveLocation(lat, lng, neighborhoodName);
-  const zone = neighborhoodName ? `${neighborhoodName}, Corrientes` : "Corrientes";
+  const zone = zoneLabel(neighborhoodName);
 
   if (!location && !addressText && !neighborhoodName) return null;
 

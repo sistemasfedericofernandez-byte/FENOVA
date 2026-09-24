@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import { goTo } from "@/lib/navigate";
 import { createClient } from "@/lib/supabase/client";
 import { translateAuthError } from "@/lib/auth-errors";
 import { Button } from "@/components/ui/button";
@@ -73,8 +74,7 @@ export default function RegistroPage() {
     }
 
     if (data.session) {
-      router.push(role === "hotel" ? "/dashboard/hotel" : "/dashboard");
-      router.refresh();
+      goTo(router, role === "hotel" ? "/dashboard/hotel" : "/dashboard");
       return;
     }
 

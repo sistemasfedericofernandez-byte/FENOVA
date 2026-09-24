@@ -3,6 +3,7 @@
 import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { goTo } from "@/lib/navigate";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { LocationPicker } from "@/components/dashboard/location-picker";
@@ -175,8 +176,7 @@ export function NewPropertyForm({
         return;
       }
 
-      router.push("/dashboard/propiedades");
-      router.refresh();
+      goTo(router, "/dashboard/propiedades");
     } catch {
       setError("No se pudo guardar la propiedad. Intentá de nuevo.");
       setLoading(false);
@@ -343,6 +343,7 @@ export function NewPropertyForm({
             value={location}
             onChange={setLocation}
             fallbackCenter={neighborhoodCenter(neighborhoods.find((n) => n.id === neighborhoodId)?.name)}
+            neighborhoodName={neighborhoods.find((n) => n.id === neighborhoodId)?.name ?? null}
           />
         </div>
 
