@@ -185,16 +185,21 @@ export function NewPropertyForm({
 
   return (
     <div className="flex max-w-2xl flex-col gap-5">
-      <section className="card flex flex-col gap-4 border-dashed p-5">
-        <div className="flex flex-col gap-1">
-          <h2 className="text-base font-bold text-[#0d2740]">
-            ¿Ya la tenés publicada en Facebook Marketplace?
-          </h2>
-          <p className="text-sm text-zinc-700">
-            Importala y completamos título, descripción, precio y fotos por vos. Después podés
-            corregir lo que quieras antes de guardar.
-          </p>
-        </div>
+      <details className="card group border-dashed">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 p-4 sm:p-5 [&::-webkit-details-marker]:hidden">
+          <span className="flex flex-col">
+            <span className="text-base font-bold text-[#0d2740]">¿La tenés publicada en Facebook Marketplace?</span>
+            <span className="text-sm text-zinc-700">Importala en un paso. Es opcional.</span>
+          </span>
+          <span className="shrink-0 text-sm font-semibold text-[#163a5c] underline underline-offset-4 group-open:hidden">Mostrar</span>
+          <span className="hidden shrink-0 text-sm font-semibold text-[#163a5c] underline underline-offset-4 group-open:inline">Ocultar</span>
+        </summary>
+
+        <div className="flex flex-col gap-4 px-4 pb-4 sm:px-5 sm:pb-5">
+        <p className="text-sm text-zinc-700">
+          Importala y completamos título, descripción, precio y fotos por vos. Después podés corregir
+          lo que quieras antes de guardar.
+        </p>
 
         <ol className="list-decimal space-y-1 pl-5 text-sm text-zinc-800">
           <li>Abrí tu publicación en Facebook, en tu propio navegador.</li>
@@ -241,14 +246,15 @@ export function NewPropertyForm({
 
         {importing ? <p className="text-sm text-zinc-700">Importando, un momento…</p> : null}
         {importError ? <p className="text-sm font-medium text-red-700">{importError}</p> : null}
-      </section>
+      </div>
+      </details>
 
       <form className="card flex flex-col gap-5 p-5 sm:p-6">
         <Field label="Título del aviso">
           <input
             type="text"
             required
-            placeholder="Ej: Casa 3 dormitorios en Cambá Cué"
+            placeholder="Ej: Casa 3 dormitorios en Camba Cuá"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="field"

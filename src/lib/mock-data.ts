@@ -32,12 +32,12 @@ export const MOCK_PROPERTIES: MockProperty[] = [
   {
     id: "1",
     slug: "casa-3-dormitorios-cambau-cue-a1b2c3",
-    title: "Casa 3 dormitorios con pileta en Cambá Cué",
+    title: "Casa 3 dormitorios con pileta en Camba Cuá",
     description:
       "Casa amplia de dos plantas, living comedor, cocina integrada, patio con pileta y parrilla. Apta crédito.",
     operationType: "venta",
     propertyType: "casa",
-    neighborhoodName: "Cambá Cué",
+    neighborhoodName: "Camba Cuá",
     priceAmount: 145000,
     priceCurrency: "USD",
     surfaceTotalM2: 220,

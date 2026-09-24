@@ -1,3 +1,5 @@
+import { NEIGHBORHOOD_CENTERS } from "@/lib/corrientes-barrios";
+
 /**
  * Texto de la zona de un aviso. Se aclara "Barrio" y "Corrientes Capital" para
  * que no se confunda con localidades de la provincia que tienen el mismo nombre
@@ -11,21 +13,6 @@ export function zoneLabel(neighborhoodName: string | null | undefined) {
 export const CORRIENTES_CENTER = { lat: -27.4692, lng: -58.8306 };
 
 type LatLng = { lat: number; lng: number };
-
-/**
- * Punto de referencia de cada barrio (coordenadas de OpenStreetMap). Se usa
- * solo como ubicación aproximada para los avisos que todavía no tienen un
- * punto exacto cargado por la inmobiliaria.
- */
-const NEIGHBORHOOD_CENTERS: Record<string, LatLng> = {
-  centro: { lat: -27.4705, lng: -58.8339 },
-  "camba cue": { lat: -27.4706, lng: -58.8489 },
-  "laguna seca": { lat: -27.4934, lng: -58.8009 },
-  "molina punta": { lat: -27.4539, lng: -58.7789 },
-  "punta tacuara": { lat: -27.4654, lng: -58.8484 },
-  "san benito": { lat: -27.4787, lng: -58.8467 },
-  yapeyu: { lat: -27.469, lng: -58.8159 },
-};
 
 function normalize(name: string) {
   return name
