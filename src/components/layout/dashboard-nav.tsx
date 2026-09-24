@@ -41,7 +41,7 @@ export function DashboardNav({ role }: { role?: UserRole }) {
               "flex min-h-11 shrink-0 items-center whitespace-nowrap border-b-2 px-3 text-sm font-medium",
               active
                 ? "border-zinc-900 text-zinc-900 dark:border-white dark:text-white"
-                : "border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200",
+                : "border-transparent text-zinc-600 hover:text-zinc-800 dark:hover:text-zinc-200",
             )}
           >
             {link.label}

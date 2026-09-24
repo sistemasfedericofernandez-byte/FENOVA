@@ -291,7 +291,7 @@ export function EditPropertyForm({
           href="/dashboard/propietarios"
           target="_blank"
           rel="noreferrer"
-          className="text-xs text-zinc-500 underline underline-offset-4"
+          className="text-xs text-zinc-600 underline underline-offset-4"
         >
           + nuevo propietario
         </a>

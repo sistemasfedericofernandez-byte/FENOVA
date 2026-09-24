@@ -47,7 +47,7 @@ export default async function PagosAlquilerPage({
     <div className="flex flex-col gap-4">
       <div className="flex flex-col">
         <h1 className="text-2xl font-semibold">Pagos de alquiler</h1>
-        <span className="text-zinc-500">
+        <span className="text-zinc-600">
           {property.title} · {tenancy.tenant_full_name}
         </span>
       </div>

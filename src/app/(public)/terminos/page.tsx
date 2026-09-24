@@ -107,7 +107,7 @@ export default function TerminosPage() {
     <main className="mx-auto flex min-h-screen max-w-2xl flex-col gap-8 px-4 py-12">
       <div className="flex flex-col gap-2">
         <h1 className="text-2xl font-semibold sm:text-3xl">Términos y Condiciones</h1>
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-zinc-600">
           Versión {TERMS_VERSION} · PropiMarket ({"propimarket.com.ar"})
         </p>
       </div>

@@ -119,7 +119,7 @@ export default async function PropiedadDetallePage({
       </div>
 
       <div className="glass-strong rounded-2xl p-4 backdrop-blur-xl backdrop-saturate-150">
-        <div className="text-sm text-foreground/60">Publicado por</div>
+        <div className="text-sm text-foreground/75">Publicado por</div>
         <div className="font-semibold">{property.agencyName}</div>
       </div>
 

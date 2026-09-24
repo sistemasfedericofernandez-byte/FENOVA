@@ -59,7 +59,7 @@ export function PropertyCard({
           ) : null}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           {isVerifiedOwner ? (
-            <span className="absolute left-2 top-2 rounded-full bg-emerald-600/95 px-2 py-1 text-xs font-medium text-white backdrop-blur-sm">
+            <span className="absolute left-2 top-2 rounded-full bg-emerald-700 px-2 py-1 text-xs font-medium text-white backdrop-blur-sm">
               Propietario Seguro
             </span>
           ) : null}
@@ -78,10 +78,10 @@ export function PropertyCard({
             {title}
           </span>
           {neighborhoodName ? (
-            <span className="text-sm text-zinc-500">{neighborhoodName}</span>
+            <span className="text-sm text-zinc-600">{neighborhoodName}</span>
           ) : null}
           {hasSpecs ? (
-            <div className="mt-1 flex items-center gap-3 text-xs text-zinc-500">
+            <div className="mt-1 flex items-center gap-3 text-xs text-zinc-600">
               {surfaceTotalM2 ? (
                 <span className="flex items-center gap-1">
                   <RulerIcon width={14} height={14} />

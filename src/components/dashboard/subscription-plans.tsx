@@ -58,7 +58,7 @@ export function SubscriptionPlans({
               <h3 className="text-lg font-semibold">{plan.name}</h3>
               <p className="text-2xl font-bold">
                 {formatArs(plan.price_ars, "ARS")}
-                <span className="text-sm font-normal text-zinc-500">/mes</span>
+                <span className="text-sm font-normal text-zinc-600">/mes</span>
               </p>
               <ul className="flex flex-col gap-1 text-sm text-zinc-600 dark:text-zinc-400">
                 <li>Hasta {plan.max_active_listings} publicaciones activas</li>

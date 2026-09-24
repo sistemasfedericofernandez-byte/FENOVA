@@ -51,13 +51,13 @@ export function BottomNav({
               className="flex h-8 w-11 items-center justify-center rounded-full"
             >
               <span
-                className={cn(active ? "text-accent-strong" : "text-foreground/40")}
+                className={cn(active ? "text-accent-strong" : "text-foreground/60")}
               >
                 <Icon width={19} height={19} />
               </span>
             </motion.span>
             <span
-              className={cn(active ? "text-accent-strong" : "text-foreground/40")}
+              className={cn(active ? "text-accent-strong" : "text-foreground/60")}
             >
               {item.label}
             </span>

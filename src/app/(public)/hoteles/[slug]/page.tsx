@@ -91,7 +91,7 @@ export default async function HotelDetallePage({
         ) : null}
         <p className="text-2xl font-bold">
           {formatArs(hotel.pricePerNight, hotel.priceCurrency as PriceCurrency)}{" "}
-          <span className="text-base font-normal text-zinc-500">/ noche</span>
+          <span className="text-base font-normal text-zinc-600">/ noche</span>
         </p>
         {hotel.totalRooms ? (
           <p className="text-sm text-zinc-600 dark:text-zinc-400">
@@ -123,7 +123,7 @@ export default async function HotelDetallePage({
       ) : null}
 
       <div className="glass-strong rounded-2xl p-4 backdrop-blur-xl backdrop-saturate-150">
-        <div className="text-sm text-foreground/60">Publicado por</div>
+        <div className="text-sm text-foreground/75">Publicado por</div>
         <div className="font-semibold">{hotel.agencyName}</div>
       </div>
 

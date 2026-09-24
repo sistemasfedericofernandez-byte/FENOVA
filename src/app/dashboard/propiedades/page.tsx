@@ -56,12 +56,12 @@ export default async function DashboardPropiedadesPage() {
             >
               <div className="flex flex-col">
                 <span className="font-medium">{p.title}</span>
-                <span className="text-sm text-zinc-500">
+                <span className="text-sm text-zinc-600">
                   {formatArs(p.price_amount, p.price_currency as PriceCurrency)} ·{" "}
                   {STATUS_LABEL[p.status] ?? p.status}
                 </span>
               </div>
-              <div className="flex items-center justify-between gap-4 text-sm text-zinc-500 sm:justify-end">
+              <div className="flex items-center justify-between gap-4 text-sm text-zinc-600 sm:justify-end">
                 <span>{p.views_count} vistas</span>
                 <span>{p.whatsapp_clicks_count} clics WhatsApp</span>
                 <Link

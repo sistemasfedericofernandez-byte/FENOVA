@@ -112,24 +112,24 @@ export function TenancyForm({
       <div className="flex max-w-xl flex-col gap-4">
         <div className="flex flex-col gap-3 rounded-xl border border-zinc-200 p-4 dark:border-zinc-800">
           <div className="flex flex-col">
-            <span className="text-sm text-zinc-500">Inquilino</span>
+            <span className="text-sm text-zinc-600">Inquilino</span>
             <span className="font-medium">{activeTenancy.tenantFullName}</span>
             {activeTenancy.tenantDni ? (
-              <span className="text-sm text-zinc-500">DNI {activeTenancy.tenantDni}</span>
+              <span className="text-sm text-zinc-600">DNI {activeTenancy.tenantDni}</span>
             ) : null}
           </div>
           {activeTenancy.guarantorFullName ? (
             <div className="flex flex-col">
-              <span className="text-sm text-zinc-500">Garante</span>
+              <span className="text-sm text-zinc-600">Garante</span>
               <span className="font-medium">{activeTenancy.guarantorFullName}</span>
               {activeTenancy.guarantorDni ? (
-                <span className="text-sm text-zinc-500">DNI {activeTenancy.guarantorDni}</span>
+                <span className="text-sm text-zinc-600">DNI {activeTenancy.guarantorDni}</span>
               ) : null}
             </div>
           ) : null}
           {activeTenancy.monthlyRentAmount ? (
             <div className="flex flex-col">
-              <span className="text-sm text-zinc-500">Monto mensual</span>
+              <span className="text-sm text-zinc-600">Monto mensual</span>
               <span className="font-medium">
                 {formatArs(activeTenancy.monthlyRentAmount, activeTenancy.priceCurrency ?? "ARS")}
               </span>
@@ -137,13 +137,13 @@ export function TenancyForm({
           ) : null}
           {activeTenancy.startDate ? (
             <div className="flex flex-col">
-              <span className="text-sm text-zinc-500">Inicio del contrato</span>
+              <span className="text-sm text-zinc-600">Inicio del contrato</span>
               <span className="font-medium">{activeTenancy.startDate}</span>
             </div>
           ) : null}
           {activeTenancy.notes ? (
             <div className="flex flex-col">
-              <span className="text-sm text-zinc-500">Notas</span>
+              <span className="text-sm text-zinc-600">Notas</span>
               <span className="whitespace-pre-line">{activeTenancy.notes}</span>
             </div>
           ) : null}

@@ -77,7 +77,7 @@ export function CategorySection({
             </Link>
           </div>
           {description ? (
-            <p className="max-w-xl text-sm text-foreground/60">{description}</p>
+            <p className="max-w-xl text-sm text-foreground/75">{description}</p>
           ) : null}
         </motion.div>
 

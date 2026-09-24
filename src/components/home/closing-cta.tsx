@@ -21,7 +21,7 @@ export function ClosingCta() {
           ¿Tenés una <span className="text-accent-strong">inmobiliaria</span>,
           hotel o propiedad para publicar?
         </motion.h2>
-        <motion.p variants={fadeInUp} className="max-w-md text-sm text-foreground/60">
+        <motion.p variants={fadeInUp} className="max-w-md text-sm text-foreground/75">
           Sumate a PropiMarket y llegá a quienes buscan propiedades y hoteles en
           Corrientes todos los días.
         </motion.p>

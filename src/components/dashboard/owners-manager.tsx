@@ -217,7 +217,7 @@ export function OwnersManager({ owners }: { owners: Owner[] }) {
               >
                 <div className="flex flex-col">
                   <span className="font-medium">{owner.full_name}</span>
-                  <span className="text-sm text-zinc-500">
+                  <span className="text-sm text-zinc-600">
                     {[owner.dni_cuit, owner.phone, owner.email].filter(Boolean).join(" · ") ||
                       "Sin datos de contacto"}
                   </span>

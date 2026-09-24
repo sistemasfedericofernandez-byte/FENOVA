@@ -47,7 +47,7 @@ export default async function AlquilarPropiedadPage({
         <h1 className="text-2xl font-semibold">
           {tenancy ? "Contrato de alquiler" : "Marcar como alquilada"}
         </h1>
-        <span className="text-zinc-500">{property.title}</span>
+        <span className="text-zinc-600">{property.title}</span>
       </div>
       <TenancyForm
         propertyId={property.id}

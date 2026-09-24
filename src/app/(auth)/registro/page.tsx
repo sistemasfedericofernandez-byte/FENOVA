@@ -110,7 +110,7 @@ export default function RegistroPage() {
         >
           Reenviar el email
         </button>
-        {resendMessage ? <p className="text-sm text-zinc-500">{resendMessage}</p> : null}
+        {resendMessage ? <p className="text-sm text-zinc-600">{resendMessage}</p> : null}
         <a href="/login" className="text-sm underline underline-offset-4">
           Ya confirmé, ingresar
         </a>
@@ -200,7 +200,7 @@ export default function RegistroPage() {
           <button
             type="button"
             onClick={() => setShowPassword((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-zinc-500 underline underline-offset-2"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-zinc-600 underline underline-offset-2"
           >
             {showPassword ? "Ocultar" : "Ver"}
           </button>

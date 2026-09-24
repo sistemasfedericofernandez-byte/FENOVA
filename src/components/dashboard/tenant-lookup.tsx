@@ -108,7 +108,7 @@ export function TenantLookup() {
                   {"★".repeat(r.score)}
                   {"☆".repeat(5 - r.score)}
                 </span>
-                <span className="text-xs text-zinc-500">
+                <span className="text-xs text-zinc-600">
                   {new Date(r.created_at).toLocaleDateString("es-AR")}
                 </span>
               </div>

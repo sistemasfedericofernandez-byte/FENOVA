@@ -1,6 +1,13 @@
 @import "tailwindcss";
 
+/* El sitio es de tema único claro. Por defecto Tailwind activa `dark:` según
+   el modo del sistema operativo, lo que dejaba texto gris claro sobre el
+   fondo marfil (ilegible) a quien tuviera el SO en oscuro. Se ata `dark:` a
+   una clase `.dark` que nunca se usa, así esas variantes quedan inertes. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
+  color-scheme: light;
   --background: #f5f2ea;
   --foreground: #131b26;
   --accent: #163a5c;
@@ -8,7 +15,7 @@
   --accent-soft: #dfe7ee;
   --accent-foreground: #ffffff;
   --gold: #b6862f;
-  --gold-strong: #8f6a22;
+  --gold-strong: #7a5a1c;
   --gold-soft: #f4e8cd;
   --gold-foreground: #241a06;
   --surface: #ffffff;

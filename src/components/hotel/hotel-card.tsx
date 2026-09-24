@@ -58,7 +58,7 @@ export function HotelCard({
           ) : null}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           {isVerifiedOwner ? (
-            <span className="absolute left-2 top-2 rounded-full bg-emerald-600/95 px-2 py-1 text-xs font-medium text-white backdrop-blur-sm">
+            <span className="absolute left-2 top-2 rounded-full bg-emerald-700 px-2 py-1 text-xs font-medium text-white backdrop-blur-sm">
               Propietario Seguro
             </span>
           ) : null}
@@ -83,10 +83,10 @@ export function HotelCard({
             ) : null}
           </div>
           {neighborhoodName ? (
-            <span className="text-sm text-zinc-500">{neighborhoodName}</span>
+            <span className="text-sm text-zinc-600">{neighborhoodName}</span>
           ) : null}
           {topAmenities.length > 0 ? (
-            <div className="mt-1 flex items-center gap-3 text-xs text-zinc-500">
+            <div className="mt-1 flex items-center gap-3 text-xs text-zinc-600">
               {topAmenities.map((key) => {
                 const opt = AMENITY_MAP.get(key);
                 if (!opt) return null;
@@ -101,7 +101,7 @@ export function HotelCard({
           ) : null}
           <span className="mt-1 text-sm font-semibold">
             Desde {formatArs(pricePerNight, priceCurrency)}{" "}
-            <span className="font-normal text-zinc-500">/ noche</span>
+            <span className="font-normal text-zinc-600">/ noche</span>
           </span>
         </div>
       </Link>

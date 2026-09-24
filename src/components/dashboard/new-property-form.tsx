@@ -182,7 +182,7 @@ export function NewPropertyForm({
           <label className="text-sm font-medium">
             Importar desde Facebook Marketplace
           </label>
-          <p className="text-xs text-zinc-500">
+          <p className="text-xs text-zinc-600">
             Completamos título, descripción, precio y fotos automáticamente
             — después podés editar todo antes de guardar.
           </p>
@@ -192,7 +192,7 @@ export function NewPropertyForm({
           <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
             Opción recomendada — 100% confiable
           </span>
-          <ol className="list-decimal pl-4 text-xs text-zinc-500">
+          <ol className="list-decimal pl-4 text-xs text-zinc-600">
             <li>Abrí tu publicación en Facebook, en tu propio navegador.</li>
             <li>
               Ctrl+S (o menú → &quot;Guardar página como&quot;) y elegí{" "}
@@ -211,7 +211,7 @@ export function NewPropertyForm({
           </label>
         </div>
 
-        <details className="text-xs text-zinc-500">
+        <details className="text-xs text-zinc-600">
           <summary className="cursor-pointer font-medium">
             O probá pegando el link directo
           </summary>
@@ -240,7 +240,7 @@ export function NewPropertyForm({
         </details>
 
         {importing ? (
-          <p className="text-sm text-zinc-500">Importando, un momento…</p>
+          <p className="text-sm text-zinc-600">Importando, un momento…</p>
         ) : null}
         {importError ? <p className="text-sm text-red-600">{importError}</p> : null}
       </div>
@@ -317,7 +317,7 @@ export function NewPropertyForm({
             href="/dashboard/propietarios"
             target="_blank"
             rel="noreferrer"
-            className="text-xs text-zinc-500 underline underline-offset-4"
+            className="text-xs text-zinc-600 underline underline-offset-4"
           >
             + nuevo propietario
           </a>
@@ -404,7 +404,7 @@ export function NewPropertyForm({
           />
         </label>
         {files.length > 0 ? (
-          <p className="text-xs text-zinc-500">
+          <p className="text-xs text-zinc-600">
             {files.length} foto{files.length === 1 ? "" : "s"} seleccionada
             {files.length === 1 ? "" : "s"}
           </p>

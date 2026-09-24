@@ -63,7 +63,7 @@ export function RentPaymentsList({ payments }: { payments: Payment[] }) {
           >
             <div className="flex flex-col">
               <span className="font-medium">{formatPeriod(payment.period_month)}</span>
-              <span className="text-sm text-zinc-500">
+              <span className="text-sm text-zinc-600">
                 {payment.amount != null
                   ? formatArs(payment.amount, payment.price_currency ?? "ARS")
                   : "Sin monto"}

@@ -16,7 +16,7 @@ function StatCard({
       href={href}
       className="flex flex-col gap-1 rounded-xl border border-zinc-200 p-4 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900"
     >
-      <span className="text-sm text-zinc-500">{label}</span>
+      <span className="text-sm text-zinc-600">{label}</span>
       <span className="text-2xl font-semibold">{value}</span>
     </Link>
   );
@@ -132,7 +132,7 @@ export default async function DashboardHomePage() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1 rounded-xl border border-zinc-200 p-4 dark:border-zinc-800">
-          <span className="text-sm text-zinc-500">Suscripción</span>
+          <span className="text-sm text-zinc-600">Suscripción</span>
           <span className="font-medium">
             {plan?.name ?? "Sin plan activo"}
             {subscription?.status ? ` · ${subscription.status}` : ""}
@@ -145,7 +145,7 @@ export default async function DashboardHomePage() {
           </Link>
         </div>
         <div className="flex flex-col gap-1 rounded-xl border border-zinc-200 p-4 dark:border-zinc-800">
-          <span className="text-sm text-zinc-500">Propietario Seguro</span>
+          <span className="text-sm text-zinc-600">Propietario Seguro</span>
           <span className="font-medium">
             {agency?.verification_status === "aprobado" ? "Verificado" : "No verificado"}
           </span>

@@ -56,7 +56,7 @@ export default async function DashboardHotelPage() {
       <h1 className="text-2xl font-semibold">Mi hotel</h1>
 
       {hotel ? (
-        <div className="flex gap-6 text-sm text-zinc-500">
+        <div className="flex gap-6 text-sm text-zinc-600">
           <span>{hotel.views_count} vistas</span>
           <span>{hotel.whatsapp_clicks_count} clics WhatsApp</span>
         </div>

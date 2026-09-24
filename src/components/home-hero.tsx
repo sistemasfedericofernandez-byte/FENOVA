@@ -22,7 +22,7 @@ export function HomeHero({ children }: { children: ReactNode }) {
         </motion.h1>
         <motion.p
           variants={fadeInUp}
-          className="max-w-md text-base text-foreground/60"
+          className="max-w-md text-base text-foreground/75"
         >
           Propiedades y hoteles en venta, alquiler o alquiler temporal, sin
           necesidad de registrarte.

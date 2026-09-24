@@ -102,7 +102,7 @@ export function AgencyProfileForm({
           />
         </label>
       </div>
-      {uploadingLogo ? <p className="text-sm text-zinc-500">Subiendo logo...</p> : null}
+      {uploadingLogo ? <p className="text-sm text-zinc-600">Subiendo logo...</p> : null}
 
       <input
         type="text"

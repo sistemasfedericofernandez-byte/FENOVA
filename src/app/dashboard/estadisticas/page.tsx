@@ -38,15 +38,15 @@ export default async function EstadisticasPage() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div className="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800">
           <p className="text-2xl font-bold">{totalViews}</p>
-          <p className="text-sm text-zinc-500">Vistas totales</p>
+          <p className="text-sm text-zinc-600">Vistas totales</p>
         </div>
         <div className="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800">
           <p className="text-2xl font-bold">{totalClicks}</p>
-          <p className="text-sm text-zinc-500">Clics en WhatsApp</p>
+          <p className="text-sm text-zinc-600">Clics en WhatsApp</p>
         </div>
         <div className="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800">
           <p className="text-2xl font-bold">{conversionRate}%</p>
-          <p className="text-sm text-zinc-500">Tasa de conversión</p>
+          <p className="text-sm text-zinc-600">Tasa de conversión</p>
         </div>
       </div>
 

@@ -246,7 +246,7 @@ export function HotelForm({
         />
       </label>
       {files.length > 0 ? (
-        <p className="text-xs text-zinc-500">
+        <p className="text-xs text-zinc-600">
           {files.length} foto{files.length === 1 ? "" : "s"} seleccionada
           {files.length === 1 ? "" : "s"}
         </p>
