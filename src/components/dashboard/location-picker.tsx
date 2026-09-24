@@ -10,11 +10,16 @@ import { geocodeAddress, type GeocodeResult } from "@/server/actions/geocoding";
 type Point = { lat: number; lng: number };
 
 export function LocationPicker({
+  address,
+  onAddressChange,
   value,
   onChange,
   fallbackCenter,
   neighborhoodName,
 }: {
+  /** Dirección escrita (calle y número): es la del aviso y también lo que se busca en el mapa. */
+  address: string;
+  onAddressChange: (address: string) => void;
   value: Point | null;
   onChange: (point: Point | null) => void;
   /** Dónde centrar el mapa mientras no hay un punto marcado (p. ej. el barrio elegido). */
@@ -30,7 +35,6 @@ export function LocationPicker({
   const initialValue = useRef(value);
   const initialCenter = useRef(fallbackCenter);
 
-  const [query, setQuery] = useState("");
   const [searching, setSearching] = useState(false);
   const [results, setResults] = useState<GeocodeResult[]>([]);
   const [message, setMessage] = useState<string | null>(null);
@@ -108,7 +112,7 @@ export function LocationPicker({
     setMessage(null);
     setResults([]);
     setSearching(true);
-    const response = await geocodeAddress(query, neighborhoodName);
+    const response = await geocodeAddress(address, neighborhoodName);
     setSearching(false);
 
     if (!response.ok) {
@@ -148,19 +152,19 @@ export function LocationPicker({
       <div className="flex flex-col gap-2 sm:flex-row">
         <input
           type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          value={address}
+          onChange={(e) => onAddressChange(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.preventDefault();
               handleSearch();
             }
           }}
-          placeholder="Buscar dirección: calle y número"
-          aria-label="Buscar dirección"
+          placeholder="Ej: San Martín 1200"
+          aria-label="Dirección"
           className="field flex-1"
         />
-        <Button type="button" variant="secondary" disabled={searching || query.trim().length < 3} onClick={handleSearch}>
+        <Button type="button" variant="secondary" disabled={searching || address.trim().length < 3} onClick={handleSearch}>
           {searching ? "Buscando..." : "Buscar en el mapa"}
         </Button>
       </div>

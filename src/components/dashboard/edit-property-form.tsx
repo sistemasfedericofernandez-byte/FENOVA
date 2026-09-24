@@ -311,26 +311,16 @@ export function EditPropertyForm({
           </Field>
         </div>
 
-        <Field
-          label="Dirección"
-          hint="Es opcional y se muestra en el aviso. Si no querés mostrar el número exacto, poné solo la calle o la zona."
-        >
-          <input
-            type="text"
-            value={addressText}
-            onChange={(e) => setAddressText(e.target.value)}
-            placeholder="Ej: San Martín 1200"
-            className="field"
-          />
-        </Field>
-
         <div className="flex flex-col gap-2">
-          <span className="text-sm font-semibold text-zinc-800">Ubicación en el mapa</span>
+          <span className="text-sm font-semibold text-zinc-800">Dirección y ubicación</span>
           <p className="text-xs leading-snug text-zinc-600">
-            Marcá el punto exacto. Quien mire el aviso va a ver en el mapa la zona donde queda, sin
-            necesidad de que le pases la dirección.
+            Escribí la calle y el número y tocá &quot;Buscar en el mapa&quot;. Si hace falta, arrastrá el
+            pin para ajustar el punto. Quien mire el aviso va a ver la dirección y la zona en el mapa; si
+            no querés mostrar el número exacto, escribí solo la calle.
           </p>
           <LocationPicker
+            address={addressText}
+            onAddressChange={setAddressText}
             value={location}
             onChange={setLocation}
             fallbackCenter={neighborhoodCenter(neighborhoods.find((n) => n.id === neighborhoodId)?.name)}
