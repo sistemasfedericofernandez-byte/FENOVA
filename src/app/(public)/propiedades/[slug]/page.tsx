@@ -141,6 +141,9 @@ export default async function PropiedadDetallePage({
             phone={property.whatsappNumber}
             propertyId={property.id}
             propertyTitle={property.title}
+            url={`${siteUrl}/propiedades/${slug}`}
+            summary={`${OPERATION_LABEL[property.operationType] ?? property.operationType} · ${formatArs(property.priceAmount, property.priceCurrency as PriceCurrency)}`}
+            location={property.neighborhoodName ? `${property.neighborhoodName}, Corrientes` : "Corrientes"}
           />
         </div>
       ) : null}

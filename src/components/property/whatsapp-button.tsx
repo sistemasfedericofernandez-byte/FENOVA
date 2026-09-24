@@ -8,14 +8,20 @@ export function WhatsappButton({
   phone,
   propertyId,
   propertyTitle,
+  url,
+  summary,
+  location,
   kind = "property",
 }: {
   phone: string;
   propertyId: string;
   propertyTitle: string;
+  url: string;
+  summary?: string;
+  location?: string;
   kind?: "property" | "hotel";
 }) {
-  const href = buildWhatsappLink({ phone, propertyId, propertyTitle });
+  const href = buildWhatsappLink({ phone, title: propertyTitle, url, summary, location });
   const endpoint =
     kind === "hotel" ? "/api/hotels/track-event" : "/api/properties/track-event";
   const idField = kind === "hotel" ? "hotelId" : "propertyId";

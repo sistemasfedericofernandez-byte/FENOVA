@@ -10,14 +10,30 @@ export function formatArs(amount: number, currency: "ARS" | "USD" = "ARS") {
   }).format(amount);
 }
 
-/** Genera el link de WhatsApp con mensaje predefinido, incluyendo el ID de la propiedad. */
+/**
+ * Genera el link de WhatsApp con un mensaje que le permite a la inmobiliaria
+ * identificar el aviso al instante: título, tipo y precio, ubicación y el
+ * enlace directo al aviso (al tocarlo abre su propio anuncio).
+ */
 export function buildWhatsappLink(params: {
   phone: string;
-  propertyId: string;
-  propertyTitle: string;
+  title: string;
+  url: string;
+  summary?: string;
+  location?: string;
 }) {
-  const { phone, propertyId, propertyTitle } = params;
-  const message = `Hola! Te escribo por la propiedad "${propertyTitle}" (ID: ${propertyId}) que vi en PropiMarket.`;
+  const { phone, title, url, summary, location } = params;
+  const lines = [
+    "Hola! Te escribo por tu aviso en PropiMarket:",
+    "",
+    `*${title}*`,
+    summary,
+    location ? `Ubicación: ${location}` : undefined,
+    `Ver aviso: ${url}`,
+    "",
+    "Me gustaría recibir más información. ¡Gracias!",
+  ].filter((line): line is string => line !== undefined);
+
   const digitsOnly = phone.replace(/\D/g, "");
-  return `https://wa.me/${digitsOnly}?text=${encodeURIComponent(message)}`;
+  return `https://wa.me/${digitsOnly}?text=${encodeURIComponent(lines.join("\n"))}`;
 }

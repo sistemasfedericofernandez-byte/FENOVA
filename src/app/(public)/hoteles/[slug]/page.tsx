@@ -143,6 +143,9 @@ export default async function HotelDetallePage({
             phone={hotel.whatsappNumber}
             propertyId={hotel.id}
             propertyTitle={hotel.name}
+            url={`${siteUrl}/hoteles/${slug}`}
+            summary={`Hotel · ${formatArs(hotel.pricePerNight, hotel.priceCurrency as PriceCurrency)} por noche`}
+            location={hotel.neighborhoodName ? `${hotel.neighborhoodName}, Corrientes` : "Corrientes"}
             kind="hotel"
           />
         </div>
