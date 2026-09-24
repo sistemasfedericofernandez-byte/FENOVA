@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { PageHeader } from "@/components/dashboard/page-header";
 import { createClient } from "@/lib/supabase/server";
 import { EditPropertyForm } from "@/components/dashboard/edit-property-form";
 
@@ -44,7 +45,7 @@ export default async function EditarPropiedadPage({
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-2xl font-semibold">Editar propiedad</h1>
+      <PageHeader title="Editar propiedad" />
       <EditPropertyForm
         propertyId={property.id}
         initial={{

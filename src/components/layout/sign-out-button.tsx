@@ -1,10 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
-export function SignOutButton({ className }: { className?: string }) {
+export function SignOutButton({
+  className,
+  children,
+}: {
+  className?: string;
+  children?: ReactNode;
+}) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -23,6 +29,7 @@ export function SignOutButton({ className }: { className?: string }) {
       disabled={loading}
       className={className}
     >
+      {children}
       {loading ? "Saliendo..." : "Cerrar sesión"}
     </button>
   );

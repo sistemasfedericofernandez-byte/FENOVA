@@ -20,7 +20,7 @@ export default async function AlertasPage() {
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center gap-6 px-4 py-8">
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-semibold">Creá una alerta de búsqueda</h1>
-        <p className="text-zinc-600 dark:text-zinc-400">
+        <p className="text-zinc-700">
           Dejá tu email y te avisamos apenas publiquemos algo que coincida.
         </p>
       </div>

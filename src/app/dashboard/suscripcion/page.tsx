@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { PageHeader } from "@/components/dashboard/page-header";
 import { SubscriptionPlans } from "@/components/dashboard/subscription-plans";
 
 const STATUS_LABEL: Record<string, string> = {
@@ -39,14 +40,11 @@ export default async function SuscripcionPage() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-semibold">Mi suscripción</h1>
-        <p className="text-zinc-600 dark:text-zinc-400">
-          Elegí un plan para poder publicar propiedades o tu hotel.
-        </p>
+        <PageHeader title="Mi suscripción" description={"Elegí un plan para poder publicar propiedades o tu hotel."} />
       </div>
 
       {subscription ? (
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">
+        <p className="text-sm text-zinc-700">
           Estado actual: <strong>{STATUS_LABEL[subscription.status] ?? subscription.status}</strong>
           {subscription.status === "activa" && subscription.current_period_end
             ? ` · Próximo cobro: ${new Date(subscription.current_period_end).toLocaleDateString("es-AR", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })}`

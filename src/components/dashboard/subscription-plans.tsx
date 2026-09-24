@@ -46,21 +46,21 @@ export function SubscriptionPlans({
 
   return (
     <div className="flex flex-col gap-4">
-      {error ? <p className="text-sm text-red-600">{error}</p> : null}
+      {error ? <p className="text-sm text-red-700">{error}</p> : null}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {plans.map((plan) => {
           const isCurrent = plan.id === currentPlanId;
           return (
             <div
               key={plan.id}
-              className="flex flex-col gap-3 rounded-xl border border-zinc-200 p-5 dark:border-zinc-800"
+              className="flex flex-col gap-3 card p-5"
             >
               <h3 className="text-lg font-semibold">{plan.name}</h3>
               <p className="text-2xl font-bold">
                 {formatArs(plan.price_ars, "ARS")}
                 <span className="text-sm font-normal text-zinc-600">/mes</span>
               </p>
-              <ul className="flex flex-col gap-1 text-sm text-zinc-600 dark:text-zinc-400">
+              <ul className="flex flex-col gap-1 text-sm text-zinc-700">
                 <li>Hasta {plan.max_active_listings} publicaciones activas</li>
                 <li>
                   {plan.allows_csv_bulk_upload

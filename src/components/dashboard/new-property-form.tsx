@@ -4,6 +4,7 @@ import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Field } from "@/components/ui/field";
 import { createProperty } from "@/server/actions/properties";
 import {
   importFromFacebookMarketplace,
@@ -176,49 +177,40 @@ export function NewPropertyForm({
   }
 
   return (
-    <div className="flex max-w-xl flex-col gap-4">
-      <div className="flex flex-col gap-3 rounded-lg border border-dashed border-zinc-300 p-3 dark:border-zinc-700">
+    <div className="flex max-w-2xl flex-col gap-5">
+      <section className="card flex flex-col gap-4 border-dashed p-5">
         <div className="flex flex-col gap-1">
-          <label className="text-sm font-medium">
-            Importar desde Facebook Marketplace
-          </label>
-          <p className="text-xs text-zinc-600">
-            Completamos título, descripción, precio y fotos automáticamente
-            — después podés editar todo antes de guardar.
+          <h2 className="text-base font-bold text-[#0d2740]">
+            ¿Ya la tenés publicada en Facebook Marketplace?
+          </h2>
+          <p className="text-sm text-zinc-700">
+            Importala y completamos título, descripción, precio y fotos por vos. Después podés
+            corregir lo que quieras antes de guardar.
           </p>
         </div>
 
-        <div className="flex flex-col gap-1.5">
-          <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
-            Opción recomendada — 100% confiable
-          </span>
-          <ol className="list-decimal pl-4 text-xs text-zinc-600">
-            <li>Abrí tu publicación en Facebook, en tu propio navegador.</li>
-            <li>
-              Ctrl+S (o menú → &quot;Guardar página como&quot;) y elegí{" "}
-              <strong>&quot;Página web, solo HTML&quot;</strong>.
-            </li>
-            <li>Subí acá ese archivo .html.</li>
-          </ol>
-          <label className="flex flex-col gap-1 text-sm">
-            <input
-              type="file"
-              accept=".html,.htm,text/html"
-              disabled={importing}
-              onChange={handleImportFromHtmlFile}
-              className="rounded-lg border border-dashed border-zinc-300 px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-            />
-          </label>
-        </div>
+        <ol className="list-decimal space-y-1 pl-5 text-sm text-zinc-800">
+          <li>Abrí tu publicación en Facebook, en tu propio navegador.</li>
+          <li>
+            Apretá Ctrl+S (o menú → &quot;Guardar página como&quot;) y elegí{" "}
+            <strong>&quot;Página web, solo HTML&quot;</strong>.
+          </li>
+          <li>Subí acá ese archivo .html.</li>
+        </ol>
 
-        <details className="text-xs text-zinc-600">
-          <summary className="cursor-pointer font-medium">
-            O probá pegando el link directo
-          </summary>
-          <p className="mt-1">
-            Más rápido, pero Facebook a veces bloquea este método (bloquea
-            más seguido a los servidores que a una visita normal) — si
-            falla, usá la opción de arriba.
+        <input
+          type="file"
+          accept=".html,.htm,text/html"
+          disabled={importing}
+          onChange={handleImportFromHtmlFile}
+          aria-label="Archivo HTML de la publicación de Facebook"
+          className="field"
+        />
+
+        <details className="text-sm text-zinc-800">
+          <summary className="cursor-pointer font-semibold">O probá pegando el link directo</summary>
+          <p className="mt-2 text-zinc-700">
+            Es más rápido, pero Facebook a veces lo bloquea. Si falla, usá el archivo de arriba.
           </p>
           <div className="mt-2 flex flex-col gap-2 sm:flex-row">
             <input
@@ -226,7 +218,8 @@ export function NewPropertyForm({
               placeholder="https://www.facebook.com/marketplace/item/..."
               value={facebookUrl}
               onChange={(e) => setFacebookUrl(e.target.value)}
-              className="flex-1 rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+              aria-label="Link de la publicación de Facebook"
+              className="field flex-1"
             />
             <Button
               type="button"
@@ -239,151 +232,156 @@ export function NewPropertyForm({
           </div>
         </details>
 
-        {importing ? (
-          <p className="text-sm text-zinc-600">Importando, un momento…</p>
-        ) : null}
-        {importError ? <p className="text-sm text-red-600">{importError}</p> : null}
-      </div>
+        {importing ? <p className="text-sm text-zinc-700">Importando, un momento…</p> : null}
+        {importError ? <p className="text-sm font-medium text-red-700">{importError}</p> : null}
+      </section>
 
-      <form className="flex flex-col gap-3">
-        <input
-          type="text"
-          required
-          placeholder="Título (ej: Casa 3 dormitorios en Cambá Cué)"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        />
-        <textarea
-          placeholder="Descripción"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          rows={4}
-          className="resize-none rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        />
-
-        <div className="grid grid-cols-2 gap-3">
-          <select
-            value={operationType}
-            onChange={(e) => setOperationType(e.target.value as OperationType)}
-            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-          >
-            {OPERATION_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-          <select
-            value={propertyType}
-            onChange={(e) => setPropertyType(e.target.value as PropertyType)}
-            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-          >
-            {PROPERTY_TYPE_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <select
-          value={neighborhoodId}
-          onChange={(e) => setNeighborhoodId(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        >
-          <option value="">Barrio (opcional)</option>
-          {neighborhoods.map((n) => (
-            <option key={n.id} value={n.id}>
-              {n.name}
-            </option>
-          ))}
-        </select>
-
-        <div className="flex flex-col gap-1">
-          <select
-            value={ownerId}
-            onChange={(e) => setOwnerId(e.target.value)}
-            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-          >
-            <option value="">Sin propietario asignado</option>
-            {owners.map((o) => (
-              <option key={o.id} value={o.id}>
-                {o.full_name}
-              </option>
-            ))}
-          </select>
-          <a
-            href="/dashboard/propietarios"
-            target="_blank"
-            rel="noreferrer"
-            className="text-xs text-zinc-600 underline underline-offset-4"
-          >
-            + nuevo propietario
-          </a>
-        </div>
-
-        <div className="grid grid-cols-2 gap-3">
+      <form className="card flex flex-col gap-5 p-5 sm:p-6">
+        <Field label="Título del aviso">
           <input
-            type="number"
+            type="text"
             required
-            inputMode="decimal"
-            placeholder="Precio"
-            value={priceAmount}
-            onChange={(e) => setPriceAmount(e.target.value)}
-            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+            placeholder="Ej: Casa 3 dormitorios en Cambá Cué"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="field"
           />
-          <select
-            value={priceCurrency}
-            onChange={(e) => setPriceCurrency(e.target.value as PriceCurrency)}
-            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-          >
-            <option value="USD">USD</option>
-            <option value="ARS">ARS</option>
-          </select>
+        </Field>
+
+        <Field label="Descripción" hint="Contá lo más importante: ambientes, estado, servicios, cercanías.">
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={5}
+            className="field resize-none"
+          />
+        </Field>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="¿Qué querés hacer?">
+            <select
+              value={operationType}
+              onChange={(e) => setOperationType(e.target.value as OperationType)}
+              className="field"
+            >
+              {OPERATION_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </Field>
+          <Field label="Tipo de propiedad">
+            <select
+              value={propertyType}
+              onChange={(e) => setPropertyType(e.target.value as PropertyType)}
+              className="field"
+            >
+              {PROPERTY_TYPE_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </Field>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          <input
-            type="number"
-            inputMode="decimal"
-            placeholder="Superficie m²"
-            value={surfaceTotalM2}
-            onChange={(e) => setSurfaceTotalM2(e.target.value)}
-            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-          />
-          <input
-            type="number"
-            inputMode="numeric"
-            placeholder="Dormitorios"
-            value={bedrooms}
-            onChange={(e) => setBedrooms(e.target.value)}
-            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-          />
-          <input
-            type="number"
-            inputMode="numeric"
-            placeholder="Baños"
-            value={bathrooms}
-            onChange={(e) => setBathrooms(e.target.value)}
-            className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-          />
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="Barrio">
+            <select
+              value={neighborhoodId}
+              onChange={(e) => setNeighborhoodId(e.target.value)}
+              className="field"
+            >
+              <option value="">Sin especificar</option>
+              {neighborhoods.map((n) => (
+                <option key={n.id} value={n.id}>
+                  {n.name}
+                </option>
+              ))}
+            </select>
+          </Field>
+          <Field label="Propietario" hint="Opcional. Es privado: solo lo ves vos.">
+            <select value={ownerId} onChange={(e) => setOwnerId(e.target.value)} className="field">
+              <option value="">Sin propietario asignado</option>
+              {owners.map((o) => (
+                <option key={o.id} value={o.id}>
+                  {o.full_name}
+                </option>
+              ))}
+            </select>
+          </Field>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="Precio">
+            <input
+              type="number"
+              required
+              inputMode="decimal"
+              placeholder="0"
+              value={priceAmount}
+              onChange={(e) => setPriceAmount(e.target.value)}
+              className="field"
+            />
+          </Field>
+          <Field label="Moneda">
+            <select
+              value={priceCurrency}
+              onChange={(e) => setPriceCurrency(e.target.value as PriceCurrency)}
+              className="field"
+            >
+              <option value="USD">Dólares (USD)</option>
+              <option value="ARS">Pesos (ARS)</option>
+            </select>
+          </Field>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-3">
+          <Field label="Superficie (m²)">
+            <input
+              type="number"
+              inputMode="decimal"
+              value={surfaceTotalM2}
+              onChange={(e) => setSurfaceTotalM2(e.target.value)}
+              className="field"
+            />
+          </Field>
+          <Field label="Dormitorios">
+            <input
+              type="number"
+              inputMode="numeric"
+              value={bedrooms}
+              onChange={(e) => setBedrooms(e.target.value)}
+              className="field"
+            />
+          </Field>
+          <Field label="Baños">
+            <input
+              type="number"
+              inputMode="numeric"
+              value={bathrooms}
+              onChange={(e) => setBathrooms(e.target.value)}
+              className="field"
+            />
+          </Field>
         </div>
 
         {importedImages.length > 0 ? (
-          <div className="flex flex-col gap-1">
-            <span className="text-sm font-medium">Fotos importadas de Facebook</span>
-            <div className="grid grid-cols-4 gap-2">
+          <div className="flex flex-col gap-2">
+            <span className="text-sm font-semibold text-zinc-800">Fotos importadas de Facebook</span>
+            <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
               {importedImages.map((img) => (
                 <div
                   key={img.publicId}
-                  className="group relative aspect-square overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-900"
+                  className="group relative aspect-square overflow-hidden rounded-xl bg-zinc-200"
                 >
-                  <Image src={img.url} alt="" fill className="object-cover" sizes="100px" />
+                  <Image src={img.url} alt="" fill className="object-cover" sizes="120px" />
                   <button
                     type="button"
                     onClick={() => handleRemoveImported(img.publicId)}
-                    className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/70 text-xs text-white"
+                    aria-label="Quitar foto"
+                    className="absolute right-1 top-1 flex h-7 w-7 items-center justify-center rounded-full bg-black/75 text-sm text-white"
                   >
                     ×
                   </button>
@@ -393,40 +391,38 @@ export function NewPropertyForm({
           </div>
         ) : null}
 
-        <label className="flex flex-col gap-1 text-sm">
-          {importedImages.length > 0 ? "Agregar más fotos" : "Fotos (hasta 12)"}
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleFilesChange}
-            className="rounded-lg border border-dashed border-zinc-300 px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-          />
-        </label>
+        <Field
+          label={importedImages.length > 0 ? "Agregar más fotos" : "Fotos"}
+          hint="Hasta 12 fotos. La primera es la que se ve en el listado."
+        >
+          <input type="file" accept="image/*" multiple onChange={handleFilesChange} className="field" />
+        </Field>
         {files.length > 0 ? (
-          <p className="text-xs text-zinc-600">
+          <p className="-mt-3 text-sm text-zinc-700">
             {files.length} foto{files.length === 1 ? "" : "s"} seleccionada
             {files.length === 1 ? "" : "s"}
           </p>
         ) : null}
 
-        {error ? <p className="text-sm text-red-600">{error}</p> : null}
+        {error ? <p className="text-sm font-medium text-red-700">{error}</p> : null}
 
-        <div className="flex gap-3">
+        <div className="flex flex-col gap-3 border-t border-zinc-200 pt-5 sm:flex-row">
+          <Button
+            type="button"
+            disabled={loading}
+            onClick={(e) => handleSubmit(e, "publicada")}
+            className="sm:flex-1"
+          >
+            {loading ? "Guardando..." : "Publicar ahora"}
+          </Button>
           <Button
             type="button"
             variant="secondary"
             disabled={loading}
             onClick={(e) => handleSubmit(e, "borrador")}
+            className="sm:flex-1"
           >
-            Guardar borrador
-          </Button>
-          <Button
-            type="button"
-            disabled={loading}
-            onClick={(e) => handleSubmit(e, "publicada")}
-          >
-            {loading ? "Guardando..." : "Publicar"}
+            Guardar como borrador
           </Button>
         </div>
       </form>

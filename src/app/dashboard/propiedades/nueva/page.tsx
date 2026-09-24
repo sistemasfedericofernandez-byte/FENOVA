@@ -1,4 +1,5 @@
 import { NewPropertyForm } from "@/components/dashboard/new-property-form";
+import { PageHeader } from "@/components/dashboard/page-header";
 import { createClient } from "@/lib/supabase/server";
 import { requireAgencyId } from "@/server/services/agency";
 
@@ -13,10 +14,7 @@ export default async function NuevaPropiedadPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-2xl font-semibold">Nueva propiedad</h1>
-      <p className="text-zinc-600 dark:text-zinc-400">
-        Completá los datos y guardá como borrador o publicá directamente.
-      </p>
+      <PageHeader title="Nueva propiedad" description={"Completá los datos y guardá como borrador o publicá directamente."} />
       <NewPropertyForm neighborhoods={neighborhoods ?? []} owners={owners ?? []} />
     </div>
   );

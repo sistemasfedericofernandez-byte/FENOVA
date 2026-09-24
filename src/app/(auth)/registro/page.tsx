@@ -15,7 +15,7 @@ const ROLE_OPTIONS: { value: UserRole; label: string }[] = [
 ];
 
 const INPUT_CLASS =
-  "rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700";
+  "field";
 
 export default function RegistroPage() {
   const router = useRouter();
@@ -98,7 +98,7 @@ export default function RegistroPage() {
     return (
       <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center gap-4 px-4 text-center">
         <h1 className="text-2xl font-semibold">Revisá tu email</h1>
-        <p className="text-zinc-600 dark:text-zinc-400">
+        <p className="text-zinc-700">
           Te enviamos un link de confirmación a <strong>{email}</strong>. Al
           tocarlo tu cuenta queda lista para usar. Si no lo ves, revisá la
           carpeta de spam.
@@ -122,7 +122,7 @@ export default function RegistroPage() {
     <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center gap-6 px-4 py-8">
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-semibold">Crear cuenta</h1>
-        <p className="text-zinc-600 dark:text-zinc-400">
+        <p className="text-zinc-700">
           Registro para inmobiliarias, hoteles y dueños directos.
         </p>
       </div>
@@ -206,7 +206,7 @@ export default function RegistroPage() {
           </button>
         </div>
 
-        <label className="flex items-start gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+        <label className="flex items-start gap-2 text-sm text-zinc-700">
           <input
             type="checkbox"
             checked={termsAccepted}
@@ -227,7 +227,7 @@ export default function RegistroPage() {
           </span>
         </label>
 
-        {error ? <p className="text-sm text-red-600">{error}</p> : null}
+        {error ? <p className="text-sm text-red-700">{error}</p> : null}
 
         <Button type="submit" disabled={loading || !termsAccepted}>
           {loading ? "Creando cuenta..." : "Crear cuenta"}

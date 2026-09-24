@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { PageHeader } from "@/components/dashboard/page-header";
 import { TenantLookup } from "@/components/dashboard/tenant-lookup";
 
 export default async function InquilinosPage() {
@@ -24,11 +25,7 @@ export default async function InquilinosPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-2xl font-semibold">Calificación de inquilinos</h1>
-      <p className="text-zinc-600 dark:text-zinc-400">
-        Buscador de antecedentes por DNI. Disponible solo para inmobiliarias
-        validadas.
-      </p>
+      <PageHeader title="Calificación de inquilinos" description={"Buscador de antecedentes por DNI. Disponible solo para inmobiliarias validadas."} />
 
       {canAccess ? (
         <TenantLookup />

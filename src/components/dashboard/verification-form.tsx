@@ -58,14 +58,14 @@ export function VerificationForm({
   }
 
   return (
-    <div className="flex max-w-md flex-col gap-4">
+    <div className="card flex max-w-xl flex-col gap-4 p-5 sm:p-6">
       <div
-        className={`rounded-lg border p-4 text-sm ${
+        className={`rounded-xl border p-4 text-[15px] font-medium ${
           status === "aprobado"
-            ? "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-200"
+            ? "border-emerald-300 bg-emerald-50 text-emerald-900"
             : status === "rechazado"
-              ? "border-red-200 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200"
-              : "border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900"
+              ? "border-red-300 bg-red-50 text-red-900"
+              : "border-zinc-300 bg-zinc-50 text-zinc-800"
         }`}
       >
         {STATUS_MESSAGE[status]}
@@ -73,17 +73,17 @@ export function VerificationForm({
 
       {status !== "pendiente" && status !== "aprobado" ? (
         <>
-          <label className="flex flex-col gap-1 text-sm">
+          <label className="flex flex-col gap-1.5 text-sm font-semibold text-zinc-800">
             Foto de tu DNI o comprobante de titularidad
             <input
               type="file"
               accept="image/*"
               onChange={handleFileChange}
-              className="rounded-lg border border-dashed border-zinc-300 px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+              className="field"
             />
           </label>
 
-          {error ? <p className="text-sm text-red-600">{error}</p> : null}
+          {error ? <p className="text-sm text-red-700">{error}</p> : null}
 
           <Button disabled={!file || loading} onClick={handleSubmit}>
             {loading ? "Enviando..." : "Enviar para verificación"}

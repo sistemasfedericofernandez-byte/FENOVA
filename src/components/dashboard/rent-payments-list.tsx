@@ -49,13 +49,13 @@ export function RentPaymentsList({ payments }: { payments: Payment[] }) {
   }
 
   if (!payments.length) {
-    return <p className="text-zinc-600 dark:text-zinc-400">Todavía no hay meses registrados.</p>;
+    return <p className="text-zinc-700">Todavía no hay meses registrados.</p>;
   }
 
   return (
     <div className="flex max-w-xl flex-col gap-4">
-      {error ? <p className="text-sm text-red-600">{error}</p> : null}
-      <div className="flex flex-col divide-y divide-zinc-200 rounded-xl border border-zinc-200 dark:divide-zinc-800 dark:border-zinc-800">
+      {error ? <p className="text-sm text-red-700">{error}</p> : null}
+      <div className="flex flex-col card divide-y divide-zinc-200">
         {payments.map((payment) => (
           <div
             key={payment.id}
@@ -73,8 +73,8 @@ export function RentPaymentsList({ payments }: { payments: Payment[] }) {
               <span
                 className={
                   payment.status === "pagado"
-                    ? "rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-medium text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"
-                    : "rounded-full bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-700 dark:bg-amber-950 dark:text-amber-300"
+                    ? "rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-900"
+                    : "rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-900"
                 }
               >
                 {payment.status === "pagado" ? "Pagado" : "Pendiente"}

@@ -59,7 +59,7 @@ export function LoginForm() {
           placeholder="tu@email.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          className="field"
         />
         <input
           type="password"
@@ -68,10 +68,10 @@ export function LoginForm() {
           placeholder="Contraseña"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          className="field"
         />
 
-        {error ? <p className="text-sm text-red-600">{error}</p> : null}
+        {error ? <p className="text-sm text-red-700">{error}</p> : null}
 
         <Button type="submit" disabled={loading}>
           {loading ? "Ingresando..." : "Ingresar"}

@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { PageHeader } from "@/components/dashboard/page-header";
 import { requireAgencyId } from "@/server/services/agency";
 import { OwnersManager } from "@/components/dashboard/owners-manager";
 
@@ -15,11 +16,7 @@ export default async function PropietariosPage() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col">
-        <h1 className="text-2xl font-semibold">Propietarios</h1>
-        <p className="text-zinc-600 dark:text-zinc-400">
-          Tu registro privado de los dueños de los inmuebles que gestionás.
-          No es público — solo lo ves vos.
-        </p>
+        <PageHeader title="Propietarios" description={"Tu registro privado de los dueños de los inmuebles que gestionás. No es público — solo lo ves vos."} />
       </div>
       <OwnersManager owners={owners ?? []} />
     </div>

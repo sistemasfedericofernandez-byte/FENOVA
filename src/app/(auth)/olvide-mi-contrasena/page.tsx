@@ -35,7 +35,7 @@ export default function OlvideMiContrasenaPage() {
     return (
       <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center gap-4 px-4 text-center">
         <h1 className="text-2xl font-semibold">Revisá tu email</h1>
-        <p className="text-zinc-600 dark:text-zinc-400">
+        <p className="text-zinc-700">
           Si <strong>{email}</strong> tiene una cuenta, te mandamos un link para
           elegir una contraseña nueva. Si no lo ves, revisá la carpeta de spam.
         </p>
@@ -50,7 +50,7 @@ export default function OlvideMiContrasenaPage() {
     <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center gap-6 px-4">
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-semibold">Recuperar contraseña</h1>
-        <p className="text-zinc-600 dark:text-zinc-400">
+        <p className="text-zinc-700">
           Ingresá tu email y te mandamos un link para elegir una nueva.
         </p>
       </div>
@@ -63,9 +63,9 @@ export default function OlvideMiContrasenaPage() {
           placeholder="tu@email.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          className="field"
         />
-        {error ? <p className="text-sm text-red-600">{error}</p> : null}
+        {error ? <p className="text-sm text-red-700">{error}</p> : null}
         <Button type="submit" disabled={loading}>
           {loading ? "Enviando..." : "Enviar link"}
         </Button>

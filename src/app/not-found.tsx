@@ -7,7 +7,7 @@ export default function NotFound() {
       <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
         No encontramos esta página
       </h1>
-      <p className="max-w-md text-base text-zinc-600 dark:text-zinc-400">
+      <p className="max-w-md text-base text-zinc-700">
         Puede que el link esté roto o que la propiedad ya no esté disponible.
       </p>
       <Link

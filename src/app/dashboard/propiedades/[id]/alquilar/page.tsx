@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { decryptField } from "@/lib/encryption";
+import { PageHeader } from "@/components/dashboard/page-header";
 import { TenancyForm } from "@/components/dashboard/tenancy-form";
 
 export default async function AlquilarPropiedadPage({
@@ -43,12 +44,14 @@ export default async function AlquilarPropiedadPage({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-col">
-        <h1 className="text-2xl font-semibold">
-          {tenancy ? "Contrato de alquiler" : "Marcar como alquilada"}
-        </h1>
-        <span className="text-zinc-600">{property.title}</span>
-      </div>
+      <PageHeader
+        title={tenancy ? "Contrato de alquiler" : "Marcar como alquilada"}
+        description={
+          tenancy
+            ? `${property.title} · Datos privados: solo los ves vos.`
+            : `${property.title} · Cargá los datos de quien la alquila. Deja de mostrarse en el sitio público.`
+        }
+      />
       <TenancyForm
         propertyId={property.id}
         activeTenancy={

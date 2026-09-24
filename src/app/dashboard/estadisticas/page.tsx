@@ -1,79 +1,82 @@
 import { createClient } from "@/lib/supabase/server";
+import { requireAgencyId } from "@/server/services/agency";
+import { PageHeader, StatusBadge } from "@/components/dashboard/page-header";
+
+const STATUS: Record<string, { label: string; tone: "green" | "gray" | "amber" | "red" | "blue" }> = {
+  publicada: { label: "Publicada", tone: "green" },
+  borrador: { label: "Borrador", tone: "gray" },
+  oculta: { label: "Oculta", tone: "amber" },
+  pausada_por_impago: { label: "Pausada por impago", tone: "red" },
+  alquilada: { label: "Alquilada", tone: "blue" },
+};
 
 export default async function EstadisticasPage() {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const agencyId = await requireAgencyId(supabase);
 
-  const { data: agency } = await supabase
-    .from("agencies")
-    .select("id")
-    .eq("profile_id", user?.id ?? "")
-    .maybeSingle();
-
-  const { data: properties } = agency
-    ? await supabase
-        .from("properties")
-        .select("id, title, status, views_count, whatsapp_clicks_count")
-        .eq("agency_id", agency.id)
-        .order("views_count", { ascending: false })
-    : { data: [] };
+  const { data: properties } = await supabase
+    .from("properties")
+    .select("id, title, status, views_count, whatsapp_clicks_count")
+    .eq("agency_id", agencyId)
+    .order("views_count", { ascending: false });
 
   const totalViews = (properties ?? []).reduce((acc, p) => acc + p.views_count, 0);
-  const totalClicks = (properties ?? []).reduce(
-    (acc, p) => acc + p.whatsapp_clicks_count,
-    0,
-  );
-  const conversionRate =
-    totalViews > 0 ? ((totalClicks / totalViews) * 100).toFixed(1) : "0";
+  const totalClicks = (properties ?? []).reduce((acc, p) => acc + p.whatsapp_clicks_count, 0);
+  const conversionRate = totalViews > 0 ? ((totalClicks / totalViews) * 100).toFixed(1) : "0";
+
+  const cards = [
+    { value: totalViews, label: "Veces que vieron tus avisos" },
+    { value: totalClicks, label: "Consultas por WhatsApp" },
+    { value: `${conversionRate}%`, label: "De las visitas terminan en consulta" },
+  ];
 
   return (
-    <div className="flex flex-col gap-4">
-      <h1 className="text-2xl font-semibold">Estadísticas</h1>
-      <p className="text-zinc-600 dark:text-zinc-400">
-        Visualizaciones y clics en WhatsApp por propiedad.
-      </p>
+    <div className="flex flex-col gap-6">
+      <PageHeader
+        title="Estadísticas"
+        description="Cuánta gente ve tus propiedades y cuántas personas te escriben."
+      />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800">
-          <p className="text-2xl font-bold">{totalViews}</p>
-          <p className="text-sm text-zinc-600">Vistas totales</p>
-        </div>
-        <div className="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800">
-          <p className="text-2xl font-bold">{totalClicks}</p>
-          <p className="text-sm text-zinc-600">Clics en WhatsApp</p>
-        </div>
-        <div className="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800">
-          <p className="text-2xl font-bold">{conversionRate}%</p>
-          <p className="text-sm text-zinc-600">Tasa de conversión</p>
-        </div>
+        {cards.map((card) => (
+          <div key={card.label} className="card flex flex-col gap-1 p-5">
+            <span className="text-3xl font-bold tracking-tight text-[#0d2740]">{card.value}</span>
+            <span className="text-sm font-medium text-zinc-700">{card.label}</span>
+          </div>
+        ))}
       </div>
 
       {!properties?.length ? (
-        <p className="text-zinc-600 dark:text-zinc-400">
-          Todavía no tenés propiedades cargadas.
-        </p>
+        <div className="card p-8 text-center text-[15px] text-zinc-700">
+          Todavía no tenés propiedades cargadas. Cuando publiques, acá vas a ver cómo les va.
+        </div>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-zinc-200 dark:border-zinc-800">
+        <div className="card overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-zinc-200 text-left dark:border-zinc-800">
-                <th className="p-3">Propiedad</th>
-                <th className="p-3">Estado</th>
-                <th className="p-3">Vistas</th>
-                <th className="p-3">Clics WhatsApp</th>
+              <tr className="border-b border-zinc-200 bg-zinc-50 text-left text-zinc-800">
+                <th className="p-3 font-semibold">Propiedad</th>
+                <th className="p-3 font-semibold">Estado</th>
+                <th className="p-3 text-right font-semibold">Vistas</th>
+                <th className="p-3 text-right font-semibold">WhatsApp</th>
               </tr>
             </thead>
             <tbody>
-              {properties.map((p) => (
-                <tr key={p.id} className="border-b border-zinc-100 dark:border-zinc-900">
-                  <td className="p-3">{p.title}</td>
-                  <td className="p-3">{p.status}</td>
-                  <td className="p-3">{p.views_count}</td>
-                  <td className="p-3">{p.whatsapp_clicks_count}</td>
-                </tr>
-              ))}
+              {properties.map((p) => {
+                const status = STATUS[p.status] ?? { label: p.status, tone: "gray" as const };
+                return (
+                  <tr key={p.id} className="border-b border-zinc-100 last:border-0">
+                    <td className="p-3 font-medium text-zinc-900">{p.title}</td>
+                    <td className="p-3">
+                      <StatusBadge tone={status.tone}>{status.label}</StatusBadge>
+                    </td>
+                    <td className="p-3 text-right tabular-nums text-zinc-900">{p.views_count}</td>
+                    <td className="p-3 text-right tabular-nums text-zinc-900">
+                      {p.whatsapp_clicks_count}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

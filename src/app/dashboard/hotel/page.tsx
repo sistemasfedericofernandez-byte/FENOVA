@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PageHeader } from "@/components/dashboard/page-header";
 import { createClient } from "@/lib/supabase/server";
 import { HotelForm } from "@/components/dashboard/hotel-form";
 
@@ -17,8 +18,8 @@ export default async function DashboardHotelPage() {
   if (profile?.role !== "hotel") {
     return (
       <div className="flex flex-col gap-4">
-        <h1 className="text-2xl font-semibold">Mi hotel</h1>
-        <p className="text-zinc-600 dark:text-zinc-400">
+        <PageHeader title="Mi hotel" />
+        <p className="text-zinc-700">
           Este panel es solo para cuentas de tipo Hotel. Tu cuenta gestiona
           propiedades en{" "}
           <Link href="/dashboard/propiedades" className="underline underline-offset-4">
@@ -61,7 +62,7 @@ export default async function DashboardHotelPage() {
           <span>{hotel.whatsapp_clicks_count} clics WhatsApp</span>
         </div>
       ) : (
-        <p className="text-zinc-600 dark:text-zinc-400">
+        <p className="text-zinc-700">
           Completá los datos de tu hotel y guardá como borrador o publicá
           directamente.
         </p>

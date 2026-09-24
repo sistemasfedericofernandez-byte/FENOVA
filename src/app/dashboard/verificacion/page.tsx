@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { PageHeader } from "@/components/dashboard/page-header";
 import { VerificationForm } from "@/components/dashboard/verification-form";
 
 export default async function VerificacionPage() {
@@ -15,11 +16,7 @@ export default async function VerificacionPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-2xl font-semibold">Propietario Seguro</h1>
-      <p className="text-zinc-600 dark:text-zinc-400">
-        Subí tu DNI o comprobante de titularidad para obtener el sello de
-        verificación en tus publicaciones.
-      </p>
+      <PageHeader title="Propietario Seguro" description={"Subí tu DNI o comprobante de titularidad para obtener el sello de verificación en tus publicaciones."} />
       <VerificationForm initialStatus={agency?.verification_status ?? "no_iniciado"} />
     </div>
   );

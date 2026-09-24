@@ -2,17 +2,39 @@
 
 import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Field } from "@/components/ui/field";
+import { StatusBadge } from "@/components/dashboard/page-header";
 import { updateAgencyProfile } from "@/server/actions/agency";
 import { uploadImageToCloudinary } from "@/lib/cloudinary-upload";
 import type { VerificationStatus } from "@/types/database.types";
 
-const VERIFICATION_LABEL: Record<VerificationStatus, string> = {
-  no_iniciado: "Todavía no solicitaste la verificación Propietario Seguro.",
-  pendiente: "Tu solicitud de verificación está en revisión.",
-  aprobado: "Estás verificado con el sello Propietario Seguro.",
-  rechazado: "Tu solicitud de verificación fue rechazada.",
+const VERIFICATION: Record<
+  VerificationStatus,
+  { label: string; tone: "green" | "amber" | "gray" | "red"; text: string }
+> = {
+  no_iniciado: {
+    label: "Sin verificar",
+    tone: "gray",
+    text: "El sello Propietario Seguro genera más confianza en tus avisos.",
+  },
+  pendiente: {
+    label: "En revisión",
+    tone: "amber",
+    text: "Estamos revisando tu solicitud. Te avisamos por email.",
+  },
+  aprobado: {
+    label: "Verificado",
+    tone: "green",
+    text: "Tus avisos muestran el sello Propietario Seguro.",
+  },
+  rechazado: {
+    label: "Rechazado",
+    tone: "red",
+    text: "Podés volver a solicitarlo con otro comprobante.",
+  },
 };
 
 export function AgencyProfileForm({
@@ -83,78 +105,96 @@ export function AgencyProfileForm({
     router.refresh();
   }
 
+  const verification = VERIFICATION[verificationStatus];
+
   return (
-    <form onSubmit={handleSubmit} className="flex max-w-xl flex-col gap-4">
-      <div className="flex items-center gap-4">
-        <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-900">
-          {logoUrl ? (
-            <Image src={logoUrl} alt="" fill className="object-cover" sizes="64px" />
-          ) : null}
+    <div className="flex max-w-2xl flex-col gap-5">
+      <form onSubmit={handleSubmit} className="card flex flex-col gap-5 p-5 sm:p-6">
+        <div className="flex items-center gap-4">
+          <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-zinc-300 bg-zinc-100">
+            {logoUrl ? (
+              <Image src={logoUrl} alt="Logo de tu inmobiliaria" fill className="object-cover" sizes="80px" />
+            ) : (
+              <span className="flex h-full items-center justify-center px-2 text-center text-xs font-medium text-zinc-600">
+                Sin logo
+              </span>
+            )}
+          </div>
+          <Field
+            label={logoUrl ? "Cambiar logo" : "Subir logo"}
+            hint={uploadingLogo ? "Subiendo logo..." : "Una imagen cuadrada se ve mejor."}
+            className="flex-1"
+          >
+            <input
+              type="file"
+              accept="image/*"
+              disabled={uploadingLogo}
+              onChange={handleLogoChange}
+              className="field"
+            />
+          </Field>
         </div>
-        <label className="flex flex-col gap-1 text-sm">
-          {logoUrl ? "Cambiar logo" : "Subir logo"}
+
+        <Field label="Nombre de la inmobiliaria">
           <input
-            type="file"
-            accept="image/*"
-            disabled={uploadingLogo}
-            onChange={handleLogoChange}
-            className="rounded-lg border border-dashed border-zinc-300 px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+            type="text"
+            required
+            value={businessName}
+            onChange={(e) => setBusinessName(e.target.value)}
+            className="field"
           />
-        </label>
-      </div>
-      {uploadingLogo ? <p className="text-sm text-zinc-600">Subiendo logo...</p> : null}
+        </Field>
 
-      <input
-        type="text"
-        required
-        placeholder="Nombre de la inmobiliaria"
-        value={businessName}
-        onChange={(e) => setBusinessName(e.target.value)}
-        className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-      />
-      <div className="grid grid-cols-2 gap-3">
-        <input
-          type="text"
-          placeholder="CUIT (opcional)"
-          value={cuit}
-          onChange={(e) => setCuit(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        />
-        <input
-          type="text"
-          required
-          placeholder="Ciudad"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        />
-      </div>
-      <input
-        type="text"
-        placeholder="WhatsApp de contacto (opcional)"
-        value={whatsappNumber}
-        onChange={(e) => setWhatsappNumber(e.target.value)}
-        className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-      />
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="Ciudad">
+            <input
+              type="text"
+              required
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              className="field"
+            />
+          </Field>
+          <Field label="CUIT" hint="Opcional.">
+            <input type="text" value={cuit} onChange={(e) => setCuit(e.target.value)} className="field" />
+          </Field>
+        </div>
 
-      <div className="rounded-lg border border-zinc-200 p-3 text-sm dark:border-zinc-800">
-        <span>{VERIFICATION_LABEL[verificationStatus]}</span>
-        {verificationStatus !== "aprobado" ? (
-          <>
-            {" "}
-            <a href="/dashboard/verificacion" className="underline underline-offset-4">
-              Solicitar Propietario Seguro
-            </a>
-          </>
+        <Field label="WhatsApp de contacto" hint="Con código de país, sin espacios. Ej: 5493794000001">
+          <input
+            type="tel"
+            inputMode="tel"
+            value={whatsappNumber}
+            onChange={(e) => setWhatsappNumber(e.target.value)}
+            className="field"
+          />
+        </Field>
+
+        {error ? <p className="text-sm font-medium text-red-700">{error}</p> : null}
+        {statusMessage ? <p className="text-sm font-semibold text-emerald-700">{statusMessage}</p> : null}
+
+        <Button type="submit" disabled={saving || uploadingLogo} className="w-full sm:w-auto sm:self-start">
+          {saving ? "Guardando..." : "Guardar cambios"}
+        </Button>
+      </form>
+
+      <section className="card flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-1.5">
+          <div className="flex items-center gap-2">
+            <h2 className="text-base font-bold text-[#0d2740]">Propietario Seguro</h2>
+            <StatusBadge tone={verification.tone}>{verification.label}</StatusBadge>
+          </div>
+          <p className="text-sm text-zinc-700">{verification.text}</p>
+        </div>
+        {verificationStatus !== "aprobado" && verificationStatus !== "pendiente" ? (
+          <Link
+            href="/dashboard/verificacion"
+            className="text-sm font-semibold text-[#163a5c] underline underline-offset-4"
+          >
+            Solicitar verificación
+          </Link>
         ) : null}
-      </div>
-
-      {error ? <p className="text-sm text-red-600">{error}</p> : null}
-      {statusMessage ? <p className="text-sm text-emerald-600">{statusMessage}</p> : null}
-
-      <Button type="submit" disabled={saving || uploadingLogo}>
-        {saving ? "Guardando..." : "Guardar cambios"}
-      </Button>
-    </form>
+      </section>
+    </div>
   );
 }

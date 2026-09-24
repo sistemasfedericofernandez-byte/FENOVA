@@ -83,7 +83,7 @@ export default async function PropiedadDetallePage({
 
         <h1 className="text-2xl font-semibold">{property.title}</h1>
         {property.neighborhoodName ? (
-          <p className="text-zinc-600 dark:text-zinc-400">
+          <p className="text-zinc-700">
             {property.neighborhoodName}, Corrientes
           </p>
         ) : null}
@@ -95,7 +95,7 @@ export default async function PropiedadDetallePage({
         </p>
 
         {property.surfaceTotalM2 || property.bedrooms || property.bathrooms ? (
-          <div className="flex items-center gap-4 text-sm text-zinc-600 dark:text-zinc-400">
+          <div className="flex items-center gap-4 text-sm text-zinc-700">
             {property.surfaceTotalM2 ? (
               <span className="flex items-center gap-1.5">
                 <RulerIcon width={18} height={18} />

@@ -4,6 +4,7 @@ import { useState, type ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { Field } from "@/components/ui/field";
 import {
   updateProperty,
   setPropertyStatus,
@@ -171,179 +172,189 @@ export function EditPropertyForm({
   }
 
   return (
-    <div className="flex max-w-xl flex-col gap-4">
-      <div className="flex flex-wrap gap-2">
-        {initial.status !== "publicada" ? (
-          <Button
-            variant="secondary"
-            disabled={saving}
-            onClick={() => handleStatusChange("publicada")}
-          >
-            Publicar
-          </Button>
-        ) : (
-          <Button
-            variant="secondary"
-            disabled={saving}
-            onClick={() => handleStatusChange("oculta")}
-          >
-            Pausar (ocultar)
-          </Button>
-        )}
-        <Button variant="ghost" disabled={saving} onClick={handleDelete}>
-          Eliminar propiedad
-        </Button>
-      </div>
-
-      {images.length > 0 ? (
-        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
-          {images.map((img) => (
-            <div key={img.id} className="relative aspect-square overflow-hidden rounded-lg">
-              <Image src={img.url} alt="" fill className="object-cover" sizes="150px" />
-              <button
-                type="button"
-                onClick={() => handleRemoveImage(img.id)}
-                className="absolute right-1 top-1 rounded-full bg-black/70 px-2 py-0.5 text-xs text-white"
-              >
-                ✕
-              </button>
-            </div>
-          ))}
+    <div className="flex max-w-2xl flex-col gap-5">
+      <section className="card flex flex-col gap-3 p-5">
+        <div className="flex flex-col gap-1">
+          <h2 className="text-base font-bold text-[#0d2740]">
+            {initial.status === "publicada" ? "Este aviso está publicado" : "Este aviso no está publicado"}
+          </h2>
+          <p className="text-sm text-zinc-700">
+            {initial.status === "publicada"
+              ? "Se ve en el sitio para cualquier persona. Podés pausarlo cuando quieras."
+              : "Solo lo ves vos. Publicalo para que aparezca en el sitio."}
+          </p>
         </div>
-      ) : null}
+        <div className="flex flex-wrap gap-2">
+          {initial.status !== "publicada" ? (
+            <Button disabled={saving} onClick={() => handleStatusChange("publicada")}>
+              Publicar
+            </Button>
+          ) : (
+            <Button variant="secondary" disabled={saving} onClick={() => handleStatusChange("oculta")}>
+              Pausar (ocultar)
+            </Button>
+          )}
+          <Button variant="danger" disabled={saving} onClick={handleDelete}>
+            Eliminar propiedad
+          </Button>
+        </div>
+      </section>
 
-      <label className="flex flex-col gap-1 text-sm">
-        Agregar fotos
-        <input
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={handleNewFilesChange}
-          className="rounded-lg border border-dashed border-zinc-300 px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        />
-      </label>
+      <section className="card flex flex-col gap-4 p-5 sm:p-6">
+        <h2 className="text-base font-bold text-[#0d2740]">Fotos</h2>
+        {images.length > 0 ? (
+          <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+            {images.map((img) => (
+              <div key={img.id} className="relative aspect-square overflow-hidden rounded-xl bg-zinc-200">
+                <Image src={img.url} alt="" fill className="object-cover" sizes="150px" />
+                <button
+                  type="button"
+                  onClick={() => handleRemoveImage(img.id)}
+                  aria-label="Quitar foto"
+                  className="absolute right-1 top-1 flex h-7 w-7 items-center justify-center rounded-full bg-black/75 text-sm text-white"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-zinc-700">Todavía no tiene fotos.</p>
+        )}
+        <Field label="Agregar fotos" hint="Hasta 12 fotos. Se suben cuando guardás los cambios.">
+          <input type="file" accept="image/*" multiple onChange={handleNewFilesChange} className="field" />
+        </Field>
+      </section>
 
-      <input
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-      />
-      <textarea
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        rows={4}
-        className="resize-none rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-      />
+      <section className="card flex flex-col gap-5 p-5 sm:p-6">
+        <h2 className="text-base font-bold text-[#0d2740]">Datos del aviso</h2>
 
-      <div className="grid grid-cols-2 gap-3">
-        <select
-          value={operationType}
-          onChange={(e) => setOperationType(e.target.value as OperationType)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        >
-          {OPERATION_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-        <select
-          value={propertyType}
-          onChange={(e) => setPropertyType(e.target.value as PropertyType)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        >
-          {PROPERTY_TYPE_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-      </div>
+        <Field label="Título del aviso">
+          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="field" />
+        </Field>
 
-      <select
-        value={neighborhoodId}
-        onChange={(e) => setNeighborhoodId(e.target.value)}
-        className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-      >
-        <option value="">Barrio (opcional)</option>
-        {neighborhoods.map((n) => (
-          <option key={n.id} value={n.id}>
-            {n.name}
-          </option>
-        ))}
-      </select>
+        <Field label="Descripción">
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={5}
+            className="field resize-none"
+          />
+        </Field>
 
-      <div className="flex flex-col gap-1">
-        <select
-          value={ownerId}
-          onChange={(e) => setOwnerId(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        >
-          <option value="">Sin propietario asignado</option>
-          {owners.map((o) => (
-            <option key={o.id} value={o.id}>
-              {o.full_name}
-            </option>
-          ))}
-        </select>
-        <a
-          href="/dashboard/propietarios"
-          target="_blank"
-          rel="noreferrer"
-          className="text-xs text-zinc-600 underline underline-offset-4"
-        >
-          + nuevo propietario
-        </a>
-      </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="¿Qué querés hacer?">
+            <select
+              value={operationType}
+              onChange={(e) => setOperationType(e.target.value as OperationType)}
+              className="field"
+            >
+              {OPERATION_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </Field>
+          <Field label="Tipo de propiedad">
+            <select
+              value={propertyType}
+              onChange={(e) => setPropertyType(e.target.value as PropertyType)}
+              className="field"
+            >
+              {PROPERTY_TYPE_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </Field>
+        </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <input
-          type="number"
-          value={priceAmount}
-          onChange={(e) => setPriceAmount(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        />
-        <select
-          value={priceCurrency}
-          onChange={(e) => setPriceCurrency(e.target.value as PriceCurrency)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        >
-          <option value="USD">USD</option>
-          <option value="ARS">ARS</option>
-        </select>
-      </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="Barrio">
+            <select
+              value={neighborhoodId}
+              onChange={(e) => setNeighborhoodId(e.target.value)}
+              className="field"
+            >
+              <option value="">Sin especificar</option>
+              {neighborhoods.map((n) => (
+                <option key={n.id} value={n.id}>
+                  {n.name}
+                </option>
+              ))}
+            </select>
+          </Field>
+          <Field label="Propietario" hint="Opcional. Es privado: solo lo ves vos.">
+            <select value={ownerId} onChange={(e) => setOwnerId(e.target.value)} className="field">
+              <option value="">Sin propietario asignado</option>
+              {owners.map((o) => (
+                <option key={o.id} value={o.id}>
+                  {o.full_name}
+                </option>
+              ))}
+            </select>
+          </Field>
+        </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        <input
-          type="number"
-          placeholder="Superficie m²"
-          value={surfaceTotalM2}
-          onChange={(e) => setSurfaceTotalM2(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        />
-        <input
-          type="number"
-          placeholder="Dormitorios"
-          value={bedrooms}
-          onChange={(e) => setBedrooms(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        />
-        <input
-          type="number"
-          placeholder="Baños"
-          value={bathrooms}
-          onChange={(e) => setBathrooms(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        />
-      </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="Precio">
+            <input
+              type="number"
+              value={priceAmount}
+              onChange={(e) => setPriceAmount(e.target.value)}
+              className="field"
+            />
+          </Field>
+          <Field label="Moneda">
+            <select
+              value={priceCurrency}
+              onChange={(e) => setPriceCurrency(e.target.value as PriceCurrency)}
+              className="field"
+            >
+              <option value="USD">Dólares (USD)</option>
+              <option value="ARS">Pesos (ARS)</option>
+            </select>
+          </Field>
+        </div>
 
-      {error ? <p className="text-sm text-red-600">{error}</p> : null}
-      {statusMessage ? <p className="text-sm text-emerald-600">{statusMessage}</p> : null}
+        <div className="grid gap-4 sm:grid-cols-3">
+          <Field label="Superficie (m²)">
+            <input
+              type="number"
+              value={surfaceTotalM2}
+              onChange={(e) => setSurfaceTotalM2(e.target.value)}
+              className="field"
+            />
+          </Field>
+          <Field label="Dormitorios">
+            <input
+              type="number"
+              value={bedrooms}
+              onChange={(e) => setBedrooms(e.target.value)}
+              className="field"
+            />
+          </Field>
+          <Field label="Baños">
+            <input
+              type="number"
+              value={bathrooms}
+              onChange={(e) => setBathrooms(e.target.value)}
+              className="field"
+            />
+          </Field>
+        </div>
 
-      <Button disabled={saving} onClick={handleSave}>
-        {saving ? "Guardando..." : "Guardar cambios"}
-      </Button>
+        {error ? <p className="text-sm font-medium text-red-700">{error}</p> : null}
+        {statusMessage ? <p className="text-sm font-semibold text-emerald-700">{statusMessage}</p> : null}
+
+        <div className="border-t border-zinc-200 pt-5">
+          <Button disabled={saving} onClick={handleSave} className="w-full sm:w-auto">
+            {saving ? "Guardando..." : "Guardar cambios"}
+          </Button>
+        </div>
+      </section>
     </div>
   );
 }

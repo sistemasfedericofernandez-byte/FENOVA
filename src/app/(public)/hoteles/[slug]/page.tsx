@@ -85,7 +85,7 @@ export default async function HotelDetallePage({
           ) : null}
         </div>
         {hotel.neighborhoodName ? (
-          <p className="text-zinc-600 dark:text-zinc-400">
+          <p className="text-zinc-700">
             {hotel.neighborhoodName}, Corrientes
           </p>
         ) : null}
@@ -94,7 +94,7 @@ export default async function HotelDetallePage({
           <span className="text-base font-normal text-zinc-600">/ noche</span>
         </p>
         {hotel.totalRooms ? (
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">
+          <p className="text-sm text-zinc-700">
             {hotel.totalRooms} habitaciones
           </p>
         ) : null}

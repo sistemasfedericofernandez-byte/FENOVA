@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, type SyntheticEvent } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Field } from "@/components/ui/field";
+import { buttonClass } from "@/lib/button-styles";
 import {
   markPropertyAsRented,
   endTenancy,
@@ -22,6 +25,15 @@ type ActiveTenancy = {
   startDate: string | null;
   notes: string | null;
 };
+
+function Detail({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex flex-col">
+      <span className="text-sm font-medium text-zinc-600">{label}</span>
+      <span className="text-base font-semibold text-zinc-900">{value}</span>
+    </div>
+  );
+}
 
 export function TenancyForm({
   propertyId,
@@ -77,7 +89,7 @@ export function TenancyForm({
       return;
     }
 
-    router.push("/dashboard/propiedades");
+    router.push("/dashboard/alquileres");
     router.refresh();
   }
 
@@ -103,165 +115,183 @@ export function TenancyForm({
     }
 
     setLoading(false);
-    router.push("/dashboard/propiedades");
+    router.push("/dashboard/alquileres");
     router.refresh();
   }
 
   if (activeTenancy) {
     return (
-      <div className="flex max-w-xl flex-col gap-4">
-        <div className="flex flex-col gap-3 rounded-xl border border-zinc-200 p-4 dark:border-zinc-800">
-          <div className="flex flex-col">
-            <span className="text-sm text-zinc-600">Inquilino</span>
-            <span className="font-medium">{activeTenancy.tenantFullName}</span>
-            {activeTenancy.tenantDni ? (
-              <span className="text-sm text-zinc-600">DNI {activeTenancy.tenantDni}</span>
+      <div className="flex max-w-2xl flex-col gap-5">
+        <section className="card flex flex-col gap-5 p-5 sm:p-6">
+          <div className="grid gap-5 sm:grid-cols-2">
+            <div className="flex flex-col gap-3">
+              <h2 className="text-base font-bold text-[#0d2740]">Inquilino</h2>
+              <Detail label="Nombre" value={activeTenancy.tenantFullName} />
+              {activeTenancy.tenantDni ? <Detail label="DNI" value={activeTenancy.tenantDni} /> : null}
+            </div>
+            {activeTenancy.guarantorFullName ? (
+              <div className="flex flex-col gap-3">
+                <h2 className="text-base font-bold text-[#0d2740]">Garante</h2>
+                <Detail label="Nombre" value={activeTenancy.guarantorFullName} />
+                {activeTenancy.guarantorDni ? (
+                  <Detail label="DNI" value={activeTenancy.guarantorDni} />
+                ) : null}
+              </div>
             ) : null}
           </div>
-          {activeTenancy.guarantorFullName ? (
-            <div className="flex flex-col">
-              <span className="text-sm text-zinc-600">Garante</span>
-              <span className="font-medium">{activeTenancy.guarantorFullName}</span>
-              {activeTenancy.guarantorDni ? (
-                <span className="text-sm text-zinc-600">DNI {activeTenancy.guarantorDni}</span>
-              ) : null}
-            </div>
-          ) : null}
-          {activeTenancy.monthlyRentAmount ? (
-            <div className="flex flex-col">
-              <span className="text-sm text-zinc-600">Monto mensual</span>
-              <span className="font-medium">
-                {formatArs(activeTenancy.monthlyRentAmount, activeTenancy.priceCurrency ?? "ARS")}
-              </span>
-            </div>
-          ) : null}
-          {activeTenancy.startDate ? (
-            <div className="flex flex-col">
-              <span className="text-sm text-zinc-600">Inicio del contrato</span>
-              <span className="font-medium">{activeTenancy.startDate}</span>
-            </div>
-          ) : null}
+
+          <div className="grid gap-5 border-t border-zinc-200 pt-5 sm:grid-cols-2">
+            {activeTenancy.monthlyRentAmount ? (
+              <Detail
+                label="Monto mensual"
+                value={formatArs(activeTenancy.monthlyRentAmount, activeTenancy.priceCurrency ?? "ARS")}
+              />
+            ) : null}
+            {activeTenancy.startDate ? (
+              <Detail label="Inicio del contrato" value={activeTenancy.startDate} />
+            ) : null}
+          </div>
+
           {activeTenancy.notes ? (
-            <div className="flex flex-col">
-              <span className="text-sm text-zinc-600">Notas</span>
-              <span className="whitespace-pre-line">{activeTenancy.notes}</span>
+            <div className="flex flex-col border-t border-zinc-200 pt-5">
+              <span className="text-sm font-medium text-zinc-600">Notas</span>
+              <span className="whitespace-pre-line text-base text-zinc-900">{activeTenancy.notes}</span>
             </div>
           ) : null}
-        </div>
+        </section>
 
-        {error ? <p className="text-sm text-red-600">{error}</p> : null}
+        {error ? <p className="text-sm font-medium text-red-700">{error}</p> : null}
 
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <Link
+            href={`/dashboard/propiedades/${propertyId}/alquilar/pagos`}
+            className={buttonClass("primary", "sm:flex-1")}
+          >
+            Ver cobros de cada mes
+          </Link>
           <Button
             type="button"
             variant="secondary"
             disabled={loading}
             onClick={handleEndTenancy}
+            className="sm:flex-1"
           >
             {loading ? "Finalizando..." : "Finalizar contrato"}
           </Button>
-          <a
-            href={`/dashboard/propiedades/${propertyId}/alquilar/pagos`}
-            className="flex min-h-11 items-center underline underline-offset-4"
-          >
-            Ver pagos
-          </a>
         </div>
       </div>
     );
   }
 
   return (
-    <form className="flex max-w-xl flex-col gap-3" onSubmit={handleMarkAsRented}>
-      <p className="text-sm text-zinc-600 dark:text-zinc-400">
-        Al guardar, la propiedad deja de mostrarse en el sitio público. Estos
-        datos son privados: solo los ve tu cuenta.
+    <form className="card flex max-w-2xl flex-col gap-5 p-5 sm:p-6" onSubmit={handleMarkAsRented}>
+      <p className="rounded-xl bg-[#f4e8cd] p-3 text-sm text-[#3a2c0c]">
+        Al guardar, la propiedad deja de mostrarse en el sitio público. Estos datos son privados:
+        solo los ve tu cuenta.
       </p>
 
-      <input
-        type="text"
-        required
-        placeholder="Nombre y apellido del inquilino"
-        value={tenantFullName}
-        onChange={(e) => setTenantFullName(e.target.value)}
-        className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-      />
-      <input
-        type="text"
-        placeholder="DNI del inquilino (opcional)"
-        value={tenantDni}
-        onChange={(e) => setTenantDni(e.target.value)}
-        className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-      />
-
-      <div className="grid grid-cols-2 gap-3">
-        <input
-          type="text"
-          placeholder="Nombre del garante (opcional)"
-          value={guarantorFullName}
-          onChange={(e) => setGuarantorFullName(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        />
-        <input
-          type="text"
-          placeholder="DNI del garante (opcional)"
-          value={guarantorDni}
-          onChange={(e) => setGuarantorDni(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        />
+      <div className="flex flex-col gap-4">
+        <h2 className="text-base font-bold text-[#0d2740]">Inquilino</h2>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="Nombre y apellido">
+            <input
+              type="text"
+              required
+              value={tenantFullName}
+              onChange={(e) => setTenantFullName(e.target.value)}
+              className="field"
+            />
+          </Field>
+          <Field label="DNI" hint="Opcional. Se guarda encriptado.">
+            <input
+              type="text"
+              inputMode="numeric"
+              value={tenantDni}
+              onChange={(e) => setTenantDni(e.target.value)}
+              className="field"
+            />
+          </Field>
+        </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <input
-          type="number"
-          inputMode="decimal"
-          placeholder="Monto mensual (opcional)"
-          value={monthlyRentAmount}
-          onChange={(e) => setMonthlyRentAmount(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        />
-        <select
-          value={priceCurrency}
-          onChange={(e) => setPriceCurrency(e.target.value as PriceCurrency)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        >
-          <option value="ARS">ARS</option>
-          <option value="USD">USD</option>
-        </select>
+      <div className="flex flex-col gap-4">
+        <h2 className="text-base font-bold text-[#0d2740]">Garante (opcional)</h2>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="Nombre y apellido">
+            <input
+              type="text"
+              value={guarantorFullName}
+              onChange={(e) => setGuarantorFullName(e.target.value)}
+              className="field"
+            />
+          </Field>
+          <Field label="DNI">
+            <input
+              type="text"
+              inputMode="numeric"
+              value={guarantorDni}
+              onChange={(e) => setGuarantorDni(e.target.value)}
+              className="field"
+            />
+          </Field>
+        </div>
       </div>
 
-      <label className="flex flex-col gap-1 text-sm">
-        Inicio del contrato
-        <input
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-        />
-      </label>
+      <div className="flex flex-col gap-4">
+        <h2 className="text-base font-bold text-[#0d2740]">Alquiler</h2>
+        <div className="grid gap-4 sm:grid-cols-3">
+          <Field label="Monto mensual">
+            <input
+              type="number"
+              inputMode="decimal"
+              value={monthlyRentAmount}
+              onChange={(e) => setMonthlyRentAmount(e.target.value)}
+              className="field"
+            />
+          </Field>
+          <Field label="Moneda">
+            <select
+              value={priceCurrency}
+              onChange={(e) => setPriceCurrency(e.target.value as PriceCurrency)}
+              className="field"
+            >
+              <option value="ARS">Pesos (ARS)</option>
+              <option value="USD">Dólares (USD)</option>
+            </select>
+          </Field>
+          <Field label="Inicio del contrato">
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="field"
+            />
+          </Field>
+        </div>
+        <Field label="Notas" hint="Opcional. Por ejemplo: aumento cada 6 meses, depósito, condiciones.">
+          <textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            rows={3}
+            className="field resize-none"
+          />
+        </Field>
+      </div>
 
-      <textarea
-        placeholder="Notas (opcional)"
-        value={notes}
-        onChange={(e) => setNotes(e.target.value)}
-        rows={3}
-        className="resize-none rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
-      />
-
-      <label className="flex items-start gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+      <label className="flex items-start gap-3 rounded-xl border border-zinc-300 bg-zinc-50 p-3 text-sm text-zinc-800">
         <input
           type="checkbox"
           checked={dataConsentConfirmed}
           onChange={(e) => setDataConsentConfirmed(e.target.checked)}
-          className="mt-1 h-4 w-4 shrink-0"
+          className="mt-0.5 h-5 w-5 shrink-0"
         />
         <span>
-          Confirmo que cuento con el consentimiento del inquilino y del
-          garante para registrar sus datos personales en este sistema.
+          Confirmo que cuento con el consentimiento del inquilino y del garante para registrar sus
+          datos personales en este sistema.
         </span>
       </label>
 
-      {error ? <p className="text-sm text-red-600">{error}</p> : null}
+      {error ? <p className="text-sm font-medium text-red-700">{error}</p> : null}
 
       <Button type="submit" disabled={loading || !dataConsentConfirmed}>
         {loading ? "Guardando..." : "Marcar como alquilada"}

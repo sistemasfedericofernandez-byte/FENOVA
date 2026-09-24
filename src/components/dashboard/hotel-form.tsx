@@ -130,21 +130,21 @@ export function HotelForm({
         placeholder="Nombre del hotel (ej: Hotel Costanera)"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+        className="field"
       />
       <textarea
         placeholder="Descripción"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         rows={4}
-        className="resize-none rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+        className="resize-none field"
       />
 
       <div className="grid grid-cols-2 gap-3">
         <select
           value={neighborhoodId}
           onChange={(e) => setNeighborhoodId(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          className="field"
         >
           <option value="">Barrio (opcional)</option>
           {neighborhoods.map((n) => (
@@ -156,7 +156,7 @@ export function HotelForm({
         <select
           value={starRating}
           onChange={(e) => setStarRating(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          className="field"
         >
           <option value="">Categoría (opcional)</option>
           {[1, 2, 3, 4, 5].map((n) => (
@@ -175,12 +175,12 @@ export function HotelForm({
           placeholder="Precio / noche"
           value={pricePerNight}
           onChange={(e) => setPricePerNight(e.target.value)}
-          className="col-span-2 rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          className="col-span-2 field"
         />
         <select
           value={priceCurrency}
           onChange={(e) => setPriceCurrency(e.target.value as PriceCurrency)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          className="field"
         >
           <option value="ARS">ARS</option>
           <option value="USD">USD</option>
@@ -193,7 +193,7 @@ export function HotelForm({
         placeholder="Cantidad de habitaciones (opcional)"
         value={totalRooms}
         onChange={(e) => setTotalRooms(e.target.value)}
-        className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+        className="field"
       />
 
       <fieldset className="flex flex-col gap-2">
@@ -242,7 +242,7 @@ export function HotelForm({
           accept="image/*"
           multiple
           onChange={handleFilesChange}
-          className="rounded-lg border border-dashed border-zinc-300 px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          className="field"
         />
       </label>
       {files.length > 0 ? (
@@ -252,7 +252,7 @@ export function HotelForm({
         </p>
       ) : null}
 
-      {error ? <p className="text-sm text-red-600">{error}</p> : null}
+      {error ? <p className="text-sm text-red-700">{error}</p> : null}
 
       <div className="flex gap-3">
         <Button

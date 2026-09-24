@@ -54,7 +54,7 @@ export default function ActualizarContrasenaPage() {
     <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center gap-6 px-4">
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-semibold">Elegí tu nueva contraseña</h1>
-        <p className="text-zinc-600 dark:text-zinc-400">Mínimo 8 caracteres.</p>
+        <p className="text-zinc-700">Mínimo 8 caracteres.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
@@ -66,7 +66,7 @@ export default function ActualizarContrasenaPage() {
           placeholder="Nueva contraseña"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          className="field"
         />
         <input
           type="password"
@@ -76,9 +76,9 @@ export default function ActualizarContrasenaPage() {
           placeholder="Repetí la nueva contraseña"
           value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          className="field"
         />
-        {error ? <p className="text-sm text-red-600">{error}</p> : null}
+        {error ? <p className="text-sm text-red-700">{error}</p> : null}
         <Button type="submit" disabled={loading}>
           {loading ? "Guardando..." : "Guardar contraseña"}
         </Button>

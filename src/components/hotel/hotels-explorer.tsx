@@ -46,7 +46,7 @@ export function HotelsExplorer({
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-semibold">Hoteles en Corrientes</h1>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">
+        <p className="text-sm text-zinc-700">
           {filtered.length} resultado{filtered.length === 1 ? "" : "s"}
         </p>
       </div>
@@ -55,7 +55,7 @@ export function HotelsExplorer({
         <select
           value={neighborhood}
           onChange={(e) => updateFilter(setNeighborhood)(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          className="field"
         >
           <option value="todos">Todos los barrios</option>
           {neighborhoods.map((n) => (
@@ -71,13 +71,13 @@ export function HotelsExplorer({
           placeholder="Precio máximo por noche"
           value={priceMax}
           onChange={(e) => updateFilter(setPriceMax)(e.target.value)}
-          className="rounded-lg border border-zinc-300 bg-transparent px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+          className="field"
         />
       </div>
 
       {filtered.length === 0 ? (
         <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-zinc-300 py-16 text-center dark:border-zinc-700">
-          <p className="text-zinc-600 dark:text-zinc-400">
+          <p className="text-zinc-700">
             No encontramos hoteles con esos filtros.
           </p>
         </div>
@@ -116,7 +116,7 @@ export function HotelsExplorer({
               >
                 Anterior
               </button>
-              <span className="text-sm text-zinc-600 dark:text-zinc-400">
+              <span className="text-sm text-zinc-700">
                 Página {currentPage} de {totalPages}
               </span>
               <button

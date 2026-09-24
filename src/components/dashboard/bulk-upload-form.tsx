@@ -133,20 +133,20 @@ export function BulkUploadForm() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-lg border border-zinc-200 p-4 text-sm dark:border-zinc-800">
+      <div className="card p-5 text-sm">
         <p className="font-medium">Formato esperado (CSV o Excel)</p>
-        <p className="text-zinc-600 dark:text-zinc-400">
+        <p className="text-zinc-700">
           Columnas: <code>titulo, descripcion, operacion, tipo, barrio, precio,
           moneda, superficie_m2, dormitorios, banos, publicar</code>
         </p>
-        <p className="text-zinc-600 dark:text-zinc-400">
+        <p className="text-zinc-700">
           operacion: venta / alquiler / alquiler_temporal · moneda: ARS / USD ·
           publicar: si / no
         </p>
         <a
           href="/templates/plantilla-carga-masiva.csv"
           download
-          className="text-sm font-medium underline underline-offset-4"
+          className="text-sm font-semibold text-[#163a5c] underline underline-offset-4"
         >
           Descargar plantilla de ejemplo
         </a>
@@ -156,18 +156,18 @@ export function BulkUploadForm() {
         type="file"
         accept=".csv,.xlsx,.xls"
         onChange={handleFileChange}
-        className="rounded-lg border border-dashed border-zinc-300 px-3 py-2.5 text-base sm:text-sm dark:border-zinc-700"
+        className="field"
       />
 
       {rows.length > 0 && !results ? (
         <>
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">
+          <p className="text-sm text-zinc-700">
             {validCount} fila{validCount === 1 ? "" : "s"} válida
             {validCount === 1 ? "" : "s"}, {errorCount} con error
             {errorCount === 1 ? "" : "es"}.
           </p>
 
-          <div className="max-h-80 overflow-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
+          <div className="card max-h-80 overflow-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-zinc-200 text-left dark:border-zinc-800">
@@ -183,9 +183,9 @@ export function BulkUploadForm() {
                     <td className="p-2">{r.raw["titulo"] || "(sin título)"}</td>
                     <td className="p-2">
                       {r.data ? (
-                        <span className="text-emerald-600">OK</span>
+                        <span className="text-emerald-700">OK</span>
                       ) : (
-                        <span className="text-red-600">{r.error}</span>
+                        <span className="text-red-700">{r.error}</span>
                       )}
                     </td>
                   </tr>
@@ -194,7 +194,7 @@ export function BulkUploadForm() {
             </table>
           </div>
 
-          {submitError ? <p className="text-sm text-red-600">{submitError}</p> : null}
+          {submitError ? <p className="text-sm text-red-700">{submitError}</p> : null}
 
           <Button disabled={!validCount || loading} onClick={handleConfirm}>
             {loading ? "Procesando..." : `Cargar ${validCount} propiedades`}
@@ -208,7 +208,7 @@ export function BulkUploadForm() {
             {results.filter((r) => r.ok).length} cargadas, {" "}
             {results.filter((r) => !r.ok).length} con error.
           </p>
-          <div className="max-h-80 overflow-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
+          <div className="card max-h-80 overflow-auto">
             <table className="w-full text-sm">
               <tbody>
                 {results.map((r) => (
@@ -217,9 +217,9 @@ export function BulkUploadForm() {
                     <td className="p-2">{r.title}</td>
                     <td className="p-2">
                       {r.ok ? (
-                        <span className="text-emerald-600">{r.status}</span>
+                        <span className="text-emerald-700">{r.status}</span>
                       ) : (
-                        <span className="text-red-600">{r.error}</span>
+                        <span className="text-red-700">{r.error}</span>
                       )}
                     </td>
                   </tr>

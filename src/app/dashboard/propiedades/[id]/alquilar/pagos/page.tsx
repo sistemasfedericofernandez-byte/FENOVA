@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { PageHeader } from "@/components/dashboard/page-header";
 import { createClient } from "@/lib/supabase/server";
 import { requireAgencyId } from "@/server/services/agency";
 import { ensureCurrentMonthPaymentRow } from "@/server/actions/rent-payments";
@@ -46,7 +47,7 @@ export default async function PagosAlquilerPage({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col">
-        <h1 className="text-2xl font-semibold">Pagos de alquiler</h1>
+        <PageHeader title="Cobros de alquiler" description="Marcá cada mes como pagado cuando lo cobres. Los meses sin marcar quedan como pendientes." />
         <span className="text-zinc-600">
           {property.title} · {tenancy.tenant_full_name}
         </span>
