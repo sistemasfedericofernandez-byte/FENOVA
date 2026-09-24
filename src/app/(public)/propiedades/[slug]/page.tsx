@@ -5,6 +5,7 @@ import { ViewTracker } from "@/components/property/view-tracker";
 import { PropertyGallery } from "@/components/property/property-gallery";
 import { ShareButton } from "@/components/property/share-button";
 import { LocationSection } from "@/components/property/location-section";
+import { JsonLd, breadcrumbs, CORRIENTES_ADDRESS } from "@/components/seo/json-ld";
 import { zoneLabel } from "@/lib/corrientes";
 import { BedIcon, BathIcon, RulerIcon } from "@/components/icons";
 import { getPublishedPropertyBySlug } from "@/server/services/public-properties";
@@ -38,6 +39,7 @@ export async function generateMetadata({
   return {
     title: property.title,
     description,
+    alternates: { canonical: `/propiedades/${slug}` },
     openGraph: {
       title: property.title,
       description,
@@ -61,6 +63,41 @@ export default async function PropiedadDetallePage({
   return (
     <main className="mx-auto flex min-h-screen max-w-4xl flex-col gap-6 px-4 py-6 sm:py-8">
       <ViewTracker propertyId={property.id} />
+      <JsonLd
+        data={[
+          {
+            "@context": "https://schema.org",
+            "@type": "RealEstateListing",
+            name: property.title,
+            description: property.description ?? undefined,
+            url: `${siteUrl}/propiedades/${slug}`,
+            image: property.images.slice(0, 6),
+            offers: {
+              "@type": "Offer",
+              price: property.priceAmount,
+              priceCurrency: property.priceCurrency,
+              availability: "https://schema.org/InStock",
+            },
+            contentLocation: {
+              "@type": "Place",
+              name: zoneLabel(property.neighborhoodName),
+              address: {
+                ...CORRIENTES_ADDRESS,
+                streetAddress: property.addressText ?? undefined,
+              },
+              geo:
+                property.lat != null && property.lng != null
+                  ? { "@type": "GeoCoordinates", latitude: property.lat, longitude: property.lng }
+                  : undefined,
+            },
+          },
+          breadcrumbs([
+            { name: "Inicio", path: "/" },
+            { name: "Propiedades", path: "/propiedades" },
+            { name: property.title, path: `/propiedades/${slug}` },
+          ]),
+        ]}
+      />
 
       <PropertyGallery images={property.images} title={property.title} />
 

@@ -10,6 +10,7 @@ import {
   getPublishedProperties,
 } from "@/server/services/public-properties";
 import { getPublishedHotels } from "@/server/services/public-hotels";
+import { JsonLd, SITE_URL } from "@/components/seo/json-ld";
 
 export default async function HomePage() {
   const [properties, neighborhoodNames, hotels] = await Promise.all([
@@ -30,6 +31,27 @@ export default async function HomePage() {
 
   return (
     <main className="flex min-h-screen flex-col">
+      <JsonLd
+        data={[
+          {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "PropiMarket",
+            url: SITE_URL,
+            logo: `${SITE_URL}/opengraph-image`,
+            description:
+              "Marketplace inmobiliario de Corrientes: propiedades en alquiler y venta, alquiler temporal y hoteles.",
+            areaServed: { "@type": "City", name: "Corrientes", addressCountry: "AR" },
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: "PropiMarket",
+            url: SITE_URL,
+            inLanguage: "es-AR",
+          },
+        ]}
+      />
       <HomeHero>
         <HomeSearch neighborhoods={neighborhoods} />
       </HomeHero>

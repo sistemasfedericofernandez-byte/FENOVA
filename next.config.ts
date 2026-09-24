@@ -9,6 +9,34 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "8mb",
     },
   },
+  async redirects() {
+    return [
+      // Un solo dominio canónico: www y la URL vieja de Vercel llevan a propimarket.com.ar
+      // (así Google no ve el mismo sitio en tres direcciones).
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.propimarket.com.ar" }],
+        destination: "https://propimarket.com.ar/:path*",
+        permanent: true,
+      },
+      // /api queda afuera: el webhook de Mercado Pago puede seguir apuntando a la URL vieja.
+      {
+        source: "/:path((?!api/).*)",
+        has: [{ type: "host", value: "fenova-seven.vercel.app" }],
+        destination: "https://propimarket.com.ar/:path",
+        permanent: true,
+      },
+    ];
+  },
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "(?<host>.*\\.vercel\\.app)" }],
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {

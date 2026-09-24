@@ -17,11 +17,20 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "PropiMarket — Marketplace inmobiliario de Corrientes",
+    default: "PropiMarket | Alquiler, venta y hoteles en Corrientes",
     template: "%s | PropiMarket",
   },
   description:
-    "Buscá propiedades y hoteles en venta, alquiler o alquiler temporal en Corrientes sin necesidad de registrarte. Contactá directo por WhatsApp.",
+    "Casas y departamentos en alquiler y venta, alquiler temporal y hoteles en Corrientes Capital. Precios, fotos y ubicación en el mapa. Contactá directo por WhatsApp, sin registrarte.",
+  alternates: { canonical: "./" },
+  keywords: [
+    "alquiler Corrientes",
+    "departamentos en alquiler Corrientes",
+    "casas en venta Corrientes",
+    "inmobiliarias Corrientes",
+    "alquiler temporal Corrientes",
+    "hoteles Corrientes",
+  ],
   openGraph: {
     type: "website",
     locale: "es_AR",
@@ -48,7 +57,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="es"
+      lang="es-AR"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>

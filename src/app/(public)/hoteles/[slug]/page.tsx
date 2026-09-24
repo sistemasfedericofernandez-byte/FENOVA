@@ -5,6 +5,7 @@ import { ViewTracker } from "@/components/property/view-tracker";
 import { PropertyGallery } from "@/components/property/property-gallery";
 import { ShareButton } from "@/components/property/share-button";
 import { LocationSection } from "@/components/property/location-section";
+import { JsonLd, breadcrumbs, CORRIENTES_ADDRESS } from "@/components/seo/json-ld";
 import { zoneLabel } from "@/lib/corrientes";
 import { StarIcon } from "@/components/icons";
 import { AMENITY_MAP } from "@/components/hotel/amenities";
@@ -34,6 +35,7 @@ export async function generateMetadata({
   return {
     title: hotel.name,
     description,
+    alternates: { canonical: `/hoteles/${slug}` },
     openGraph: {
       title: hotel.name,
       description,
@@ -57,6 +59,30 @@ export default async function HotelDetallePage({
   return (
     <main className="mx-auto flex min-h-screen max-w-4xl flex-col gap-6 px-4 py-6 sm:py-8">
       <ViewTracker propertyId={hotel.id} kind="hotel" />
+      <JsonLd
+        data={[
+          {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            name: hotel.name,
+            description: hotel.description ?? undefined,
+            url: `${siteUrl}/hoteles/${slug}`,
+            image: hotel.images.slice(0, 6),
+            priceRange: `${formatArs(hotel.pricePerNight, hotel.priceCurrency as PriceCurrency)} por noche`,
+            starRating: hotel.starRating ? { "@type": "Rating", ratingValue: hotel.starRating } : undefined,
+            address: { ...CORRIENTES_ADDRESS, streetAddress: hotel.addressText ?? undefined },
+            geo:
+              hotel.lat != null && hotel.lng != null
+                ? { "@type": "GeoCoordinates", latitude: hotel.lat, longitude: hotel.lng }
+                : undefined,
+          },
+          breadcrumbs([
+            { name: "Inicio", path: "/" },
+            { name: "Hoteles", path: "/hoteles" },
+            { name: hotel.name, path: `/hoteles/${slug}` },
+          ]),
+        ]}
+      />
 
       <PropertyGallery images={hotel.images} title={hotel.name} />
 

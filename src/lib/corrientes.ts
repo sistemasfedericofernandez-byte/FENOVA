@@ -41,3 +41,13 @@ export function resolveLocation(
   const center = neighborhoodCenter(neighborhood);
   return center ? { ...center, approximate: true } : null;
 }
+
+/** Slug para la dirección de la página de un barrio: "Camba Cuá" → "camba-cua". */
+export function neighborhoodSlug(name: string) {
+  return name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}

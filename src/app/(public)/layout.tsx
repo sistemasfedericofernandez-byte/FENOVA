@@ -2,6 +2,7 @@ import { Suspense, type ReactNode } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { SiteHeader } from "@/components/layout/site-header";
 import { BottomNav } from "@/components/layout/bottom-nav";
+import { SiteFooter } from "@/components/layout/site-footer";
 import { BackgroundToneProvider } from "@/components/background-tone-provider";
 import { RouteTone } from "@/components/route-tone";
 
@@ -35,7 +36,10 @@ export default async function PublicLayout({
         <RouteTone />
       </Suspense>
       <SiteHeader isLoggedIn={Boolean(user)} dashboardHref={dashboardHref} />
-      <div className="pb-28 sm:pb-0">{children}</div>
+      <div>
+        {children}
+        <SiteFooter />
+      </div>
       <BottomNav isLoggedIn={Boolean(user)} dashboardHref={dashboardHref} />
     </BackgroundToneProvider>
   );
