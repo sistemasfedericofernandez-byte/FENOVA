@@ -1,8 +1,7 @@
 insert into subscription_plans (name, slug, price_ars, max_active_listings, allows_csv_bulk_upload, allows_advanced_stats)
 values
-  ('Básico', 'basico', 15000, 10, false, false),
-  ('Profesional', 'profesional', 50000, 50, true, true),
-  ('Premium', 'premium', 85000, 200, true, true)
+  ('Hasta 15 propiedades', 'basico', 40000, 15, true, true),
+  ('Ilimitado', 'profesional', 60000, 100000, true, true)
 on conflict (slug) do nothing;
 
 insert into neighborhoods (name, city)

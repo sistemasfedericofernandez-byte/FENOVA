@@ -47,7 +47,7 @@ export function SubscriptionPlans({
   return (
     <div className="flex flex-col gap-4">
       {error ? <p className="text-sm text-red-700">{error}</p> : null}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {plans.map((plan) => {
           const isCurrent = plan.id === currentPlanId;
           return (
@@ -61,7 +61,11 @@ export function SubscriptionPlans({
                 <span className="text-sm font-normal text-zinc-600">/mes</span>
               </p>
               <ul className="flex flex-col gap-1 text-sm text-zinc-700">
-                <li>Hasta {plan.max_active_listings} publicaciones activas</li>
+                <li>
+                  {plan.max_active_listings >= 1000
+                    ? "Propiedades ilimitadas"
+                    : `Hasta ${plan.max_active_listings} propiedades activas`}
+                </li>
                 <li>
                   {plan.allows_csv_bulk_upload
                     ? "Carga masiva por CSV/Excel"
